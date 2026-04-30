@@ -2,40 +2,61 @@
 
 ## 中文
 
-安装 Vue 默认入口和运行时依赖：
+这一页只做一件事：在 Vue 3 + Element Plus 项目里跑起一个可提交、可校验、可观察值变化的 FormX 表单。完整概念请先看 [Introduction / 介绍](/guide/introduction)。
+
+## 1. 安装
 
 ```sh
 pnpm add @formx/vue vue element-plus
 ```
 
-在入口文件加载 Element Plus 和 FormX 皮肤样式：
+`@formx/vue` 是 Vue 默认入口，内部重导出常用类型、核心引擎和 Element Plus 皮肤。
+
+## 2. 注册 Element Plus 和样式
+
+在应用入口加载 Element Plus 以及 FormX 皮肤样式：
 
 ```ts
+import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import '@formx/vue-ep/style.css'
+import App from './App.vue'
 
-app.use(ElementPlus)
+createApp(App).use(ElementPlus).mount('#app')
 ```
 
-定义一份 schema，并把它交给 `FormX` 渲染：
+如果你直接使用 `@formx/vue-ep`，也需要同样加载 `@formx/vue-ep/style.css`。
+
+## 3. 创建第一份 schema
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { FormX } from '@formx/vue'
 import type { FormSchema } from '@formx/vue'
 
-const formModel = ref({ name: '', status: 'active' })
+const formRef = ref<any>()
+const formModel = ref({
+  name: '',
+  status: 'active',
+  notifyBy: 'email',
+  email: ''
+})
 
-const schema: FormSchema = {
+const schema = computed<FormSchema>(() => ({
   version: '1.0.0',
   model: formModel.value,
+  ui: {
+    labelWidth: '120px',
+    labelSuffix: ':'
+  },
   fields: [
     {
       id: 'name',
       type: 'input',
       label: 'Name',
+      props: { placeholder: 'Enter a name', clearable: true },
       rules: [{ required: true, message: 'Name is required.' }]
     },
     {
@@ -48,27 +69,125 @@ const schema: FormSchema = {
           { label: 'Paused', value: 'paused' }
         ]
       }
+    },
+    {
+      id: 'notifyBy',
+      type: 'radio',
+      label: 'Notify by',
+      props: {
+        options: [
+          { label: 'Email', value: 'email' },
+          { label: 'None', value: 'none' }
+        ]
+      }
+    },
+    {
+      id: 'email',
+      type: 'input',
+      label: 'Email',
+      showWhen: { field: 'notifyBy', eq: 'email' },
+      requiredWhen: { field: 'notifyBy', eq: 'email' },
+      props: { placeholder: 'name@example.test' },
+      rules: [
+        { pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$', message: 'Invalid email.' }
+      ]
     }
   ]
+}))
+
+async function submit() {
+  const ok = await formRef.value?.validate?.()
+  if (!ok) return
+
+  const values = formRef.value?.getValues?.()
+  console.log(values)
+}
+
+function reset() {
+  formRef.value?.resetFields?.()
 }
 </script>
 
 <template>
-  <FormX v-model:value="formModel" :schema="schema" />
+  <FormX ref="formRef" v-model:value="formModel" :schema="schema" />
+
+  <el-space>
+    <el-button @click="reset">Reset</el-button>
+    <el-button type="primary" @click="submit">Submit</el-button>
+  </el-space>
 </template>
 ```
 
-`FormX` 会暴露 `validate()`、`resetFields()`、`getValues()`、`validateField()`、`getFieldGroupAPI()` 等方法，适合接到提交按钮、抽屉表单或设计器预览里。
+这个例子已经包含：
+
+- 值同步：`v-model:value="formModel"`。
+- 字段校验：`rules`。
+- 条件显示：`showWhen`。
+- 动态必填：`requiredWhen`。
+- 表单提交：`formRef.value.validate()`。
+- 值读取：`formRef.value.getValues()`。
+
+## 4. 加一个远程选项
+
+注册资源：
+
+```ts
+import { ResourceManager } from '@formx/vue'
+
+ResourceManager.register('demo:getOwners', async () => [
+  { label: 'Ada Lovelace', value: 'ada' },
+  { label: 'Grace Hopper', value: 'grace' }
+])
+```
+
+schema 中引用：
+
+```json
+{
+  "id": "owner",
+  "type": "select",
+  "label": "Owner",
+  "optionsFrom": "demo:getOwners",
+  "fetchOnMount": true,
+  "props": { "clearable": true, "filterable": true }
+}
+```
+
+资源函数可以是真实 HTTP 请求，也可以是文档、测试或 Storybook 中的 mock。
+
+## 5. 开发和文档
+
+```sh
+pnpm install
+pnpm docs:dev
+pnpm docs:build
+```
+
+完整 workbench 示例：
+
+```sh
+pnpm --filter @formx/example-vue-ep-basic dev
+```
+
+下一步建议按顺序阅读：
+
+1. [Schema Model / Schema 模型](/guide/schema)
+2. [Rules and Shortcuts / 规则与短写](/guide/rules-and-shortcuts)
+3. [Resources / 远程资源](/guide/resources)
+4. [Validation / 校验](/guide/validation)
+5. [Vue Runtime / Vue 接入](/guide/vue-runtime)
 
 ## English
 
-Install the default Vue entry and runtime dependencies:
+This page gets a Vue 3 + Element Plus form running with submit validation and value synchronization. For the full concept, start with [Introduction](/guide/introduction).
+
+Install the default Vue entry:
 
 ```sh
 pnpm add @formx/vue vue element-plus
 ```
 
-Load Element Plus and the FormX skin stylesheet in your app entry:
+Register Element Plus and load the FormX skin stylesheet:
 
 ```ts
 import ElementPlus from 'element-plus'
@@ -78,53 +197,19 @@ import '@formx/vue-ep/style.css'
 app.use(ElementPlus)
 ```
 
-Create a schema and render it with `FormX`:
+Render a schema with `FormX`:
 
 ```vue
-<script setup lang="ts">
-import { ref } from 'vue'
-import { FormX } from '@formx/vue'
-import type { FormSchema } from '@formx/vue'
-
-const formModel = ref({ name: '', status: 'active' })
-
-const schema: FormSchema = {
-  version: '1.0.0',
-  model: formModel.value,
-  fields: [
-    { id: 'name', type: 'input', label: 'Name', rules: [{ required: true }] },
-    {
-      id: 'status',
-      type: 'select',
-      label: 'Status',
-      props: {
-        options: [
-          { label: 'Active', value: 'active' },
-          { label: 'Paused', value: 'paused' }
-        ]
-      }
-    }
-  ]
-}
-</script>
-
-<template>
-  <FormX v-model:value="formModel" :schema="schema" />
-</template>
+<FormX ref="formRef" v-model:value="formModel" :schema="schema" />
 ```
 
-The component exposes `validate()`, `resetFields()`, `getValues()`, `validateField()`, and `getFieldGroupAPI()` for submit flows, drawer forms, and designer previews.
+Use the exposed methods for submit flows:
 
-## Local Development / 本地开发
+```ts
+const ok = await formRef.value?.validate?.()
+if (!ok) return
 
-```sh
-pnpm install
-pnpm docs:dev
-pnpm docs:build
+const values = formRef.value?.getValues?.()
 ```
 
-完整 workbench 示例仍保留在 `examples/vue-ep-basic`：
-
-```sh
-pnpm --filter @formx/example-vue-ep-basic dev
-```
+Register remote resources through `ResourceManager` and reference them from schema with `optionsFrom`. Read the dedicated guide pages for schema structure, rules, resources, validation, and Vue runtime integration.

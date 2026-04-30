@@ -27,7 +27,7 @@ export default defineConfig({
   },
   themeConfig: {
     nav: [
-      { text: 'Guide / 指南', link: '/guide/getting-started' },
+      { text: 'Guide / 指南', link: '/guide/introduction' },
       { text: 'Examples / 示例', link: '/examples/' },
       { text: 'API', link: '/api/' },
       { text: 'GitHub', link: 'https://github.com/formxjs/formx' }
@@ -37,7 +37,13 @@ export default defineConfig({
         {
           text: 'Guide / 指南',
           items: [
+            { text: 'Introduction / 介绍', link: '/guide/introduction' },
             { text: 'Getting Started / 快速开始', link: '/guide/getting-started' },
+            { text: 'Schema Model / Schema 模型', link: '/guide/schema' },
+            { text: 'Rules / 规则与短写', link: '/guide/rules-and-shortcuts' },
+            { text: 'Resources / 远程资源', link: '/guide/resources' },
+            { text: 'Validation / 校验', link: '/guide/validation' },
+            { text: 'Vue Runtime / Vue 接入', link: '/guide/vue-runtime' },
             { text: 'Package Boundaries / 包边界', link: '/guide/packages' }
           ]
         }

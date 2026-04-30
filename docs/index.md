@@ -17,6 +17,7 @@ import BasicFormDemo from './.vitepress/theme/components/formx/BasicFormDemo.vue
       FormX is a headless dynamic form engine for complex business applications. The core owns schema execution, linkage, validation, remote resources, and runtime state, while UI renderers stay replaceable.
     </p>
     <div class="formx-doc-links">
+      <a class="formx-doc-link" href="/guide/introduction">完整介绍 / Introduction</a>
       <a class="formx-doc-link" href="/guide/getting-started">快速开始 / Getting Started</a>
       <a class="formx-doc-link" href="/examples/">示例 / Examples</a>
       <a class="formx-doc-link" href="/guide/packages">包边界 / Packages</a>

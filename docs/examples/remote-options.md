@@ -27,7 +27,7 @@ ResourceManager.register('docs:getServices', async (params) => {
   id: 'service',
   type: 'select',
   optionsFrom: 'docs:getServices',
-  params: { team: '{{ form.team }}' },
+  params: { team: { var: 'team' } },
   fetchOnMount: true
 }
 ```
