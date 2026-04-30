@@ -100,9 +100,9 @@ const regionTree: Option[] = [
 ]
 
 const dataSourceOptions = [
-  { label: '生产库 cluster-prod-a', value: 'prod-a' },
-  { label: '生产库 cluster-prod-b', value: 'prod-b' },
-  { label: '离线数仓 dwh-main', value: 'dwh-main' }
+  { label: '模拟数据源 mock-source-a', value: 'mock-source-a' },
+  { label: '模拟数据源 mock-source-b', value: 'mock-source-b' },
+  { label: '模拟数仓 mock-warehouse', value: 'mock-warehouse' }
 ]
 
 let registered = false

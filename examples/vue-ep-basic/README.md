@@ -1,6 +1,6 @@
 # FormX Vue + Element Plus Workbench
 
-这个示例用于对齐原 `formx-demo-admin` 的 FormX 演示强度，而不是只展示一个最小表单。它把复杂 schema、远程资源、字段组、联动规则和运行时调试放在同一个 Workbench 中，便于开源后快速检查 FormX 的真实能力边界。
+这个示例用于展示接近真实后台业务的 FormX 演示强度，而不是只展示一个最小表单。它把复杂 schema、远程资源、字段组、联动规则和运行时调试放在同一个 Workbench 中，便于开源后快速检查 FormX 的真实能力边界。
 
 ## 运行
 
@@ -18,7 +18,7 @@ pnpm --filter @formx/example-vue-ep-basic dev
 
 ## English
 
-This example is a FormX workbench aligned with the depth of the original `formx-demo-admin` demos. It is not a minimal starter form; it brings complex schemas, remote resources, field groups, linkage rules, and runtime inspection into one app so the open-source project can demonstrate realistic FormX behavior.
+This example is a FormX workbench for realistic admin-style workflows. It is not a minimal starter form; it brings complex schemas, remote resources, field groups, linkage rules, and runtime inspection into one app so the open-source project can demonstrate realistic FormX behavior.
 
 ### Run
 

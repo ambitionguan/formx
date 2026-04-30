@@ -100,6 +100,7 @@ const errors = engine.getErrors()
 
 ```sh
 pnpm install
+pnpm test
 pnpm typecheck
 pnpm build
 pnpm dev
@@ -111,7 +112,7 @@ pnpm dev
 pnpm --filter @formx/example-vue-ep-basic dev
 ```
 
-`@formx/example-vue-ep-basic` 目前是一个 Vue + Element Plus Workbench，不再只是三五个字段的入门页。它迁入了原 `formx-demo-admin` 中的核心 schema，并补充了远程资源 mock、校验策略切换、实时模型/错误/状态/诊断面板，覆盖全量控件、连接配置、数据保护策略、深层联动、权限矩阵、`optionsFrom` 和运行时 `setOptions` 等场景。
+`@formx/example-vue-ep-basic` 目前是一个 Vue + Element Plus Workbench，不再只是三五个字段的入门页。它包含多份接近真实后台业务的复杂 schema，并补充了远程资源 mock、校验策略切换、实时模型/错误/状态/诊断面板，覆盖全量控件、连接配置、数据保护策略、深层联动、权限矩阵、`optionsFrom` 和运行时 `setOptions` 等场景。
 
 ## 当前状态
 
@@ -186,6 +187,7 @@ const engine = new FormXEngine({ schema })
 
 ```sh
 pnpm install
+pnpm test
 pnpm typecheck
 pnpm build
 pnpm dev
@@ -197,6 +199,6 @@ Example project:
 pnpm --filter @formx/example-vue-ep-basic dev
 ```
 
-`@formx/example-vue-ep-basic` is now a Vue + Element Plus workbench instead of a minimal starter form. It ports the main schemas from the original `formx-demo-admin` example and adds mocked remote resources, validation policy controls, and live values/errors/state/diagnostics inspectors. It covers the full component showcase, connection configuration, data protection policy, deep linkage, permission matrix, `optionsFrom`, and runtime `setOptions` scenarios.
+`@formx/example-vue-ep-basic` is now a Vue + Element Plus workbench instead of a minimal starter form. It includes multiple complex schemas modeled after realistic admin workflows and adds mocked remote resources, validation policy controls, and live values/errors/state/diagnostics inspectors. It covers the full component showcase, connection configuration, data protection policy, deep linkage, permission matrix, `optionsFrom`, and runtime `setOptions` scenarios.
 
 FormX is currently being prepared for open-source release and npm publishing. The package split is in place; the next work areas are tests, documentation, examples, publishing automation, and designer integration.

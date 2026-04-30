@@ -15,7 +15,7 @@ FormX 渲染时机与异步业务接入
 说明：
 
 - `@formx/core` 是 headless 引擎，本身不依赖 UI。
-- 本文提到的“挂载时机 / nextTick / formRef / Dialog opened”主要发生在 `formx-vue` / `FormXVueEp` 这层 UI 封装中。
+- 本文提到的“挂载时机 / nextTick / formRef / Dialog opened”主要发生在 `@formx/vue` / `FormXVueEp` 这层 UI 封装中。
 
 
 核心结论

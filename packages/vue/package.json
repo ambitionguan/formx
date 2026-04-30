@@ -3,12 +3,25 @@
   "version": "0.1.0",
   "description": "Default Vue entry for FormX.",
   "license": "MIT",
+  "keywords": ["formx", "dynamic-form", "vue", "element-plus", "schema"],
+  "homepage": "https://github.com/formxjs/formx#readme",
+  "bugs": {
+    "url": "https://github.com/formxjs/formx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/formxjs/formx.git",
+    "directory": "packages/vue"
+  },
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist", "README.md"],
+  "files": ["dist", "README.md", "LICENSE"],
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

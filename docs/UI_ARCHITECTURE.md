@@ -12,7 +12,7 @@
 - **路径**：三层架构 + 明确协议：
   1. Core 层（`@formx/core`）：只管 schema / values/state / 规则执行。
   2. UI Core 层（`@formx/ui-core`）：把 Core 的输出转成视图模型树 + 命令。
-  3. Skin 层（`@formx/core-ui-skin-*`）：把视图模型渲染为具体 UI 组件，对外暴露框架组件。
+  3. Skin 层（例如 `@formx/vue-ep`）：把视图模型渲染为具体 UI 组件，对外暴露框架组件。
 
 ---
 
@@ -315,12 +315,12 @@ export interface FieldGroupView extends ContainerView {
 
 > 重点：**所有这些 UI 配置都停留在 UI Core 层，皮肤只是消费这些语义并映射到具体组件。** 这样未来换成 Web Components 皮肤时，只需要重写一个渲染器，而不需要复制 field-group 的行为逻辑。
 
-### 2.3 Skin：`@formx/core-ui-skin-*`
+### 2.3 Skin：`@formx/vue-ep` 等具体皮肤包
 
 每个 UI 库对应一个皮肤包，例如：
 
-- `@formx/core-ui-skin-ep`（Vue + Element Plus）
-- 未来可以有：`@formx/core-ui-skin-lit`（Web Components）、`@formx/core-ui-skin-antd-react`（React + AntD）等。
+- `@formx/vue-ep`（Vue + Element Plus）
+- 未来可以有：`@formx/lit`（Web Components）、`@formx/react-antd`（React + AntD）等。
 
 皮肤包内部由两部分组成：
 
@@ -353,7 +353,7 @@ export interface FieldGroupView extends ContainerView {
    以 Vue + Element Plus 为例：
 
    ```ts
-   // @formx/core-ui-skin-ep
+   // @formx/vue-ep
    export const FormXVueEp = defineComponent({
      props: { schema, value, defaultValue, engine, skinProps, components, ... },
      setup(props, { emit }) {
@@ -427,8 +427,8 @@ export interface FieldGroupView extends ContainerView {
 
 新建包：
 
-- `@formx/core-ui-skin-ep`（Vue + Element Plus）
-- `@formx/core-ui-skin-lit` 等。
+- `@formx/vue-ep`（Vue + Element Plus）
+- `@formx/lit` 等。
 
 统一流程：
 
@@ -439,8 +439,8 @@ export interface FieldGroupView extends ContainerView {
 业务层选择皮肤的方式可以是：
 
 ```ts
-import { FormXVueEp } from '@formx/core-ui-skin-ep'
-// 或 import { FormXLit } from '@formx/core-ui-skin-lit'
+import { FormXVueEp } from '@formx/vue-ep'
+// 或 import { FormXLit } from '@formx/lit'
 ```
 
 Core 与 UI Core 不需要知道用的是哪套皮肤。
@@ -467,7 +467,7 @@ Core 与 UI Core 不需要知道用的是哪套皮肤。
        - 集中处理 label/required/errors/options/uiProps。
        - 封装 field-group 的 add/remove 命令。
 
-2. **新建 EP 皮肤包 `@formx/core-ui-skin-ep`**
+2. **新建 EP 皮肤包 `@formx/vue-ep`**
    - 只依赖 Core + UI Core。
    - 结构：
      - `core/context.ts`：注入 Engine + FormView。
@@ -477,7 +477,7 @@ Core 与 UI Core 不需要知道用的是哪套皮肤。
 
 3. **设计器运行预览切换到新皮肤**
    - 在 designer app 中：
-     - 用 `@formx/core-ui-skin-ep` 替换旧的 `@formx/core-ep` 渲染路径。
+     - 用 `@formx/vue-ep` 替换旧的临时渲染路径。
      - 保留旧实现作为 legacy，不再扩展。
 
 4. **对齐控件行为与布局**

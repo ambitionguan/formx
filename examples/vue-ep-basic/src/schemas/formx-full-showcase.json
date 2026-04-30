@@ -52,7 +52,7 @@
       "riskScore": 68,
       "enableApproval": true,
       "approvalComment": "涉及核心链路，需在低峰时段发布。",
-      "readonlyToken": "TOKEN-PROD-001",
+      "readonlyToken": "mock-readonly-token",
       "releasePackage": [],
       "releaseImage": [],
       "emergencyChannel": ""
@@ -61,7 +61,7 @@
       {
         "name": "张三",
         "notifyBy": "email",
-        "email": "zhangsan@example.com",
+        "email": "zhangsan@example.test",
         "phone": "",
         "slackWebhook": "",
         "isPrimary": true
@@ -70,7 +70,7 @@
         "name": "李四",
         "notifyBy": "sms",
         "email": "",
-        "phone": "13800000000",
+        "phone": "00000000000",
         "slackWebhook": "",
         "isPrimary": false
       }
@@ -81,29 +81,29 @@
         "zone": "cn-hz-a",
         "weight": 50,
         "enabled": true,
-        "healthUrl": "https://api.demo.com/health"
+        "healthUrl": "https://mock-api.example.test/health"
       },
       {
         "nodeName": "华北备节点",
         "zone": "cn-bj-b",
         "weight": 50,
         "enabled": true,
-        "healthUrl": "https://api-bj.demo.com/health"
+        "healthUrl": "https://mock-api-bj.example.test/health"
       }
     ],
     "envTabs": [
       {
         "envName": "dev",
-        "baseUrl": "https://dev.demo.com",
+        "baseUrl": "https://dev.example.test",
         "authMode": "none",
         "accessToken": "",
         "expiresAt": ""
       },
       {
         "envName": "prod",
-        "baseUrl": "https://api.demo.com",
+        "baseUrl": "https://api.example.test",
         "authMode": "token",
-        "accessToken": "prod-token-demo",
+        "accessToken": "mock-access-token",
         "expiresAt": "2026-12-31"
       }
     ],

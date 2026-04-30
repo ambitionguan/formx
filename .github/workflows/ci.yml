@@ -16,8 +16,11 @@ jobs:
           version: 10.8.1
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm test
       - run: pnpm typecheck
       - run: pnpm build
+      - run: pnpm --filter @formx/example-vue-ep-basic typecheck
+      - run: pnpm --filter @formx/example-vue-ep-basic build
