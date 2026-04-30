@@ -41,7 +41,7 @@ Effects (core list)
 
 Expression DSL (JSON)
 - Logical: and, or, not
-- Compare: ==, !=, >, >=, <, <=, in, nin
+- Compare: `==`, `!=`, `>`, `>=`, `<`, `<=`, `in`, `nin`
 - String: includes, startsWith, endsWith, match
 - Math: +, -, *, /
 - Ternary/merge: iif, coalesce

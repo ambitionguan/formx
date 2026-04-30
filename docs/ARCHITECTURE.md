@@ -51,7 +51,7 @@ packages/share/components/formx-ep/         # UI 集成包（Element Plus）
 - 编译一次的是“规则与表达式→索引与指令”；运行期每次变化都会动态求值与执行；隐藏≠移除
 
 三、表达式 DSL
-- 基础：== != > >= < <= and or not in nin includes match + - * / iif coalesce
+- 基础：`==` `!=` `>` `>=` `<` `<=` `and` `or` `not` `in` `nin` `includes` `match` `+` `-` `*` `/` `iif` `coalesce`
 - 变量：{var:a.b[0].c} / {var:.qty}
 - 数组高阶：some/every/none/len/includes/uniq/flatten/map/filter/reduce/sum/avg/min/max/groupBy
 - 预编译：常量折叠、路径绑定、短路；导出依赖路径集缩小重算
@@ -73,7 +73,7 @@ packages/share/components/formx-ep/         # UI 集成包（Element Plus）
 - 远程资源：requestKey/params/map/ttl/debounce；onInit/onVisible/manual；缓存与并发去重
 
 七、执行器策略（性能）
-- LiteExecutor：规则<阈值且无通配 → Map<path, rules> 直连，简化求值器，微任务合并
+- LiteExecutor：规则 `<` 阈值且无通配 → `Map<path, rules>` 直连，简化求值器，微任务合并
 - GraphExecutor：通配/作用域/聚合或规则≥阈值 → 依赖图 + scope 实例工厂 + 聚合缓存
 - 循环保护：值未变不传播 + oncePerTick + maxHops；开发态可开启 DAG 检测
 

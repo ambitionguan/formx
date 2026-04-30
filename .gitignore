@@ -7,3 +7,5 @@ pnpm-debug.log*
 .env
 .env.*
 !.env.example
+docs/.vitepress/cache
+docs/.vitepress/dist

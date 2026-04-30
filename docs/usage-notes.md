@@ -17,7 +17,7 @@ FormX 使用注意事项（Best Practices）
 - resolveNearestPath：用于把裸 id（如 'name'）解析为当前作用域最近的模式路径（在嵌套容器下尤为有用）。
 
 表达式与短写
-- JSON 表达式：var/and/or/not/==/!=/>/>=/</<=/in/nin/includes/startsWith/endsWith/match/iif/coalesce/some/every/none/len/sum/avg/+/−/*/。
+- JSON 表达式：`var` / `and` / `or` / `not` / `==` / `!=` / `>` / `>=` / `<` / `<=` / `in` / `nin` / `includes` / `startsWith` / `endsWith` / `match` / `iif` / `coalesce` / `some` / `every` / `none` / `len` / `sum` / `avg` / `+` / `-` / `*` / `/`。
 - $item：在 some/every/none/sum/avg 中，谓词/映射表达式通过 { var: '$item.xxx' } 访问当前迭代项。
 - 短写编译：showWhen/hideWhen/disableWhen/readOnlyWhen/requiredWhen/valueWhen/change/compute 在编译期转为 RuleV2。
 - 模板：'{{ form.a.b }}'/'{{ $self.xxx }}'/'{{ $parent.xxx }}'/'{{ $root.xxx }}' 支持混合文本与表达式，运行期通过 resolveParams 展开。
@@ -25,7 +25,7 @@ FormX 使用注意事项（Best Practices）
 
 规则与效果
 - rule.id：必须全局唯一；用于诊断、增量更新与 ownerIndex。
-- watch vs trigger：watch 监听值变化；trigger 支持 'change:<path>' 和 'event:<name>' 主动触发规则。
+- watch vs trigger：watch 监听值变化；trigger 支持 `change:<path>` 和 `event:<name>` 主动触发规则。
 - when/elseEffects：条件不满足时执行 elseEffects。建议尽量避免两侧都写大量 effect 造成抖动。
 - effect 常用：set/patch/setVisible/setDisabled/setRequired/setReadOnly/setOptions/fetch/validate/addItem/removeItem/splice/setSchemaPatch/batch/dispatch/toggle/copyValue。
 - setVisible 策略：EnginePolicyOptions.onHide='clear' 时，隐藏字段会清空值（并加入 diff 队列）。
@@ -66,7 +66,7 @@ UI 适配建议
 常见坑位（Checklist）
 - rule.id 重复：导致增量更新与诊断异常；务必唯一。
 - 过度耦合的 set：两条规则相互 set 可能形成循环；利用 oncePerTick（预留）/debounce/事件触发化解。
-- $parent 拼接：当 $parent.<base> 与 selfPath 的父路径相同，系统会避免重复拼接；无需手动去重。
+- `$parent` 拼接：当 `$parent.<base>` 与 `selfPath` 的父路径相同，系统会避免重复拼接；无需手动去重。
 - optionsFrom 与 fetch 并用：若仅要静态选项，使用 setOptions；远端选项用 fetch 并设置 map/fallbackOptions。
 - onHide='clear'：隐藏后值被清空，可能触发更多联动；必要时配合 oncePerTick 或条件避免抖动。
 - 大数组 + 通配：优先开启 recalcScope='siblings' 与 aggregateCache。
