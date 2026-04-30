@@ -1,0 +1,528 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FormX AIDSL",
+  "type": "object",
+  "required": ["version", "fields"],
+  "properties": {
+    "version": { "type": "string" },
+    "formId": { "type": "string" },
+    "model": { "type": "object" },
+    "layout": { "$ref": "#/definitions/LayoutConfig" },
+    "style": { "type": "object" },
+    "presets": { "type": "object" },
+    "fields": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/FormFieldSchema" }
+    },
+    "rulesV2": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/RuleV2" }
+    },
+    "resources": { "type": "object" }
+  },
+  "additionalProperties": true,
+  "definitions": {
+    "LayoutConfig": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["grid", "flex", "horizontal", "vertical", "inline", "table"] },
+        "span": { "type": "number" },
+        "offset": { "type": "number" },
+        "columns": { "type": "number" },
+        "gutter": { "type": "number" },
+        "gap": { "type": "number" },
+        "direction": { "type": "string", "enum": ["row", "column"] },
+        "wrap": { "type": "string", "enum": ["wrap", "nowrap"] },
+        "justifyContent": {
+          "type": "string",
+          "enum": ["flex-start", "flex-end", "center", "space-between", "space-around", "space-evenly"]
+        },
+        "alignItems": {
+          "type": "string",
+          "enum": ["flex-start", "flex-end", "center", "stretch", "baseline"]
+        },
+        "responsive": { "type": "object" },
+        "className": { "type": "string" },
+        "style": { "type": "object" },
+        "styleVars": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "WhenExpr": {
+      "anyOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "required": ["field"],
+          "properties": {
+            "field": { "type": "string" },
+            "eq": {},
+            "ne": {},
+            "in": { "type": "array" }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "RequiredWhenExpr": {
+      "anyOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "required": ["field"],
+          "properties": {
+            "field": { "type": "string" },
+            "eq": {},
+            "ne": {},
+            "in": { "type": "array" },
+            "message": { "type": "string" },
+            "i18nKey": {
+              "anyOf": [
+                { "type": "string" },
+                { "type": "object" }
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "SelectOption": {
+      "type": "object",
+      "required": ["label", "value"],
+      "properties": {
+        "label": { "type": "string" },
+        "value": {},
+        "disabled": { "type": "boolean" },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/SelectOption" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "FieldGroupPresentation": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["list", "cards", "tabs", "table", "custom"] },
+        "tabLabelField": { "type": "string" },
+        "tabClosable": { "type": "boolean" },
+        "addButtonText": { "type": "string" },
+        "addButtonIcon": { "type": "string" },
+        "toolbar": {},
+        "table": {},
+        "extra": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "FormFieldSchema": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": [
+            "input",
+            "textarea",
+            "number",
+            "select",
+            "radio",
+            "checkbox",
+            "date-picker",
+            "autocomplete",
+            "tree-select",
+            "switch",
+            "slider",
+            "cascader",
+            "time-picker",
+            "time-select",
+            "upload",
+            "text",
+            "separator",
+            "divider",
+            "custom",
+            "form-object",
+            "field-group"
+          ]
+        },
+        "label": { "type": "string" },
+        "tooltip": { "type": "string" },
+        "defaultValue": {},
+        "props": { "type": "object" },
+        "layout": { "$ref": "#/definitions/LayoutConfig" },
+        "style": { "type": "object" },
+        "visible": { "type": "boolean" },
+        "disabled": { "type": "boolean" },
+        "readonly": { "type": "boolean" },
+        "rules": { "type": "array" },
+        "labelWidth": {},
+        "renderMode": { "type": "string", "enum": ["show", "if"] },
+        "excludeFromSubmit": { "type": "boolean" },
+        "showWhen": { "$ref": "#/definitions/WhenExpr" },
+        "hideWhen": { "$ref": "#/definitions/WhenExpr" },
+        "disableWhen": { "$ref": "#/definitions/WhenExpr" },
+        "readOnlyWhen": { "$ref": "#/definitions/WhenExpr" },
+        "requiredWhen": { "$ref": "#/definitions/RequiredWhenExpr" },
+        "valueWhen": {
+          "type": "object",
+          "required": ["when", "value"],
+          "properties": {
+            "when": { "$ref": "#/definitions/WhenExpr" },
+            "value": {}
+          },
+          "additionalProperties": true
+        },
+        "patchWhen": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["when", "patch"],
+            "properties": {
+              "when": { "$ref": "#/definitions/WhenExpr" },
+              "patch": { "type": "object" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "optionsFrom": { "type": "string" },
+        "params": { "type": "object" },
+        "fetchOnMount": { "type": "boolean" },
+        "ttl": { "type": "number" },
+        "cacheKey": { "type": "string" },
+        "debounce": { "type": "number" },
+        "retries": { "type": "number" },
+        "retryDelayMs": { "type": "number" },
+        "map": {
+          "type": "object",
+          "properties": {
+            "label": { "type": "string" },
+            "value": { "type": "string" },
+            "children": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "fallbackOptions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/SelectOption" }
+        },
+        "change": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["target", "action"],
+                "properties": {
+                  "target": { "type": "string" },
+                  "action": { "type": "string" },
+                  "value": {},
+                  "patch": { "type": "object" }
+                },
+                "additionalProperties": true
+              }
+            },
+            { "type": "object" }
+          ]
+        },
+        "compute": {
+          "anyOf": [
+            {
+              "type": "object",
+              "required": ["expr"],
+              "properties": {
+                "expr": { "$ref": "#/definitions/Expression" },
+                "when": { "$ref": "#/definitions/Expression" },
+                "watch": { "type": "array", "items": { "type": "string" } },
+                "target": { "type": "string" }
+              },
+              "additionalProperties": true
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["expr"],
+                "properties": {
+                  "expr": { "$ref": "#/definitions/Expression" },
+                  "when": { "$ref": "#/definitions/Expression" },
+                  "watch": { "type": "array", "items": { "type": "string" } },
+                  "target": { "type": "string" }
+                },
+                "additionalProperties": true
+              }
+            }
+          ]
+        },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/FormFieldSchema" }
+        },
+        "template": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/FormFieldSchema" }
+        },
+        "presentation": { "$ref": "#/definitions/FieldGroupPresentation" }
+      },
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "type": { "const": "form-object" } },
+            "required": ["type"]
+          },
+          "then": { "required": ["children"] }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "field-group" } },
+            "required": ["type"]
+          },
+          "then": { "required": ["template"] }
+        }
+      ]
+    },
+    "RuleV2": {
+      "type": "object",
+      "required": ["id", "effects"],
+      "properties": {
+        "id": { "type": "string" },
+        "scope": { "type": "string" },
+        "watch": { "type": "array", "items": { "type": "string" } },
+        "trigger": {
+          "anyOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" } }
+          ]
+        },
+        "when": { "$ref": "#/definitions/Expression" },
+        "effects": { "type": "array", "items": { "$ref": "#/definitions/Effect" } },
+        "elseEffects": { "type": "array", "items": { "$ref": "#/definitions/Effect" } },
+        "options": {
+          "type": "object",
+          "properties": {
+            "debounce": { "type": "number" },
+            "oncePerTick": { "type": "boolean" },
+            "maxHops": { "type": "number" },
+            "runAfter": { "type": "array", "items": { "type": "string" } },
+            "autoWatch": { "type": "boolean" }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "TargetPath": {
+      "anyOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "Effect": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type", "target", "value"],
+          "properties": {
+            "type": { "const": "set" },
+            "target": { "$ref": "#/definitions/TargetPath" },
+            "value": {}
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type", "target", "value"],
+          "properties": {
+            "type": { "const": "patch" },
+            "target": { "$ref": "#/definitions/TargetPath" },
+            "value": { "type": "object" }
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type", "target", "value"],
+          "properties": {
+            "type": { "enum": ["setVisible", "setDisabled", "setRequired", "setReadOnly"] },
+            "target": { "$ref": "#/definitions/TargetPath" },
+            "value": { "type": "boolean" }
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type", "target", "options"],
+          "properties": {
+            "type": { "const": "setOptions" },
+            "target": { "type": "string" },
+            "options": { "type": "array", "items": { "$ref": "#/definitions/SelectOption" } }
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type", "target", "requestKey"],
+          "properties": {
+            "type": { "const": "fetch" },
+            "target": { "type": "string" },
+            "requestKey": { "type": "string" },
+            "params": { "type": "object" },
+            "cacheKey": { "type": "string" },
+            "ttl": { "type": "number" },
+            "mode": { "type": "string", "enum": ["latest", "queue", "drop"] },
+            "debounceMs": { "type": "number" },
+            "retries": { "type": "number" },
+            "retryDelayMs": { "type": "number" },
+            "map": { "type": "object" },
+            "fallbackOptions": { "type": "array", "items": { "$ref": "#/definitions/SelectOption" } }
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type", "patch"],
+          "properties": {
+            "type": { "const": "setSchemaPatch" },
+            "patch": { "type": "array" }
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": { "const": "validate" },
+            "target": { "$ref": "#/definitions/TargetPath" },
+            "message": {}
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type", "target"],
+          "properties": {
+            "type": { "const": "addItem" },
+            "target": { "type": "string" },
+            "value": {},
+            "index": { "type": "number" }
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type", "target", "index"],
+          "properties": {
+            "type": { "const": "removeItem" },
+            "target": { "type": "string" },
+            "index": { "type": "number" }
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type", "target", "start"],
+          "properties": {
+            "type": { "const": "splice" },
+            "target": { "type": "string" },
+            "start": { "type": "number" },
+            "deleteCount": { "type": "number" },
+            "items": { "type": "array" }
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type", "effects"],
+          "properties": {
+            "type": { "const": "batch" },
+            "effects": { "type": "array", "items": { "$ref": "#/definitions/Effect" } }
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type", "event"],
+          "properties": {
+            "type": { "const": "dispatch" },
+            "event": { "type": "string" },
+            "payload": {}
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type", "target"],
+          "properties": {
+            "type": { "const": "toggle" },
+            "target": { "type": "string" },
+            "truthyValue": {},
+            "falsyValue": {}
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type", "target", "from"],
+          "properties": {
+            "type": { "const": "copyValue" },
+            "target": { "$ref": "#/definitions/TargetPath" },
+            "from": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "required": ["type", "target"],
+          "properties": {
+            "type": { "const": "clearErrors" },
+            "target": { "$ref": "#/definitions/TargetPath" }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "Expression": {
+      "anyOf": [
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "boolean" },
+        { "type": "null" },
+        { "$ref": "#/definitions/ExprObject" }
+      ]
+    },
+    "ExprObject": {
+      "type": "object",
+      "oneOf": [
+        { "required": ["var"], "properties": { "var": { "type": "string" } }, "additionalProperties": false },
+        { "required": ["and"], "properties": { "and": { "type": "array", "items": { "$ref": "#/definitions/Expression" } } }, "additionalProperties": false },
+        { "required": ["or"], "properties": { "or": { "type": "array", "items": { "$ref": "#/definitions/Expression" } } }, "additionalProperties": false },
+        { "required": ["not"], "properties": { "not": { "$ref": "#/definitions/Expression" } }, "additionalProperties": false },
+        { "required": ["=="], "properties": { "==": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["!="], "properties": { "!=": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": [">"], "properties": { ">": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": [">="], "properties": { ">=": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["<"], "properties": { "<": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["<="], "properties": { "<=": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["in"], "properties": { "in": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["nin"], "properties": { "nin": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["includes"], "properties": { "includes": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["startsWith"], "properties": { "startsWith": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["endsWith"], "properties": { "endsWith": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["match"], "properties": { "match": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["iif"], "properties": { "iif": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 3, "maxItems": 3 } }, "additionalProperties": false },
+        { "required": ["coalesce"], "properties": { "coalesce": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 1 } }, "additionalProperties": false },
+        { "required": ["some"], "properties": { "some": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["every"], "properties": { "every": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["none"], "properties": { "none": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["len"], "properties": { "len": { "$ref": "#/definitions/Expression" } }, "additionalProperties": false },
+        { "required": ["sum"], "properties": { "sum": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["avg"], "properties": { "avg": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["+"], "properties": { "+": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["-"], "properties": { "-": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["*"], "properties": { "*": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false },
+        { "required": ["/"], "properties": { "/": { "type": "array", "items": { "$ref": "#/definitions/Expression" }, "minItems": 2, "maxItems": 2 } }, "additionalProperties": false }
+      ]
+    }
+  }
+}

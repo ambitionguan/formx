@@ -1,0 +1,1016 @@
+{
+  "version": "1.0.0",
+  "formId": "connection-config",
+  "model": {
+    "isNewMode": true,
+    "showSensitiveOptions": 1,
+    "optionClusterEnable": 0,
+    "discoveryScope": 0,
+    "discoveryAutoEnable": 0,
+    "scheduleType": "daily",
+    "scheduleTime": "00:00",
+    "scheduleWeekday": 1,
+    "scheduleMonthDay": 1,
+    "scheduleInterval": 1,
+    "proxyAccountList": [
+      { "name": "默认账号", "username": "", "password": "" }
+    ]
+  },
+  "fields": [
+    {
+      "id": "basicInfo",
+      "type": "form-object",
+      "label": "基本信息",
+      "flatten": true,
+      "style": {
+        "marginBottom": "16px",
+        "border": "1px solid #e4e7ed",
+        "borderRadius": "4px",
+        "padding": "16px"
+      },
+      "children": [
+        {
+          "id": "name",
+          "type": "input",
+          "label": "连接名称",
+          "props": {
+            "placeholder": "请输入连接名称"
+          },
+          "rules": [
+            { "required": true, "message": "请输入连接名称", "trigger": "blur" }
+          ],
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "dataSourceType",
+          "type": "select",
+          "label": "数据源类型",
+          "props": {
+            "placeholder": "请选择数据源类型",
+            "options": [
+              { "label": "MySQL", "value": 1 },
+              { "label": "PostgreSQL", "value": 2 },
+              { "label": "Hive", "value": 3 },
+              { "label": "ClickHouse", "value": 4 }
+            ]
+          },
+          "rules": [
+            { "required": true, "message": "请选择数据库类型", "trigger": "change" }
+          ],
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "businessUser",
+          "type": "form-object",
+          "label": "",
+          "flatten": true,
+          "layout": {
+            "span": 24,
+            "innerLayout": {
+              "type": "flex",
+              "direction": "row",
+              "gap": 8,
+              "alignItems": "center"
+            }
+          },
+          "children": [
+            {
+              "id": "businessUserType",
+              "type": "select",
+              "label": "业务责任人",
+              "defaultValue": "username",
+              "excludeFromSubmit": true,
+              "props": {
+                "options": [
+                  { "label": "用户名", "value": "username" },
+                  { "label": "机构", "value": "organization" },
+                  { "label": "角色", "value": "role" }
+                ]
+              },
+              "layout": { "span": 8 }
+            },
+            {
+              "id": "businessUserId",
+              "type": "select",
+              "label": "",
+              "labelWidth": 0,
+              "props": {
+                "placeholder": "请选择",
+                "clearable": true,
+                "filterable": true
+              },
+              "optionsFrom": "getUserRoleOrganByType",
+              "params": { "type": "{{form.businessUserType}}" },
+              "layout": { "span": 16 }
+            }
+          ]
+        },
+        {
+          "id": "technicalUser",
+          "type": "form-object",
+          "label": "",
+          "flatten": true,
+          "layout": {
+            "span": 24,
+            "innerLayout": {
+              "type": "flex",
+              "direction": "row",
+              "gap": 8,
+              "alignItems": "center"
+            }
+          },
+          "children": [
+            {
+              "id": "technicalUserType",
+              "type": "select",
+              "label": "技术责任人",
+              "defaultValue": "username",
+              "excludeFromSubmit": true,
+              "props": {
+                "options": [
+                  { "label": "用户名", "value": "username" },
+                  { "label": "机构", "value": "organization" },
+                  { "label": "角色", "value": "role" }
+                ]
+              },
+              "layout": { "span": 8 }
+            },
+            {
+              "id": "technicalUserId",
+              "type": "select",
+              "label": "",
+              "labelWidth": 0,
+              "props": {
+                "placeholder": "请选择",
+                "clearable": true,
+                "filterable": true
+              },
+              "optionsFrom": "getUserRoleOrganByType",
+              "params": { "type": "{{form.technicalUserType}}" },
+              "layout": { "span": 16 }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "connectionInfo",
+      "type": "form-object",
+      "label": "连接信息",
+      "flatten": true,
+      "style": {
+        "marginBottom": "16px",
+        "border": "1px solid #e4e7ed",
+        "borderRadius": "4px",
+        "padding": "16px"
+      },
+      "children": [
+        {
+          "id": "connectIp",
+          "type": "input",
+          "label": "IP地址",
+          "props": {
+            "placeholder": "请输入IP地址"
+          },
+          "rules": [
+            { "required": true, "message": "请输入IP地址", "trigger": "blur" },
+            {
+              "pattern": "^(?:[0-9]{1,3}\\\\.){3}[0-9]{1,3}$",
+              "message": "请输入有效的IP地址",
+              "trigger": "blur"
+            }
+          ],
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "connectPort",
+          "type": "input",
+          "label": "端口",
+          "props": {
+            "placeholder": "请输入端口"
+          },
+          "rules": [
+            { "required": true, "message": "请输入端口", "trigger": "blur" },
+            {
+              "pattern": "^([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$",
+              "message": "端口范围：1-65535",
+              "trigger": "blur"
+            }
+          ],
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "connectDb",
+          "type": "input",
+          "label": "数据库名称",
+          "props": {
+            "placeholder": "请输入数据库名称"
+          },
+          "rules": [
+            { "required": true, "message": "请输入数据库名称", "trigger": "blur" }
+          ],
+          "layout": { "span": 24 }
+        }
+      ]
+    },
+    {
+      "id": "authInfo",
+      "type": "form-object",
+      "label": "认证信息",
+      "flatten": true,
+      "style": {
+        "marginBottom": "16px",
+        "border": "1px solid #e4e7ed",
+        "borderRadius": "4px",
+        "padding": "16px"
+      },
+      "children": [
+        {
+          "id": "authUser",
+          "type": "input",
+          "label": "认证用户名",
+          "props": {
+            "placeholder": "请输入认证用户名"
+          },
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "authPwd",
+          "type": "input",
+          "label": "认证密码",
+          "props": {
+            "placeholder": "请输入认证密码",
+            "type": "password",
+            "showPassword": true
+          },
+          "layout": { "span": 24 }
+        }
+      ]
+    },
+    {
+      "id": "proxyInfo",
+      "type": "form-object",
+      "label": "代理账号",
+      "flatten": true,
+      "style": {
+        "marginBottom": "16px",
+        "border": "1px solid #e4e7ed",
+        "borderRadius": "4px",
+        "padding": "16px"
+      },
+      "children": [
+        {
+          "id": "proxyAccountList",
+          "type": "field-group",
+          "label": "",
+          "operations": {
+            "add": { "text": "+ 添加账号" },
+            "position": "right"
+          },
+          "presentation": {
+            "type": "tabs",
+            "tabLabelField": "name",
+            "tabClosable": true,
+            "addButtonText": "+ 添加账号"
+          },
+          "itemMeta": {
+            "titleField": "name"
+          },
+          "min": 1,
+          "max": 10,
+          "layout": {
+            "span": 24,
+            "itemLayout": {
+              "gap": 12
+            }
+          },
+          "template": [
+            {
+              "id": "name",
+              "type": "input",
+              "label": "账号名称",
+              "props": { "placeholder": "请输入账号名称" }
+            },
+            {
+              "id": "username",
+              "type": "input",
+              "label": "用户名",
+              "props": { "placeholder": "请输入用户名" }
+            },
+            {
+              "id": "password",
+              "type": "input",
+              "label": "密码",
+              "props": { "type": "password", "showPassword": true, "placeholder": "请输入密码" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "advancedOptions",
+      "type": "form-object",
+      "label": "高级选项",
+      "flatten": true,
+      "collapsible": true,
+      "collapsed": true,
+      "showWhen": "isNewMode",
+      "style": {
+        "marginBottom": "16px",
+        "border": "1px solid #e4e7ed",
+        "borderRadius": "4px",
+        "padding": "16px"
+      },
+      "children": [
+        {
+          "id": "optionClusterEnable",
+          "type": "radio",
+          "label": "集群模式",
+          "defaultValue": 0,
+          "props": {
+            "options": [
+              { "label": "否", "value": 0 },
+              { "label": "是", "value": 1 }
+            ]
+          },
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "clusterIpPortHeader",
+          "type": "form-object",
+          "label": "集群IP端口",
+          "showWhen": "optionClusterEnable=1",
+          "style": {
+            "marginBottom": "8px",
+            "padding": "12px",
+            "borderRadius": "4px",
+            "border": "1px dashed #d0d7de"
+          },
+          "layout": {
+            "type": "flex",
+            "direction": "row",
+            "wrap": "nowrap",
+            "gap": 8,
+            "alignItems": "center",
+            "span": 24
+          },
+          "children": [
+            {
+              "id": "ipLabel",
+              "type": "custom",
+              "excludeFromSubmit": true,
+              "render": {
+                "text": "IP地址"
+              },
+              "style": {
+                "flex": "1",
+                "fontFamily": "monospace",
+                "fontSize": "14px",
+                "color": "#606266"
+              }
+            },
+            {
+              "id": "clusterSeparator",
+              "type": "custom",
+              "excludeFromSubmit": true,
+              "render": {
+                "text": "-"
+              },
+              "style": {
+                "width": "40px",
+                "textAlign": "center",
+                "fontFamily": "monospace",
+                "fontSize": "14px",
+                "color": "#606266"
+              }
+            },
+            {
+              "id": "clusterPortLabel",
+              "type": "custom",
+              "excludeFromSubmit": true,
+              "render": {
+                "text": "端口"
+              },
+              "style": {
+                "flex": "1",
+                "fontFamily": "monospace",
+                "fontSize": "14px",
+                "color": "#606266"
+              }
+            },
+            {
+              "id": "clusterAddButton",
+              "type": "custom",
+              "excludeFromSubmit": true,
+              "render": {
+                "component": "GroupAddButton",
+                "props": {
+                  "targetField": "clusterIpPortList",
+                  "label": "+ 添加节点",
+                  "buttonType": "primary",
+                  "link": true
+                }
+              },
+              "style": {
+                "marginLeft": "auto"
+              }
+            }
+          ]
+        },
+        {
+          "id": "clusterIpPortList",
+          "type": "field-group",
+          "label": "",
+          "showWhen": "optionClusterEnable=1",
+          "operations": {
+            "add": { "show": false },
+            "copy": { "show": false },
+            "move": { "show": false },
+            "position": "right"
+          },
+          "min": 0,
+          "max": 10,
+          "sortable": false,
+          "showIndex": false,
+          "layout": {
+            "span": 24,
+            "itemLayout": {
+              "type": "flex",
+              "gap": 8,
+              "wrap": "nowrap",
+              "alignItems": "center"
+            }
+          },
+          "template": [
+            {
+              "id": "clusterIp",
+              "type": "input",
+              "label": "",
+              "labelWidth": 0,
+              "props": {
+                "placeholder": "请输入IP地址"
+              },
+              "rules": [
+                {
+                  "pattern": "^(?:[0-9]{1,3}\\\\.){3}[0-9]{1,3}$",
+                  "message": "请输入有效的IP地址",
+                  "trigger": "blur"
+                }
+              ],
+              "style": { "flex": "1" }
+            },
+            {
+              "id": "clusterPort",
+              "type": "input",
+              "label": "",
+              "labelWidth": 0,
+              "props": {
+                "placeholder": "请输入端口"
+              },
+              "rules": [
+                {
+                  "pattern": "^([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$",
+                  "message": "端口范围：1-65535",
+                  "trigger": "blur"
+                }
+              ],
+              "style": { "flex": "1" }
+            }
+          ]
+        },
+        {
+          "id": "customParamsHeader",
+          "type": "form-object",
+          "label": "自定义参数",
+          "style": {
+            "marginTop": "12px",
+            "marginBottom": "8px",
+            "padding": "12px",
+            "borderRadius": "4px",
+            "border": "1px dashed #d0d7de"
+          },
+          "layout": {
+            "type": "flex",
+            "direction": "row",
+            "gap": 8,
+            "wrap": "nowrap",
+            "alignItems": "center",
+            "span": 24
+          },
+          "children": [
+            {
+              "id": "paramKeyLabel",
+              "type": "custom",
+              "excludeFromSubmit": true,
+              "render": { "text": "参数名" },
+              "style": {
+                "flex": "1",
+                "fontFamily": "monospace",
+                "fontSize": "14px",
+                "color": "#606266"
+              }
+            },
+            {
+              "id": "paramSeparator",
+              "type": "custom",
+              "excludeFromSubmit": true,
+              "render": { "text": "-" },
+              "style": {
+                "width": "40px",
+                "textAlign": "center",
+                "fontFamily": "monospace",
+                "fontSize": "14px",
+                "color": "#606266"
+              }
+            },
+            {
+              "id": "paramValueLabel",
+              "type": "custom",
+              "excludeFromSubmit": true,
+              "render": { "text": "参数值" },
+              "style": {
+                "flex": "1",
+                "fontFamily": "monospace",
+                "fontSize": "14px",
+                "color": "#606266"
+              }
+            },
+            {
+              "id": "customParamsAddButton",
+              "type": "custom",
+              "label": "",
+              "labelWidth": 0,
+              "excludeFromSubmit": true,
+              "render": {
+                "component": "GroupAddButton",
+                "props": {
+                  "targetField": "customParamList",
+                  "label": "+ 添加参数",
+                  "buttonType": "primary",
+                  "link": true
+                }
+              },
+              "style": {
+                "width": "auto",
+                "flexShrink": "0"
+              }
+            }
+          ]
+        },
+        {
+          "id": "customParamList",
+          "type": "field-group",
+          "label": "",
+          "operations": {
+            "add": { "show": false },
+            "copy": { "show": false },
+            "move": { "show": false },
+            "position": "right"
+          },
+          "min": 0,
+          "max": 20,
+          "sortable": false,
+          "showIndex": false,
+          "layout": {
+            "span": 24,
+            "itemLayout": {
+              "type": "flex",
+              "gap": 8,
+              "wrap": "nowrap",
+              "alignItems": "center"
+            }
+          },
+          "template": [
+            {
+              "id": "paramKey",
+              "type": "input",
+              "label": "",
+              "labelWidth": 0,
+              "props": {
+                "placeholder": "请输入参数名"
+              },
+              "style": { "flex": "1" }
+            },
+            {
+              "id": "paramValue",
+              "type": "input",
+              "label": "",
+              "labelWidth": 0,
+              "props": {
+                "placeholder": "请输入参数值"
+              },
+              "style": { "flex": "1" }
+            },
+            {
+              "id": "paramOps",
+              "type": "custom",
+              "label": "",
+              "labelWidth": 0,
+              "excludeFromSubmit": true,
+              "render": {
+                "component": "GroupClearButton"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "discoveryScopeSection",
+      "type": "form-object",
+      "label": "发现范围",
+      "flatten": true,
+      "collapsible": true,
+      "collapsed": false,
+      "showWhen": "showSensitiveOptions=1",
+      "style": {
+        "marginBottom": "16px",
+        "border": "1px solid #e4e7ed",
+        "borderRadius": "4px",
+        "padding": "16px"
+      },
+      "children": [
+        {
+          "id": "discoveryScope",
+          "type": "radio",
+          "label": "",
+          "labelWidth": 0,
+          "defaultValue": 0,
+          "props": {
+            "options": [
+              {
+                "label": "发现全部数据",
+                "value": 0
+              },
+              {
+                "label": "发现部分数据",
+                "value": 1
+              }
+            ]
+          },
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "discoveryScopeList",
+          "type": "tree-select",
+          "label": "选择Schema",
+          "props": {
+            "placeholder": "请选择需要发现的Schema",
+            "multiple": true,
+            "check-strictly": true,
+            "default-expand-all": true,
+            "props": {
+              "label": "label",
+              "children": "children",
+              "value": "value"
+            }
+          },
+          "showWhen": "discoveryScope=1",
+          "optionsFrom": "fetchDataCatalogueTree",
+          "fetchOnMount": true,
+          "layout": { "span": 24 }
+        }
+      ]
+    },
+    {
+      "id": "classificationPlanSection",
+      "type": "form-object",
+      "label": "分类分级方案",
+      "flatten": true,
+      "collapsible": true,
+      "collapsed": false,
+      "showWhen": "showSensitiveOptions=1",
+      "style": {
+        "marginBottom": "16px",
+        "border": "1px solid #e4e7ed",
+        "borderRadius": "4px",
+        "padding": "16px"
+      },
+      "children": [
+        {
+          "id": "discoveryPlanIds",
+          "type": "select",
+          "label": "分类分级方案",
+          "props": {
+            "placeholder": "请选择分类分级方案",
+            "multiple": true
+          },
+          "optionsFrom": "fetchClassificationPlans",
+          "fetchOnMount": true,
+          "layout": { "span": 24 }
+        }
+      ]
+    },
+    {
+      "id": "scheduleStrategy",
+      "type": "form-object",
+      "label": "定时策略",
+      "flatten": true,
+      "collapsible": true,
+      "collapsed": false,
+      "showWhen": "showSensitiveOptions=1",
+      "style": {
+        "marginBottom": "16px",
+        "border": "1px solid #e4e7ed",
+        "borderRadius": "4px",
+        "padding": "16px"
+      },
+      "children": [
+        {
+          "id": "discoveryAutoEnable",
+          "type": "radio",
+          "label": "是否开启自动增量敏感发现",
+          "defaultValue": 0,
+          "props": {
+            "options": [
+              { "label": "否", "value": 0 },
+              { "label": "是", "value": 1 }
+            ]
+          },
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "discoverMode",
+          "type": "select",
+          "label": "发现方式",
+          "showWhen": "discoveryAutoEnable=1",
+          "defaultValue": 1,
+          "props": {
+            "placeholder": "请选择发现方式",
+            "options": [
+              { "label": "全量发现", "value": 1 },
+              { "label": "增量发现", "value": 2 }
+            ]
+          },
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "scheduleConfig",
+          "type": "form-object",
+          "label": "默认敏感发现任务定时策略",
+          "showWhen": "discoveryAutoEnable=1",
+          "flatten": true,
+          "layout": {
+            "span": 24,
+            "innerLayout": {
+              "type": "flex",
+              "direction": "row",
+              "gap": "8",
+              "alignItems": "center"
+            }
+          },
+          "children": [
+            {
+              "id": "scheduleType",
+              "type": "select",
+              "label": "",
+              "labelWidth": 0,
+              "defaultValue": "daily",
+              "props": {
+                "options": [
+                  { "label": "每天", "value": "daily" },
+                  { "label": "每周", "value": "weekly" },
+                  { "label": "每月", "value": "monthly" },
+                  { "label": "每隔", "value": "interval" }
+                ]
+              },
+              "style": { "flex": "0 0 120px" }
+            },
+            {
+              "id": "scheduleWeekday",
+              "type": "select",
+              "label": "",
+              "labelWidth": 0,
+              "showWhen": "scheduleType=weekly",
+              "props": {
+                "placeholder": "请选择星期",
+                "options": [
+                  { "label": "一", "value": 1 },
+                  { "label": "二", "value": 2 },
+                  { "label": "三", "value": 3 },
+                  { "label": "四", "value": 4 },
+                  { "label": "五", "value": 5 },
+                  { "label": "六", "value": 6 },
+                  { "label": "七", "value": 7 }
+                ]
+              },
+              "style": { "flex": "0 0 120px" }
+            },
+            {
+              "id": "scheduleMonthDay",
+              "type": "select",
+              "label": "",
+              "labelWidth": 0,
+              "showWhen": "scheduleType=monthly",
+              "props": {
+                "placeholder": "请选择日期",
+                "options": [
+                  { "label": "末", "value": "last" },
+                  { "label": "1号", "value": 1 },
+                  { "label": "2号", "value": 2 },
+                  { "label": "3号", "value": 3 },
+                  { "label": "4号", "value": 4 },
+                  { "label": "5号", "value": 5 },
+                  { "label": "6号", "value": 6 },
+                  { "label": "7号", "value": 7 },
+                  { "label": "8号", "value": 8 },
+                  { "label": "9号", "value": 9 },
+                  { "label": "10号", "value": 10 },
+                  { "label": "11号", "value": 11 },
+                  { "label": "12号", "value": 12 },
+                  { "label": "13号", "value": 13 },
+                  { "label": "14号", "value": 14 },
+                  { "label": "15号", "value": 15 },
+                  { "label": "16号", "value": 16 },
+                  { "label": "17号", "value": 17 },
+                  { "label": "18号", "value": 18 },
+                  { "label": "19号", "value": 19 },
+                  { "label": "20号", "value": 20 },
+                  { "label": "21号", "value": 21 },
+                  { "label": "22号", "value": 22 },
+                  { "label": "23号", "value": 23 },
+                  { "label": "24号", "value": 24 },
+                  { "label": "25号", "value": 25 },
+                  { "label": "26号", "value": 26 },
+                  { "label": "27号", "value": 27 },
+                  { "label": "28号", "value": 28 },
+                  { "label": "29号", "value": 29 },
+                  { "label": "30号", "value": 30 },
+                  { "label": "31号", "value": 31 }
+                ]
+              },
+              "style": { "flex": "0 0 120px" }
+            },
+            {
+              "id": "scheduleInterval",
+              "type": "number",
+              "label": "",
+              "labelWidth": 0,
+              "showWhen": "scheduleType=interval",
+              "defaultValue": 1,
+              "props": {
+                "min": 1,
+                "step": 1,
+                "controlsPosition": "right"
+              },
+              "style": { "flex": "0 0 120px" }
+            },
+            {
+              "id": "scheduleIntervalUnit",
+              "type": "custom",
+              "excludeFromSubmit": true,
+              "showWhen": "scheduleType=interval",
+              "render": { "text": "分钟" },
+              "style": {
+                "width": "48px",
+                "textAlign": "center",
+                "fontSize": "14px",
+                "color": "#606266"
+              }
+            },
+            {
+              "id": "scheduleSeparator",
+              "type": "custom",
+              "excludeFromSubmit": true,
+              "showWhen": "scheduleType!=interval",
+              "render": { "text": "-" },
+              "style": {
+                "width": "40px",
+                "textAlign": "center",
+                "fontSize": "14px",
+                "color": "#606266"
+              }
+            },
+            {
+              "id": "scheduleTime",
+              "type": "time-picker",
+              "label": "",
+              "labelWidth": 0,
+              "showWhen": "scheduleType!=interval",
+              "props": {
+                "placeholder": "时:分",
+                "format": "HH:mm",
+                "valueFormat": "HH:mm"
+              },
+              "defaultValue": "00:00",
+              "style": { "flex": "1" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "advancedDiscoveryOptions",
+      "type": "form-object",
+      "label": "高级选项",
+      "flatten": true,
+      "collapsible": true,
+      "collapsed": true,
+      "showWhen": "showSensitiveOptions=1",
+      "style": {
+        "marginBottom": "16px",
+        "border": "1px solid #e4e7ed",
+        "borderRadius": "4px",
+        "padding": "16px"
+      },
+      "children": [
+        {
+          "id": "discoveryCoverResult",
+          "type": "radio",
+          "label": "是否覆盖发现结果",
+          "defaultValue": 1,
+          "props": {
+            "options": [
+              { "label": "否", "value": 0 },
+              { "label": "是", "value": 1 }
+            ]
+          },
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "discoverySampleEmptyFilter",
+          "type": "radio",
+          "label": "敏感发现样本是否开启非空过滤",
+          "defaultValue": 0,
+          "props": {
+            "options": [
+              { "label": "否", "value": 0 },
+              { "label": "是", "value": 1 }
+            ]
+          },
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "discoverySkipFailedTable",
+          "type": "radio",
+          "label": "敏感识别是否跳过识别失败的表",
+          "defaultValue": 1,
+          "props": {
+            "options": [
+              { "label": "否", "value": 0 },
+              { "label": "是", "value": 1 }
+            ]
+          },
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "discoveryConfirmMethod",
+          "type": "radio",
+          "label": "自动识别确认机制",
+          "defaultValue": 1,
+          "props": {
+            "options": [
+              { "label": "人工确认", "value": 1 },
+              { "label": "自动确认", "value": 0 }
+            ]
+          },
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "discoverySampleSize",
+          "type": "number",
+          "label": "敏感发现样本行数",
+          "defaultValue": 1000,
+          "props": {
+            "min": 1,
+            "max": 10000
+          },
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "discoveryValidityRatio",
+          "type": "number",
+          "label": "数据有效性比例（%）",
+          "defaultValue": 10,
+          "props": {
+            "min": 0,
+            "max": 100
+          },
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "discoveryMinRatio",
+          "type": "number",
+          "label": "敏感类型判定最小比例（%）",
+          "defaultValue": 20,
+          "props": {
+            "min": 0,
+            "max": 100
+          },
+          "layout": { "span": 24 }
+        },
+        {
+          "id": "discoveryLongFieldFilter",
+          "type": "number",
+          "label": "敏感发现超长字段过滤",
+          "defaultValue": 100,
+          "props": {
+            "min": 1,
+            "max": 1000
+          },
+          "layout": { "span": 24 }
+        }
+      ]
+    }
+  ]
+}

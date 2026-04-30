@@ -1,0 +1,54 @@
+{
+  "version": "1.0",
+  "formId": "data-policy-demo",
+  "model": {
+    "rangeType": "all",
+    "rules": [
+      {
+        "dataType": "allData",
+        "protectionMethods": [
+          { "methodType": "plaintext" }
+        ]
+      }
+    ]
+  },
+  "layout": { "type": "grid", "columns": 4, "gutter": 16 },
+  "fields": [
+    { "id": "rangeType", "type": "select", "props": { "options": [{"label":"所有","value":"all"},{"label":"指定","value":"specific"}] } },
+    { "id": "dataSources", "type": "select", "showWhen": "rangeType=specific" },
+    {
+      "id": "rules",
+      "type": "field-group",
+      "template": [
+        { "id": "dataType", "type": "select", "props": { "options": [{"label":"所有字段","value":"allData"},{"label":"数据标签","value":"dataLabel"}] } },
+        { "id": "conditionType", "type": "select", "showWhen": "dataType=dataLabel" },
+        { "id": "dataAsset", "type": "tree-select", "showWhen": "dataType=dataLabel" },
+        {
+          "id": "protectionMethods",
+          "type": "field-group",
+          "template": [
+            { "id": "methodType", "type": "select", "props": { "options": [
+              {"label":"实名认证","value":"realname"},
+              {"label":"多因素认证","value":"mfa"},
+              {"label":"明文","value":"plaintext"},
+              {"label":"限制行数","value":"rowLimit"},
+              {"label":"脱敏","value":"desensitization"}
+            ] } },
+            { "id": "desensitizationRule", "type": "select", "showWhen": "methodType=desensitization" },
+            { "id": "rowLimit", "type": "number", "showWhen": "methodType=rowLimit" }
+          ]
+        }
+      ]
+    }
+  ],
+  "rulesV2": [
+    {
+      "id": "hide-dataType-when-auth",
+      "scope": "rules[]",
+      "watch": ["$self.protectionMethods[].methodType"],
+      "when": { "some": ["$self.protectionMethods[]", { "in": [ { "var": "$item.methodType" }, ["realname","mfa"] ] }] },
+      "effects": [ { "type": "setVisible", "target": "$self.dataType", "value": false } ],
+      "elseEffects": [ { "type": "setVisible", "target": "$self.dataType", "value": true } ]
+    }
+  ]
+}

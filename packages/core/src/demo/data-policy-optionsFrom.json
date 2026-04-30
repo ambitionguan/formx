@@ -1,0 +1,65 @@
+{
+  "version": "1.0",
+  "formId": "data-policy-optionsFrom",
+  "model": {
+    "rangeType": "all",
+    "rules": [
+      {
+        "dataType": "allData",
+        "protectionMethods": [
+          { "methodType": "plaintext" }
+        ]
+      }
+    ]
+  },
+  "fields": [
+    { "id": "rangeType", "type": "select", "label": "范围", "props": { "options": [{"label":"所有","value":"all"},{"label":"指定","value":"specific"}] } },
+    { "id": "dataSources", "type": "select", "label": "数据源", "showWhen": "rangeType=specific", "props": { "multiple": true, "filterable": true, "clearable": true } },
+    {
+      "id": "rules",
+      "type": "field-group",
+      "label": "规则",
+      "template": [
+        { "id": "dataType", "type": "select", "label": "数据类型", "props": { "options": [{"label":"所有字段","value":"allData"},{"label":"数据标签","value":"dataLabel"}] } },
+        { "id": "conditionType", "type": "select", "label": "条件", "showWhen": "dataType=dataLabel" },
+        { "id": "dataAsset", "type": "tree-select", "label": "数据资产", "showWhen": "dataType=dataLabel" },
+        {
+          "id": "protectionMethods",
+          "type": "field-group",
+          "label": "方法",
+          "template": [
+            { "id": "methodType", "type": "select", "label": "方式", "props": { "options": [
+              {"label":"实名认证","value":"realname"},
+              {"label":"多因素认证","value":"mfa"},
+              {"label":"明文","value":"plaintext"},
+              {"label":"限制行数","value":"rowLimit"},
+              {"label":"脱敏","value":"desensitization"}
+            ] } },
+            { "id": "desensitizationRule", "type": "select", "label": "脱敏规则", "showWhen": "methodType=desensitization" },
+            { "id": "rowLimit", "type": "number", "label": "限制行数", "showWhen": "methodType=rowLimit" },
+            {
+              "id": "applicableScope",
+              "type": "select",
+              "label": "适用范围",
+              "optionsFrom": "getApplicableScopeOptions",
+              "params": { "methodType": "$self.methodType" },
+              "fetchOnMount": true,
+              "props": { "clearable": true }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "rulesV2": [
+    {
+      "id": "hide-dataType-when-auth",
+      "scope": "rules[]",
+      "watch": ["$self.protectionMethods[].methodType"],
+      "when": { "some": ["$self.protectionMethods[]", { "in": [ { "var": "$item.methodType" }, ["realname","mfa"] ] }] },
+      "effects": [ { "type": "setVisible", "target": "$self.dataType", "value": false } ],
+      "elseEffects": [ { "type": "setVisible", "target": "$self.dataType", "value": true } ]
+    }
+  ]
+}
+

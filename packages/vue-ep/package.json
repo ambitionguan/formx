@@ -1,0 +1,39 @@
+{
+  "name": "@formx/vue-ep",
+  "version": "0.1.0",
+  "description": "Vue + Element Plus skin for FormX.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": ["*.css", "**/*.css"],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "README.md"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "scripts": {
+    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly -p tsconfig.build.json",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@formx/core": "^0.1.0",
+    "@formx/ui-core": "^0.1.0",
+    "@formx/vue-core": "^0.1.0",
+    "element-plus": "^2.10.0",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@formx/core": "^0.1.0",
+    "@formx/ui-core": "^0.1.0",
+    "@formx/vue-core": "^0.1.0",
+    "element-plus": "^2.11.4",
+    "vue": "^3.5.22"
+  }
+}

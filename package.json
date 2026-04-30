@@ -1,0 +1,24 @@
+{
+  "name": "formx",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.8.1",
+  "scripts": {
+    "build": "pnpm -r --filter './packages/*' build",
+    "typecheck": "pnpm -r --filter './packages/*' typecheck",
+    "test": "vitest run",
+    "dev": "pnpm --filter @formx/example-vue-ep-basic dev",
+    "clean": "pnpm -r --filter './packages/*' clean"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
+    "@vue/tsconfig": "^0.5.1",
+    "typescript": "5.3.3",
+    "tsup": "^8.3.5",
+    "vite": "^5.4.20",
+    "vitest": "^3.2.4",
+    "vue-tsc": "^1.8.27"
+  }
+}
