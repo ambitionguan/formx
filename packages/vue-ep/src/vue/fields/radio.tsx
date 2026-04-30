@@ -19,7 +19,7 @@ export function renderRadioField(view: FieldView) {
         onUpdate:modelValue={(val: any) => view.setValue(val)}
       >
         {options.map((o: any) => (
-          <ElRadio label={o.value} {...radioItemProps}>
+          <ElRadio value={o.value} {...radioItemProps}>
             {o.label}
           </ElRadio>
         ))}

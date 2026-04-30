@@ -1,0 +1,1535 @@
+{
+  "version": "1.0.0",
+  "formId": "formx-full-showcase",
+  "ui": {
+    "labelWidth": "140px",
+    "labelSuffix": "：",
+    "size": "default"
+  },
+  "model": {
+    "profile": {
+      "appName": "订单中台",
+      "appCode": "ORDER_CENTER",
+      "description": "统一承接订单查询、履约编排与外部 API 网关接入。",
+      "appType": "api",
+      "serviceId": "order-openapi",
+      "ownerSuggest": "张三",
+      "ownerId": 1001,
+      "deptId": 11,
+      "businessDomain": [
+        "retail",
+        "order"
+      ],
+      "riskTags": [
+        "core",
+        "external"
+      ],
+      "allowGuest": false
+    },
+    "schedule": {
+      "launchDate": "2026-03-20",
+      "publishWindow": [
+        "20:00",
+        "22:00"
+      ],
+      "meetingTime": "10:30",
+      "deployMode": "manual",
+      "needBlueGreen": true,
+      "canaryPercent": 15
+    },
+    "notifyMode": "specific",
+    "notifyUsers": [
+      1001,
+      1002
+    ],
+    "notifyWebhook": "",
+    "ops": {
+      "instanceCount": 4,
+      "unitPrice": 1200,
+      "monthlyEstimate": 4800,
+      "syncDisplayName": "订单中台",
+      "reviewStrategy": "owner",
+      "riskScore": 68,
+      "enableApproval": true,
+      "approvalComment": "涉及核心链路，需在低峰时段发布。",
+      "readonlyToken": "TOKEN-PROD-001",
+      "releasePackage": [],
+      "releaseImage": [],
+      "emergencyChannel": ""
+    },
+    "contacts": [
+      {
+        "name": "张三",
+        "notifyBy": "email",
+        "email": "zhangsan@example.com",
+        "phone": "",
+        "slackWebhook": "",
+        "isPrimary": true
+      },
+      {
+        "name": "李四",
+        "notifyBy": "sms",
+        "email": "",
+        "phone": "13800000000",
+        "slackWebhook": "",
+        "isPrimary": false
+      }
+    ],
+    "deployNodes": [
+      {
+        "nodeName": "华东主节点",
+        "zone": "cn-hz-a",
+        "weight": 50,
+        "enabled": true,
+        "healthUrl": "https://api.demo.com/health"
+      },
+      {
+        "nodeName": "华北备节点",
+        "zone": "cn-bj-b",
+        "weight": 50,
+        "enabled": true,
+        "healthUrl": "https://api-bj.demo.com/health"
+      }
+    ],
+    "envTabs": [
+      {
+        "envName": "dev",
+        "baseUrl": "https://dev.demo.com",
+        "authMode": "none",
+        "accessToken": "",
+        "expiresAt": ""
+      },
+      {
+        "envName": "prod",
+        "baseUrl": "https://api.demo.com",
+        "authMode": "token",
+        "accessToken": "prod-token-demo",
+        "expiresAt": "2026-12-31"
+      }
+    ],
+    "reviewChecklist": [
+      {
+        "item": "完成发布单审批",
+        "ownerId": 1001,
+        "dueDate": "2026-03-18",
+        "done": false
+      },
+      {
+        "item": "完成回滚预案验证",
+        "ownerId": 1002,
+        "dueDate": "2026-03-19",
+        "done": false
+      }
+    ]
+  },
+  "fields": [
+    {
+      "id": "introHtml",
+      "type": "custom",
+      "label": "",
+      "labelWidth": 0,
+      "layout": {
+        "span": 24
+      },
+      "render": {
+        "html": "<div style='padding:16px;border-radius:8px;background:linear-gradient(135deg,#ecf5ff 0%,#f4f9ff 100%);border:1px solid #d9ecff;line-height:1.7'><div style='font-size:16px;font-weight:600;color:#1d2129;margin-bottom:6px'>FormX 全量能力演示 JSON</div><div style='font-size:13px;color:#4e5969'>这份 schema 在一页内串起基础字段、远程数据、对象容器、数组容器、联动短写、rulesV2、计算字段、上传、自定义渲染与调试信息。</div></div>"
+      }
+    },
+    {
+      "id": "overviewText",
+      "type": "text",
+      "label": "展示说明",
+      "layout": {
+        "span": 24
+      },
+      "props": {
+        "text": "覆盖字段类型：input / textarea / number / select / radio / checkbox / date-picker / autocomplete / tree-select / switch / slider / cascader / time-picker / time-select / upload / text / divider / separator / custom / form-object / field-group。",
+        "plain": false
+      }
+    },
+    {
+      "id": "dividerProfile",
+      "type": "divider",
+      "label": "",
+      "labelWidth": 0,
+      "layout": {
+        "span": 24
+      },
+      "props": {
+        "text": "基础字段 + 远程选项 + change / copyValue"
+      }
+    },
+    {
+      "id": "profile",
+      "type": "form-object",
+      "label": "应用基础信息",
+      "style": {
+        "padding": "16px",
+        "border": "1px solid #e4e7ed",
+        "borderRadius": "8px",
+        "marginBottom": "8px"
+      },
+      "layout": {
+        "span": 24
+      },
+      "children": [
+        {
+          "id": "appName",
+          "type": "input",
+          "label": "应用名称",
+          "layout": {
+            "span": 12
+          },
+          "props": {
+            "placeholder": "请输入应用名称",
+            "clearable": true
+          },
+          "rules": [
+            {
+              "required": true,
+              "message": "请输入应用名称",
+              "trigger": "blur"
+            }
+          ],
+          "change": [
+            {
+              "target": "ops.syncDisplayName",
+              "action": "copyValue"
+            }
+          ]
+        },
+        {
+          "id": "appCode",
+          "type": "input",
+          "label": "应用编码",
+          "layout": {
+            "span": 12
+          },
+          "readonly": true,
+          "props": {
+            "placeholder": "自动生成应用编码"
+          }
+        },
+        {
+          "id": "description",
+          "type": "textarea",
+          "label": "应用描述",
+          "layout": {
+            "span": 24
+          },
+          "props": {
+            "placeholder": "请输入应用描述",
+            "rows": 3,
+            "maxlength": 200,
+            "showWordLimit": true
+          }
+        },
+        {
+          "id": "appType",
+          "type": "select",
+          "label": "应用类型",
+          "layout": {
+            "span": 12
+          },
+          "props": {
+            "placeholder": "请选择应用类型",
+            "clearable": true,
+            "options": [
+              {
+                "label": "API 服务",
+                "value": "api"
+              },
+              {
+                "label": "数据处理",
+                "value": "data"
+              },
+              {
+                "label": "内部管理",
+                "value": "internal"
+              },
+              {
+                "label": "门户站点",
+                "value": "portal"
+              },
+              {
+                "label": "移动端",
+                "value": "mobile"
+              }
+            ]
+          },
+          "rules": [
+            {
+              "required": true,
+              "message": "请选择应用类型",
+              "trigger": "change"
+            }
+          ],
+          "change": [
+            {
+              "target": "profile.serviceId",
+              "action": "clearValue"
+            },
+            {
+              "target": "profile.serviceId",
+              "action": "patch",
+              "patch": {
+                "label": "所属服务（已跟随类型重置）",
+                "props": {
+                  "placeholder": "请重新选择所属服务"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "serviceId",
+          "type": "select",
+          "label": "所属服务",
+          "layout": {
+            "span": 12
+          },
+          "optionsFrom": "formxShowcase:getServices",
+          "params": {
+            "appType": "{{form.profile.appType}}"
+          },
+          "fetchOnMount": true,
+          "debounce": 120,
+          "props": {
+            "placeholder": "请选择所属服务",
+            "filterable": true,
+            "clearable": true
+          },
+          "rules": [
+            {
+              "required": true,
+              "message": "请选择所属服务",
+              "trigger": "change"
+            }
+          ]
+        },
+        {
+          "id": "ownerSuggest",
+          "type": "autocomplete",
+          "label": "负责人建议",
+          "layout": {
+            "span": 12
+          },
+          "optionsFrom": "formxShowcase:getOwners",
+          "fetchOnMount": true,
+          "props": {
+            "placeholder": "试试输入“张”“李”",
+            "clearable": true
+          }
+        },
+        {
+          "id": "ownerId",
+          "type": "select",
+          "label": "负责人",
+          "layout": {
+            "span": 12
+          },
+          "optionsFrom": "formxShowcase:getOwners",
+          "fetchOnMount": true,
+          "props": {
+            "placeholder": "请选择负责人",
+            "filterable": true,
+            "clearable": true
+          },
+          "rules": [
+            {
+              "required": true,
+              "message": "请选择负责人",
+              "trigger": "change"
+            }
+          ]
+        },
+        {
+          "id": "deptId",
+          "type": "tree-select",
+          "label": "归属部门",
+          "layout": {
+            "span": 12
+          },
+          "optionsFrom": "formxShowcase:getDeptTree",
+          "fetchOnMount": true,
+          "props": {
+            "placeholder": "请选择归属部门",
+            "clearable": true,
+            "checkStrictly": true,
+            "defaultExpandAll": true
+          }
+        },
+        {
+          "id": "businessDomain",
+          "type": "cascader",
+          "label": "业务域",
+          "layout": {
+            "span": 12
+          },
+          "optionsFrom": "formxShowcase:getBusinessDomains",
+          "fetchOnMount": true,
+          "props": {
+            "placeholder": "请选择业务域",
+            "clearable": true,
+            "filterable": true
+          }
+        },
+        {
+          "id": "riskTags",
+          "type": "checkbox",
+          "label": "风险标签",
+          "layout": {
+            "span": 12
+          },
+          "props": {
+            "options": [
+              {
+                "label": "核心链路",
+                "value": "core"
+              },
+              {
+                "label": "外网暴露",
+                "value": "external"
+              },
+              {
+                "label": "跨区域",
+                "value": "cross-zone"
+              },
+              {
+                "label": "历史系统",
+                "value": "legacy"
+              }
+            ]
+          }
+        },
+        {
+          "id": "allowGuest",
+          "type": "switch",
+          "label": "允许游客访问",
+          "layout": {
+            "span": 12
+          },
+          "disableWhen": {
+            "field": "profile.appType",
+            "in": [
+              "data",
+              "internal"
+            ]
+          },
+          "props": {
+            "activeText": "允许",
+            "inactiveText": "禁止"
+          }
+        }
+      ]
+    },
+    {
+      "id": "separatorSchedule",
+      "type": "separator",
+      "label": "",
+      "labelWidth": 0,
+      "layout": {
+        "span": 24
+      },
+      "props": {
+        "text": "发布日期 / 时间类控件 / 单选联动"
+      }
+    },
+    {
+      "id": "schedule",
+      "type": "form-object",
+      "label": "发布计划",
+      "style": {
+        "padding": "16px",
+        "border": "1px solid #e4e7ed",
+        "borderRadius": "8px",
+        "marginBottom": "8px"
+      },
+      "layout": {
+        "span": 24
+      },
+      "children": [
+        {
+          "id": "launchDate",
+          "type": "date-picker",
+          "label": "发布日期",
+          "layout": {
+            "span": 12
+          },
+          "props": {
+            "type": "date",
+            "valueFormat": "YYYY-MM-DD",
+            "placeholder": "请选择发布日期"
+          },
+          "rules": [
+            {
+              "required": true,
+              "message": "请选择发布日期",
+              "trigger": "change"
+            }
+          ]
+        },
+        {
+          "id": "meetingTime",
+          "type": "time-select",
+          "label": "评审会议",
+          "layout": {
+            "span": 12
+          },
+          "props": {
+            "start": "09:00",
+            "end": "20:00",
+            "step": "00:30",
+            "placeholder": "请选择会议时间"
+          }
+        },
+        {
+          "id": "publishWindow",
+          "type": "time-picker",
+          "label": "发布时间窗",
+          "layout": {
+            "span": 12
+          },
+          "props": {
+            "isRange": true,
+            "format": "HH:mm",
+            "valueFormat": "HH:mm",
+            "startPlaceholder": "开始时间",
+            "endPlaceholder": "结束时间"
+          }
+        },
+        {
+          "id": "deployMode",
+          "type": "radio",
+          "label": "发布模式",
+          "layout": {
+            "span": 12
+          },
+          "props": {
+            "options": [
+              {
+                "label": "手动发布",
+                "value": "manual"
+              },
+              {
+                "label": "自动发布",
+                "value": "auto"
+              },
+              {
+                "label": "金丝雀发布",
+                "value": "canary"
+              }
+            ]
+          }
+        },
+        {
+          "id": "needBlueGreen",
+          "type": "switch",
+          "label": "蓝绿切换",
+          "layout": {
+            "span": 12
+          },
+          "showWhen": "deployMode in ['manual','canary']",
+          "props": {
+            "activeText": "开启",
+            "inactiveText": "关闭"
+          }
+        },
+        {
+          "id": "canaryPercent",
+          "type": "slider",
+          "label": "金丝雀流量",
+          "layout": {
+            "span": 12
+          },
+          "showWhen": "deployMode=canary",
+          "requiredWhen": {
+            "field": "schedule.deployMode",
+            "eq": "canary"
+          },
+          "props": {
+            "min": 5,
+            "max": 100,
+            "step": 5,
+            "showInput": true,
+            "showStops": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "dividerInline",
+      "type": "divider",
+      "label": "",
+      "labelWidth": 0,
+      "layout": {
+        "span": 24
+      },
+      "props": {
+        "text": "flatten 容器 + 条件必填"
+      }
+    },
+    {
+      "id": "notificationInline",
+      "type": "form-object",
+      "label": "通知策略（flatten）",
+      "flatten": true,
+      "layout": {
+        "span": 24,
+        "innerLayout": {
+          "type": "flex",
+          "direction": "row",
+          "gap": 12,
+          "alignItems": "flex-start"
+        }
+      },
+      "style": {
+        "padding": "16px",
+        "border": "1px dashed #dcdfe6",
+        "borderRadius": "8px"
+      },
+      "children": [
+        {
+          "id": "notifyMode",
+          "type": "radio",
+          "label": "通知方式",
+          "layout": {
+            "span": 8
+          },
+          "props": {
+            "options": [
+              {
+                "label": "负责人",
+                "value": "owner"
+              },
+              {
+                "label": "指定人员",
+                "value": "specific"
+              },
+              {
+                "label": "Webhook",
+                "value": "webhook"
+              }
+            ]
+          }
+        },
+        {
+          "id": "notifyUsers",
+          "type": "select",
+          "label": "通知对象",
+          "layout": {
+            "span": 8
+          },
+          "showWhen": "notifyMode in ['owner','specific']",
+          "optionsFrom": "formxShowcase:getOwners",
+          "fetchOnMount": true,
+          "props": {
+            "placeholder": "请选择通知对象",
+            "multiple": true,
+            "filterable": true,
+            "clearable": true
+          },
+          "requiredWhen": {
+            "field": "notifyMode",
+            "eq": "specific"
+          }
+        },
+        {
+          "id": "notifyWebhook",
+          "type": "input",
+          "label": "Webhook 地址",
+          "layout": {
+            "span": 8
+          },
+          "showWhen": "notifyMode=webhook",
+          "requiredWhen": {
+            "field": "notifyMode",
+            "eq": "webhook"
+          },
+          "props": {
+            "placeholder": "请输入 Webhook 地址",
+            "clearable": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "dividerOps",
+      "type": "divider",
+      "label": "",
+      "labelWidth": 0,
+      "layout": {
+        "span": 24
+      },
+      "props": {
+        "text": "计算字段 + patchWhen + readOnlyWhen + 上传"
+      }
+    },
+    {
+      "id": "ops",
+      "type": "form-object",
+      "label": "治理与运行策略",
+      "style": {
+        "padding": "16px",
+        "border": "1px solid #e4e7ed",
+        "borderRadius": "8px"
+      },
+      "layout": {
+        "span": 24
+      },
+      "children": [
+        {
+          "id": "instanceCount",
+          "type": "number",
+          "label": "实例数",
+          "layout": {
+            "span": 8
+          },
+          "props": {
+            "min": 1,
+            "max": 100,
+            "controlsPosition": "right"
+          },
+          "rules": [
+            {
+              "required": true,
+              "message": "请输入实例数",
+              "trigger": "change"
+            }
+          ]
+        },
+        {
+          "id": "unitPrice",
+          "type": "number",
+          "label": "单实例月成本",
+          "layout": {
+            "span": 8
+          },
+          "props": {
+            "min": 0,
+            "max": 99999,
+            "controlsPosition": "right"
+          },
+          "rules": [
+            {
+              "required": true,
+              "message": "请输入单实例月成本",
+              "trigger": "change"
+            }
+          ]
+        },
+        {
+          "id": "monthlyEstimate",
+          "type": "number",
+          "label": "月度成本估算",
+          "layout": {
+            "span": 8
+          },
+          "readonly": true,
+          "props": {
+            "controls": false
+          },
+          "compute": {
+            "expr": {
+              "*": [
+                {
+                  "var": "ops.instanceCount"
+                },
+                {
+                  "var": "ops.unitPrice"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "syncDisplayName",
+          "type": "input",
+          "label": "展示名称（copyValue）",
+          "layout": {
+            "span": 12
+          },
+          "readonly": true,
+          "props": {
+            "placeholder": "会随应用名称自动同步"
+          }
+        },
+        {
+          "id": "reviewStrategy",
+          "type": "select",
+          "label": "审核策略",
+          "layout": {
+            "span": 12
+          },
+          "props": {
+            "placeholder": "将由 rulesV2 动态下发可选项",
+            "clearable": true
+          }
+        },
+        {
+          "id": "riskScore",
+          "type": "slider",
+          "label": "风险评分",
+          "layout": {
+            "span": 12
+          },
+          "props": {
+            "min": 0,
+            "max": 100,
+            "showInput": true,
+            "showStops": true
+          }
+        },
+        {
+          "id": "enableApproval",
+          "type": "switch",
+          "label": "需要审批",
+          "layout": {
+            "span": 12
+          },
+          "props": {
+            "activeText": "是",
+            "inactiveText": "否"
+          }
+        },
+        {
+          "id": "approvalComment",
+          "type": "textarea",
+          "label": "审批说明",
+          "layout": {
+            "span": 24
+          },
+          "showWhen": {
+            "field": "ops.enableApproval",
+            "eq": true
+          },
+          "requiredWhen": {
+            "field": "ops.enableApproval",
+            "eq": true
+          },
+          "patchWhen": [
+            {
+              "when": "ops.riskScore > 80",
+              "patch": {
+                "label": "高风险审批说明",
+                "props": {
+                  "placeholder": "请填写审批原因、风险点与回滚方案"
+                }
+              }
+            },
+            {
+              "when": "ops.riskScore <= 80",
+              "patch": {
+                "label": "审批说明",
+                "props": {
+                  "placeholder": "请输入审批说明"
+                }
+              }
+            }
+          ],
+          "props": {
+            "rows": 3,
+            "maxlength": 300,
+            "showWordLimit": true,
+            "placeholder": "请输入审批说明"
+          }
+        },
+        {
+          "id": "readonlyToken",
+          "type": "input",
+          "label": "访问 Token",
+          "layout": {
+            "span": 12
+          },
+          "readOnlyWhen": {
+            "field": "schedule.deployMode",
+            "eq": "auto"
+          },
+          "props": {
+            "placeholder": "自动发布时 Token 只读"
+          }
+        },
+        {
+          "id": "releasePackage",
+          "type": "upload",
+          "label": "升级包上传",
+          "layout": {
+            "span": 12
+          },
+          "props": {
+            "listType": "text",
+            "limit": 1,
+            "accept": ".tar.gz,.zip",
+            "httpRequestResource": "formxShowcase:uploadPackage",
+            "valueType": "fileList"
+          }
+        },
+        {
+          "id": "releaseImage",
+          "type": "upload",
+          "label": "截图上传",
+          "layout": {
+            "span": 12
+          },
+          "showWhen": "profile.appType in ['portal','mobile']",
+          "props": {
+            "listType": "picture-card",
+            "limit": 1,
+            "accept": ".png,.jpg,.jpeg",
+            "httpRequestResource": "formxShowcase:uploadImage",
+            "valueType": "fileList"
+          }
+        },
+        {
+          "id": "emergencyChannel",
+          "type": "select",
+          "label": "应急通知渠道",
+          "layout": {
+            "span": 12
+          },
+          "visible": false,
+          "props": {
+            "placeholder": "当联系人包含实时通知时才显示",
+            "clearable": true,
+            "options": [
+              {
+                "label": "短信通道",
+                "value": "sms"
+              },
+              {
+                "label": "电话通道",
+                "value": "phone"
+              },
+              {
+                "label": "Slack 通道",
+                "value": "slack"
+              }
+            ]
+          }
+        },
+        {
+          "id": "costHint",
+          "type": "text",
+          "label": "计费说明",
+          "layout": {
+            "span": 24
+          },
+          "props": {
+            "text": "月度成本估算 = 实例数 × 单实例月成本。你可以修改两个数字，观察 compute 计算字段即时生效。",
+            "plain": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "summaryCard",
+      "type": "custom",
+      "label": "",
+      "labelWidth": 0,
+      "layout": {
+        "span": 24
+      },
+      "render": {
+        "component": "ShowcaseSummaryCard"
+      }
+    },
+    {
+      "id": "dividerContacts",
+      "type": "divider",
+      "label": "",
+      "labelWidth": 0,
+      "layout": {
+        "span": 24
+      },
+      "props": {
+        "text": "field-group：Table + $self 联动"
+      }
+    },
+    {
+      "id": "contacts",
+      "type": "field-group",
+      "label": "告警联系人",
+      "showIndex": true,
+      "min": 1,
+      "max": 4,
+      "sortable": true,
+      "operations": {
+        "add": {
+          "text": "+ 添加联系人",
+          "disabledMessage": "最多 4 个联系人",
+          "defaultItem": {
+            "name": "",
+            "notifyBy": "email",
+            "email": "",
+            "phone": "",
+            "slackWebhook": "",
+            "isPrimary": false
+          }
+        },
+        "copy": {
+          "text": "复制",
+          "disabledMessage": "已达到上限"
+        },
+        "move": {
+          "text": "移动",
+          "disabledMessage": "已到边界"
+        },
+        "remove": {
+          "text": "删除",
+          "disabledMessage": "至少保留 1 个联系人"
+        }
+      },
+      "layout": {
+        "type": "table",
+        "itemLayout": {
+          "gap": 12
+        }
+      },
+      "presentation": {
+        "type": "table",
+        "table": {
+          "actionsWidth": 180,
+          "emptyText": "暂无联系人",
+          "columns": [
+            {
+              "field": "name",
+              "label": "姓名",
+              "width": 160
+            },
+            {
+              "field": "notifyBy",
+              "label": "通知方式",
+              "width": 140
+            },
+            {
+              "field": "email",
+              "label": "邮箱",
+              "span": 2
+            },
+            {
+              "field": "phone",
+              "label": "手机",
+              "width": 150
+            },
+            {
+              "field": "slackWebhook",
+              "label": "Webhook",
+              "span": 2
+            },
+            {
+              "field": "isPrimary",
+              "label": "主联系人",
+              "width": 120,
+              "align": "center"
+            }
+          ]
+        }
+      },
+      "template": [
+        {
+          "id": "name",
+          "type": "input",
+          "label": "",
+          "labelWidth": 0,
+          "props": {
+            "placeholder": "联系人姓名"
+          },
+          "rules": [
+            {
+              "required": true,
+              "message": "请输入联系人姓名",
+              "trigger": "blur"
+            }
+          ]
+        },
+        {
+          "id": "notifyBy",
+          "type": "select",
+          "label": "",
+          "labelWidth": 0,
+          "props": {
+            "placeholder": "通知方式",
+            "options": [
+              {
+                "label": "邮件",
+                "value": "email"
+              },
+              {
+                "label": "短信",
+                "value": "sms"
+              },
+              {
+                "label": "Slack",
+                "value": "slack"
+              },
+              {
+                "label": "邮件 + 短信",
+                "value": "both"
+              }
+            ]
+          }
+        },
+        {
+          "id": "email",
+          "type": "input",
+          "label": "",
+          "labelWidth": 0,
+          "showWhen": "notifyBy in ['email','both']",
+          "requiredWhen": {
+            "field": "notifyBy",
+            "in": [
+              "email",
+              "both"
+            ]
+          },
+          "props": {
+            "placeholder": "邮箱地址"
+          }
+        },
+        {
+          "id": "phone",
+          "type": "input",
+          "label": "",
+          "labelWidth": 0,
+          "showWhen": "notifyBy in ['sms','both']",
+          "requiredWhen": {
+            "field": "notifyBy",
+            "in": [
+              "sms",
+              "both"
+            ]
+          },
+          "props": {
+            "placeholder": "手机号"
+          }
+        },
+        {
+          "id": "slackWebhook",
+          "type": "input",
+          "label": "",
+          "labelWidth": 0,
+          "showWhen": "notifyBy=slack",
+          "requiredWhen": {
+            "field": "notifyBy",
+            "eq": "slack"
+          },
+          "props": {
+            "placeholder": "Slack Webhook 地址"
+          }
+        },
+        {
+          "id": "isPrimary",
+          "type": "switch",
+          "label": "",
+          "labelWidth": 0,
+          "props": {
+            "activeText": "是",
+            "inactiveText": "否"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dividerNodes",
+      "type": "divider",
+      "label": "",
+      "labelWidth": 0,
+      "layout": {
+        "span": 24
+      },
+      "props": {
+        "text": "field-group：Cards"
+      }
+    },
+    {
+      "id": "deployNodes",
+      "type": "field-group",
+      "label": "部署节点",
+      "showIndex": true,
+      "min": 1,
+      "max": 3,
+      "operations": {
+        "add": {
+          "text": "+ 新增节点",
+          "disabledMessage": "最多 3 个节点",
+          "defaultItem": {
+            "nodeName": "",
+            "zone": "cn-hz-a",
+            "weight": 50,
+            "enabled": true,
+            "healthUrl": ""
+          }
+        },
+        "copy": {
+          "text": "复制",
+          "disabledMessage": "已达到上限"
+        },
+        "remove": {
+          "text": "删除",
+          "disabledMessage": "至少保留 1 个节点"
+        }
+      },
+      "presentation": {
+        "type": "cards",
+        "addButtonText": "+ 添加节点"
+      },
+      "itemMeta": {
+        "titleField": "nodeName"
+      },
+      "template": [
+        {
+          "id": "nodeName",
+          "type": "input",
+          "label": "节点名称",
+          "props": {
+            "placeholder": "请输入节点名称"
+          }
+        },
+        {
+          "id": "zone",
+          "type": "select",
+          "label": "可用区",
+          "props": {
+            "options": [
+              {
+                "label": "杭州 A",
+                "value": "cn-hz-a"
+              },
+              {
+                "label": "杭州 B",
+                "value": "cn-hz-b"
+              },
+              {
+                "label": "北京 B",
+                "value": "cn-bj-b"
+              }
+            ]
+          }
+        },
+        {
+          "id": "weight",
+          "type": "slider",
+          "label": "流量权重",
+          "props": {
+            "min": 0,
+            "max": 100,
+            "showInput": true
+          }
+        },
+        {
+          "id": "enabled",
+          "type": "switch",
+          "label": "启用状态",
+          "props": {
+            "activeText": "启用",
+            "inactiveText": "停用"
+          }
+        },
+        {
+          "id": "healthUrl",
+          "type": "input",
+          "label": "健康检查",
+          "readOnlyWhen": {
+            "field": "enabled",
+            "eq": false
+          },
+          "props": {
+            "placeholder": "请输入健康检查地址"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dividerEnvTabs",
+      "type": "divider",
+      "label": "",
+      "labelWidth": 0,
+      "layout": {
+        "span": 24
+      },
+      "props": {
+        "text": "field-group：Tabs"
+      }
+    },
+    {
+      "id": "envTabs",
+      "type": "field-group",
+      "label": "环境配置",
+      "min": 1,
+      "max": 4,
+      "operations": {
+        "add": {
+          "text": "+ 新增环境",
+          "disabledMessage": "最多 4 个环境",
+          "defaultItem": {
+            "envName": "staging",
+            "baseUrl": "",
+            "authMode": "none",
+            "accessToken": "",
+            "expiresAt": ""
+          }
+        },
+        "remove": {
+          "disabledMessage": "至少保留 1 个环境"
+        }
+      },
+      "presentation": {
+        "type": "tabs",
+        "tabLabelField": "envName",
+        "tabClosable": true,
+        "addButtonText": "+ 新增环境"
+      },
+      "template": [
+        {
+          "id": "envName",
+          "type": "input",
+          "label": "环境名",
+          "props": {
+            "placeholder": "如 dev / prod"
+          }
+        },
+        {
+          "id": "baseUrl",
+          "type": "input",
+          "label": "基础地址",
+          "props": {
+            "placeholder": "请输入访问地址"
+          },
+          "rules": [
+            {
+              "required": true,
+              "message": "请输入基础地址",
+              "trigger": "blur"
+            }
+          ]
+        },
+        {
+          "id": "authMode",
+          "type": "select",
+          "label": "鉴权模式",
+          "props": {
+            "options": [
+              {
+                "label": "无鉴权",
+                "value": "none"
+              },
+              {
+                "label": "Token",
+                "value": "token"
+              },
+              {
+                "label": "Basic Auth",
+                "value": "basic"
+              }
+            ]
+          }
+        },
+        {
+          "id": "accessToken",
+          "type": "input",
+          "label": "Access Token",
+          "showWhen": "authMode=token",
+          "requiredWhen": {
+            "field": "authMode",
+            "eq": "token"
+          },
+          "props": {
+            "placeholder": "请输入 Token"
+          }
+        },
+        {
+          "id": "expiresAt",
+          "type": "date-picker",
+          "label": "失效日期",
+          "showWhen": "authMode=token",
+          "props": {
+            "type": "date",
+            "valueFormat": "YYYY-MM-DD",
+            "placeholder": "请选择失效日期"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dividerChecklist",
+      "type": "divider",
+      "label": "",
+      "labelWidth": 0,
+      "layout": {
+        "span": 24
+      },
+      "props": {
+        "text": "field-group：List + scope 内远程选项"
+      }
+    },
+    {
+      "id": "reviewChecklist",
+      "type": "field-group",
+      "label": "发布前检查项",
+      "min": 1,
+      "max": 6,
+      "operations": {
+        "add": {
+          "text": "+ 添加检查项",
+          "disabledMessage": "最多 6 项",
+          "defaultItem": {
+            "item": "",
+            "ownerId": 1001,
+            "dueDate": "",
+            "done": false
+          }
+        },
+        "remove": {
+          "disabledMessage": "至少保留 1 项"
+        }
+      },
+      "presentation": {
+        "type": "list"
+      },
+      "template": [
+        {
+          "id": "item",
+          "type": "input",
+          "label": "检查项",
+          "props": {
+            "placeholder": "请输入检查项说明"
+          }
+        },
+        {
+          "id": "ownerId",
+          "type": "select",
+          "label": "负责人",
+          "optionsFrom": "formxShowcase:getOwners",
+          "fetchOnMount": true,
+          "props": {
+            "placeholder": "请选择负责人",
+            "filterable": true,
+            "clearable": true
+          }
+        },
+        {
+          "id": "dueDate",
+          "type": "date-picker",
+          "label": "截止日期",
+          "props": {
+            "type": "date",
+            "valueFormat": "YYYY-MM-DD",
+            "placeholder": "请选择日期"
+          }
+        },
+        {
+          "id": "done",
+          "type": "switch",
+          "label": "完成",
+          "props": {
+            "activeText": "已完成",
+            "inactiveText": "未完成"
+          }
+        }
+      ]
+    }
+  ],
+  "rulesV2": [
+    {
+      "id": "set_review_strategy_options",
+      "watch": [
+        "profile.appType"
+      ],
+      "when": {
+        "==": [
+          {
+            "var": "profile.appType"
+          },
+          "api"
+        ]
+      },
+      "effects": [
+        {
+          "type": "setOptions",
+          "target": "ops.reviewStrategy",
+          "options": [
+            {
+              "label": "负责人审批",
+              "value": "owner"
+            },
+            {
+              "label": "架构委员会",
+              "value": "architecture"
+            },
+            {
+              "label": "API 治理组",
+              "value": "api-guild"
+            }
+          ]
+        }
+      ],
+      "elseEffects": [
+        {
+          "type": "setOptions",
+          "target": "ops.reviewStrategy",
+          "options": [
+            {
+              "label": "负责人审批",
+              "value": "owner"
+            },
+            {
+              "label": "质量保障",
+              "value": "qa"
+            },
+            {
+              "label": "运维审核",
+              "value": "ops"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "show_emergency_channel_when_realtime_contact_exists",
+      "watch": [
+        "contacts[].notifyBy"
+      ],
+      "when": {
+        "some": [
+          "contacts[]",
+          {
+            "in": [
+              {
+                "var": "$item.notifyBy"
+              },
+              [
+                "sms",
+                "slack",
+                "both"
+              ]
+            ]
+          }
+        ]
+      },
+      "effects": [
+        {
+          "type": "setVisible",
+          "target": "ops.emergencyChannel",
+          "value": true
+        },
+        {
+          "type": "setRequired",
+          "target": "ops.emergencyChannel",
+          "value": true
+        }
+      ],
+      "elseEffects": [
+        {
+          "type": "setVisible",
+          "target": "ops.emergencyChannel",
+          "value": false
+        },
+        {
+          "type": "setRequired",
+          "target": "ops.emergencyChannel",
+          "value": false
+        }
+      ]
+    }
+  ]
+}

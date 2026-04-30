@@ -1,0 +1,229 @@
+{
+  "version": "1.0.0",
+  "formId": "formx-linkage-permission-matrix",
+  "ui": {
+    "labelWidth": "160px",
+    "labelSuffix": "："
+  },
+  "model": {
+    "base": {
+      "role": "viewer",
+      "environment": "dev",
+      "strictMode": false
+    },
+    "modules": [
+      {
+        "module": "user",
+        "read": true,
+        "write": false,
+        "delete": false,
+        "export": false,
+        "reason": ""
+      },
+      {
+        "module": "finance",
+        "read": false,
+        "write": false,
+        "delete": false,
+        "export": false,
+        "reason": ""
+      }
+    ],
+    "summary": {
+      "selectedCount": 0,
+      "needJustification": false
+    }
+  },
+  "fields": [
+    {
+      "id": "base",
+      "type": "form-object",
+      "label": "全局配置",
+      "children": [
+        {
+          "id": "role",
+          "type": "select",
+          "label": "预设角色",
+          "props": {
+            "options": [
+              { "label": "Viewer（只读）", "value": "viewer" },
+              { "label": "Editor（读写）", "value": "editor" },
+              { "label": "Admin（全权限）", "value": "admin" }
+            ]
+          }
+        },
+        {
+          "id": "environment",
+          "type": "select",
+          "label": "环境",
+          "props": {
+            "options": [
+              { "label": "开发", "value": "dev" },
+              { "label": "预发", "value": "staging" },
+              { "label": "生产", "value": "prod" }
+            ]
+          }
+        },
+        {
+          "id": "strictMode",
+          "type": "switch",
+          "label": "严格模式",
+          "props": { "activeText": "开启", "inactiveText": "关闭" },
+          "showWhen": { "field": "base.environment", "eq": "prod" }
+        }
+      ]
+    },
+    {
+      "id": "modules",
+      "type": "field-group",
+      "label": "模块权限矩阵（Table）",
+      "min": 1,
+      "max": 10,
+      "showIndex": true,
+      "indexWidth": 48,
+      "operations": {
+        "add": {
+          "text": "+ 新增模块",
+          "defaultItem": {
+            "module": "",
+            "read": true,
+            "write": false,
+            "delete": false,
+            "export": false,
+            "reason": ""
+          }
+        },
+        "remove": { "disabledMessage": "至少保留 1 条" }
+      },
+      "layout": { "type": "table", "itemLayout": { "gap": 12 } },
+      "presentation": {
+        "type": "table",
+        "table": {
+          "actionsWidth": 150,
+          "emptyText": "暂无模块",
+          "columns": [
+            { "field": "module", "label": "模块", "width": 200 },
+            { "field": "read", "label": "读", "width": 80, "align": "center" },
+            { "field": "write", "label": "写", "width": 80, "align": "center" },
+            { "field": "delete", "label": "删", "width": 80, "align": "center" },
+            { "field": "export", "label": "导出", "width": 90, "align": "center" },
+            { "field": "reason", "label": "原因（条件必填）", "span": 2 }
+          ]
+        }
+      },
+      "template": [
+        {
+          "id": "module",
+          "type": "select",
+          "label": "",
+          "labelWidth": 0,
+          "props": {
+            "placeholder": "选择模块",
+            "options": [
+              { "label": "用户", "value": "user" },
+              { "label": "财务", "value": "finance" },
+              { "label": "审计", "value": "audit" },
+              { "label": "报表", "value": "report" }
+            ]
+          },
+          "rules": [{ "required": true, "message": "请选择模块", "trigger": "change" }]
+        },
+        {
+          "id": "read",
+          "type": "switch",
+          "label": "",
+          "labelWidth": 0,
+          "props": { "activeText": "", "inactiveText": "" }
+        },
+        {
+          "id": "write",
+          "type": "switch",
+          "label": "",
+          "labelWidth": 0,
+          "props": { "activeText": "", "inactiveText": "" },
+          "disableWhen": { "field": "$root.base.role", "eq": "viewer" },
+          "valueWhen": { "when": { "field": "$root.base.role", "eq": "admin" }, "value": true }
+        },
+        {
+          "id": "delete",
+          "type": "switch",
+          "label": "",
+          "labelWidth": 0,
+          "props": { "activeText": "", "inactiveText": "" },
+          "disableWhen": { "field": "$root.base.role", "in": ["viewer", "editor"] },
+          "valueWhen": { "when": { "field": "$root.base.role", "eq": "admin" }, "value": true }
+        },
+        {
+          "id": "export",
+          "type": "switch",
+          "label": "",
+          "labelWidth": 0,
+          "props": { "activeText": "", "inactiveText": "" },
+          "disableWhen": { "field": "$root.base.environment", "eq": "prod" },
+          "valueWhen": { "when": { "field": "$root.base.environment", "eq": "dev" }, "value": true }
+        },
+        {
+          "id": "reason",
+          "type": "input",
+          "label": "",
+          "labelWidth": 0,
+          "props": { "placeholder": "当勾选删/导出时必填（或开启严格模式）" },
+          "showWhen": {
+            "field": "$root.summary.needJustification",
+            "eq": true
+          },
+          "requiredWhen": {
+            "field": "$root.summary.needJustification",
+            "eq": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "summary",
+      "type": "form-object",
+      "label": "汇总（跨 scope）",
+      "children": [
+        {
+          "id": "selectedCount",
+          "type": "number",
+          "label": "高风险权限勾选数",
+          "props": { "precision": 0, "disabled": true },
+          "compute": {
+            "expr": {
+              "sum": [
+                "modules[]",
+                {
+                  "iif": [
+                    {
+                      "or": [
+                        { "==": [{ "var": "$item.delete" }, true] },
+                        { "==": [{ "var": "$item.export" }, true] }
+                      ]
+                    },
+                    1,
+                    0
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "needJustification",
+          "type": "switch",
+          "label": "是否需要原因",
+          "props": { "activeText": "需要", "inactiveText": "不需要" },
+          "compute": {
+            "expr": {
+              "or": [
+                { ">": [{ "var": "$root.summary.selectedCount" }, 0] },
+                { "==": [{ "var": "$root.base.strictMode" }, true] }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

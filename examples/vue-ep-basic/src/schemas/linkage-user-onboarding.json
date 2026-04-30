@@ -1,0 +1,307 @@
+{
+  "version": "1.0.0",
+  "formId": "formx-linkage-user-onboarding",
+  "ui": {
+    "labelWidth": "140px",
+    "labelSuffix": "："
+  },
+  "model": {
+    "profile": {
+      "name": "",
+      "email": "",
+      "employeeType": "fulltime",
+      "department": "rd",
+      "location": {
+        "country": "CN",
+        "city": "Shanghai"
+      }
+    },
+    "it": {
+      "needLaptop": true,
+      "laptopModel": "mbp",
+      "needPhone": false,
+      "phoneModel": "",
+      "accounts": {
+        "needVpn": true,
+        "vpnRegion": "CN",
+        "needDb": false,
+        "dbRole": ""
+      }
+    },
+    "security": {
+      "accessLevel": "standard",
+      "needTraining": false,
+      "trainingType": "",
+      "justification": ""
+    },
+    "summary": {
+      "itCost": 0,
+      "riskScore": 0
+    }
+  },
+  "fields": [
+    {
+      "id": "profile",
+      "type": "form-object",
+      "label": "基本信息",
+      "children": [
+        {
+          "id": "name",
+          "type": "input",
+          "label": "姓名",
+          "props": { "placeholder": "请输入姓名" },
+          "rules": [{ "required": true, "message": "请输入姓名", "trigger": "blur" }]
+        },
+        {
+          "id": "email",
+          "type": "input",
+          "label": "邮箱",
+          "props": { "placeholder": "name@company.com" },
+          "rules": [
+            { "required": true, "message": "请输入邮箱", "trigger": "blur" },
+            { "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", "message": "邮箱格式不正确", "trigger": "blur" }
+          ]
+        },
+        {
+          "id": "employeeType",
+          "type": "select",
+          "label": "员工类型",
+          "props": {
+            "options": [
+              { "label": "正式员工", "value": "fulltime" },
+              { "label": "外包", "value": "contractor" },
+              { "label": "实习生", "value": "intern" }
+            ]
+          }
+        },
+        {
+          "id": "department",
+          "type": "select",
+          "label": "部门",
+          "props": {
+            "options": [
+              { "label": "研发", "value": "rd" },
+              { "label": "安全", "value": "sec" },
+              { "label": "财务", "value": "fin" },
+              { "label": "运营", "value": "ops" }
+            ]
+          }
+        },
+        {
+          "id": "location",
+          "type": "form-object",
+          "label": "工作地点（深层对象）",
+          "children": [
+            {
+              "id": "country",
+              "type": "select",
+              "label": "国家",
+              "props": {
+                "options": [
+                  { "label": "中国", "value": "CN" },
+                  { "label": "美国", "value": "US" },
+                  { "label": "德国", "value": "DE" }
+                ]
+              }
+            },
+            {
+              "id": "city",
+              "type": "input",
+              "label": "城市",
+              "props": { "placeholder": "例如 Shanghai / New York" },
+              "requiredWhen": { "field": "profile.location.country", "ne": "" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "it",
+      "type": "form-object",
+      "label": "IT 资源申请（多联动）",
+      "children": [
+        {
+          "id": "needLaptop",
+          "type": "switch",
+          "label": "需要笔记本",
+          "props": { "activeText": "需要", "inactiveText": "不需要" }
+        },
+        {
+          "id": "laptopModel",
+          "type": "select",
+          "label": "笔记本型号",
+          "showWhen": { "field": "it.needLaptop", "eq": true },
+          "requiredWhen": { "field": "it.needLaptop", "eq": true },
+          "props": {
+            "options": [
+              { "label": "MacBook Pro", "value": "mbp" },
+              { "label": "ThinkPad", "value": "thinkpad" },
+              { "label": "Dell XPS", "value": "xps" }
+            ]
+          }
+        },
+        {
+          "id": "needPhone",
+          "type": "switch",
+          "label": "需要手机",
+          "props": { "activeText": "需要", "inactiveText": "不需要" }
+        },
+        {
+          "id": "phoneModel",
+          "type": "select",
+          "label": "手机型号",
+          "showWhen": { "field": "it.needPhone", "eq": true },
+          "requiredWhen": { "field": "it.needPhone", "eq": true },
+          "props": {
+            "options": [
+              { "label": "iPhone", "value": "iphone" },
+              { "label": "Android", "value": "android" }
+            ]
+          }
+        },
+        {
+          "id": "accounts",
+          "type": "form-object",
+          "label": "账号与权限",
+          "children": [
+            {
+              "id": "needVpn",
+              "type": "switch",
+              "label": "开通 VPN",
+              "props": { "activeText": "开通", "inactiveText": "不开通" }
+            },
+            {
+              "id": "vpnRegion",
+              "type": "select",
+              "label": "VPN 区域",
+              "showWhen": { "field": "it.accounts.needVpn", "eq": true },
+              "props": {
+                "options": [
+                  { "label": "中国", "value": "CN" },
+                  { "label": "美国", "value": "US" },
+                  { "label": "欧洲", "value": "EU" }
+                ]
+              }
+            },
+            {
+              "id": "needDb",
+              "type": "switch",
+              "label": "开通数据库",
+              "props": { "activeText": "开通", "inactiveText": "不开通" }
+            },
+            {
+              "id": "dbRole",
+              "type": "select",
+              "label": "数据库角色",
+              "showWhen": { "field": "it.accounts.needDb", "eq": true },
+              "requiredWhen": { "field": "it.accounts.needDb", "eq": true },
+              "props": {
+                "options": [
+                  { "label": "只读", "value": "ro" },
+                  { "label": "读写", "value": "rw" },
+                  { "label": "管理员", "value": "admin" }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "type": "form-object",
+      "label": "安全与合规（跨层联动）",
+      "children": [
+        {
+          "id": "accessLevel",
+          "type": "select",
+          "label": "访问级别",
+          "props": {
+            "options": [
+              { "label": "标准", "value": "standard" },
+              { "label": "敏感", "value": "sensitive" },
+              { "label": "高敏", "value": "high" }
+            ]
+          },
+          "valueWhen": {
+            "when": { "field": "profile.department", "eq": "sec" },
+            "value": "high"
+          }
+        },
+        {
+          "id": "needTraining",
+          "type": "switch",
+          "label": "需要培训",
+          "props": { "activeText": "需要", "inactiveText": "不需要" },
+          "compute": {
+            "expr": {
+              "or": [
+                { "==": [{ "var": "security.accessLevel" }, "high"] },
+                { "==": [{ "var": "profile.department" }, "fin"] }
+              ]
+            }
+          }
+        },
+        {
+          "id": "trainingType",
+          "type": "select",
+          "label": "培训类型",
+          "showWhen": { "field": "security.needTraining", "eq": true },
+          "requiredWhen": { "field": "security.needTraining", "eq": true },
+          "props": {
+            "options": [
+              { "label": "高敏数据处理", "value": "high-data" },
+              { "label": "财务合规", "value": "finance" },
+              { "label": "通用安全", "value": "general" }
+            ]
+          }
+        },
+        {
+          "id": "justification",
+          "type": "textarea",
+          "label": "申请说明",
+          "props": { "rows": 3, "placeholder": "当访问级别为敏感/高敏时要求填写" },
+          "showWhen": { "field": "security.accessLevel", "in": ["sensitive", "high"] },
+          "requiredWhen": { "field": "security.accessLevel", "in": ["sensitive", "high"] }
+        }
+      ]
+    },
+    {
+      "id": "summary",
+      "type": "form-object",
+      "label": "汇总（计算字段）",
+      "children": [
+        {
+          "id": "itCost",
+          "type": "number",
+          "label": "IT 成本估算",
+          "props": { "precision": 0, "disabled": true },
+          "compute": {
+            "expr": {
+              "+": [
+                { "iif": [{ "var": "it.needLaptop" }, 8000, 0] },
+                { "iif": [{ "var": "it.needPhone" }, 3000, 0] }
+              ]
+            }
+          }
+        },
+        {
+          "id": "riskScore",
+          "type": "number",
+          "label": "风险评分",
+          "props": { "precision": 0, "disabled": true },
+          "compute": {
+            "expr": {
+              "+": [
+                { "iif": [{ "==": [{ "var": "security.accessLevel" }, "standard"] }, 10, 0] },
+                { "iif": [{ "==": [{ "var": "security.accessLevel" }, "sensitive"] }, 30, 0] },
+                { "iif": [{ "==": [{ "var": "security.accessLevel" }, "high"] }, 60, 0] }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+

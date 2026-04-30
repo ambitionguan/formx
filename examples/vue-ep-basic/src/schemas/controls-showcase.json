@@ -1,0 +1,60 @@
+{
+  "version": "1.0",
+  "formId": "controls-showcase",
+  "model": {
+    "toggle": true,
+    "level": 30,
+    "region": [],
+    "regionLazy": [],
+    "timeRange": [],
+    "meeting": "09:00",
+    "file": [],
+    "file2": []
+  },
+  "formProps": { "labelPosition": "left", "labelWidth": "120px", "size": "default" },
+  "fields": [
+    { "id": "toggle", "type": "switch", "label": "开关", "props": { "activeText": "开", "inactiveText": "关" } },
+    { "id": "level", "type": "slider", "label": "滑块", "props": { "min": 0, "max": 100, "showStops": true } },
+    {
+      "id": "region",
+      "type": "cascader",
+      "label": "区域",
+      "optionsFrom": "getRegions",
+      "fetchOnMount": true,
+      "props": { "clearable": true, "filterable": true }
+    },
+    {
+      "id": "regionLazy",
+      "type": "cascader",
+      "label": "区域(懒加载)",
+      "props": { "clearable": true, "filterable": true, "props": { "lazy": true, "lazyLoadResource": "getRegionChildren" } }
+    },
+    { "id": "timeRange", "type": "time-picker", "label": "时间段", "props": { "isRange": true, "startPlaceholder": "开始", "endPlaceholder": "结束", "format": "HH:mm", "valueFormat": "HH:mm" } },
+    { "id": "meeting", "type": "time-select", "label": "会议时间", "props": { "start": "09:00", "end": "18:00", "step": "00:30" } },
+    { "id": "file", "type": "upload", "label": "上传", "props": { "action": "#", "listType": "text" } },
+    { "id": "file2", "type": "upload", "label": "上传(资源)", "props": { "listType": "text", "httpRequestResource": "uploadFile", "valueType": "fileList" } },
+    {
+      "id": "unstable",
+      "type": "select",
+      "label": "不稳定下拉（重试演示）",
+      "optionsFrom": "unstableOptions",
+      "fetchOnMount": true,
+      "props": { "clearable": true }
+    }
+  ],
+  "rulesV2": [
+    {
+      "id": "disable_upload_when_off",
+      "watch": ["toggle"],
+      "effects": [ { "type": "setDisabled", "target": "file", "value": false } ],
+      "elseEffects": [ { "type": "setDisabled", "target": "file", "value": true } ]
+    },
+    {
+      "id": "patch_level_label",
+      "watch": ["level"],
+      "when": { ">": [ { "var": "level" }, 80 ] },
+      "effects": [ { "type": "patch", "target": "level", "value": { "label": "滑块（高）" } } ],
+      "elseEffects": [ { "type": "patch", "target": "level", "value": { "label": "滑块" } } ]
+    }
+  ]
+}

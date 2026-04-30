@@ -1,0 +1,101 @@
+{
+  "version": "1.0",
+  "formId": "data-policy-setOptions",
+  "model": {
+    "rangeType": "all",
+    "rules": [
+      {
+        "dataType": "allData",
+        "protectionMethods": [
+          { "methodType": "plaintext" }
+        ]
+      }
+    ]
+  },
+  "fields": [
+    { "id": "rangeType", "type": "select", "label": "范围", "props": { "options": [{"label":"所有","value":"all"},{"label":"指定","value":"specific"}] } },
+    { "id": "dataSources", "type": "select", "label": "数据源", "showWhen": "rangeType=specific", "props": { "multiple": true, "filterable": true, "clearable": true } },
+    {
+      "id": "rules",
+      "type": "field-group",
+      "label": "规则",
+      "template": [
+        { "id": "dataType", "type": "select", "label": "数据类型", "props": { "options": [{"label":"所有字段","value":"allData"},{"label":"数据标签","value":"dataLabel"}] } },
+        { "id": "conditionType", "type": "select", "label": "条件", "showWhen": "dataType=dataLabel" },
+        { "id": "dataAsset", "type": "tree-select", "label": "数据资产", "showWhen": "dataType=dataLabel" },
+        {
+          "id": "protectionMethods",
+          "type": "field-group",
+          "label": "方法",
+          "template": [
+            { "id": "methodType", "type": "select", "label": "方式", "props": { "options": [
+              {"label":"实名认证","value":"realname"},
+              {"label":"多因素认证","value":"mfa"},
+              {"label":"明文","value":"plaintext"},
+              {"label":"限制行数","value":"rowLimit"},
+              {"label":"脱敏","value":"desensitization"}
+            ] } },
+            { "id": "desensitizationRule", "type": "select", "label": "脱敏规则", "showWhen": "methodType=desensitization" },
+            { "id": "rowLimit", "type": "number", "label": "限制行数", "showWhen": "methodType=rowLimit" },
+            { "id": "applicableScope", "type": "select", "label": "适用范围", "props": { "clearable": true } }
+          ]
+        }
+      ]
+    }
+  ],
+  "rulesV2": [
+    {
+      "id": "hide-dataType-when-auth",
+      "scope": "rules[]",
+      "watch": ["$self.protectionMethods[].methodType"],
+      "when": { "some": ["$self.protectionMethods[]", { "in": [ { "var": "$item.methodType" }, ["realname","mfa"] ] }] },
+      "effects": [ { "type": "setVisible", "target": "$self.dataType", "value": false } ],
+      "elseEffects": [ { "type": "setVisible", "target": "$self.dataType", "value": true } ]
+    },
+    {
+      "id": "opts_applicableScope_default",
+      "scope": "rules[].protectionMethods[]",
+      "watch": ["$self.methodType"],
+      "effects": [
+        { "type": "setOptions", "target": "$self.applicableScope", "options": [
+          { "label": "业务场景", "value": "businessScenario" },
+          { "label": "所有人", "value": "all" },
+          { "label": "所有人，除了", "value": "exclude" },
+          { "label": "用户", "value": "users" },
+          { "label": "未知用户", "value": "unknown" }
+        ] }
+      ]
+    },
+    {
+      "id": "opts_applicableScope_mfa",
+      "scope": "rules[].protectionMethods[]",
+      "watch": ["$self.methodType"],
+      "when": { "==": [ { "var": "$self.methodType" }, "mfa" ] },
+      "effects": [
+        { "type": "setOptions", "target": "$self.applicableScope", "options": [
+          { "label": "业务场景", "value": "businessScenario" },
+          { "label": "所有人", "value": "all" },
+          { "label": "所有人，除了", "value": "exclude" },
+          { "label": "用户", "value": "users" },
+          { "label": "未知用户", "value": "unknown", "disabled": true }
+        ] }
+      ]
+    },
+    {
+      "id": "opts_applicableScope_sensitive",
+      "scope": "rules[].protectionMethods[]",
+      "watch": ["$self.methodType"],
+      "when": { "in": [ { "var": "$self.methodType" }, ["desensitization","rowLimit"] ] },
+      "effects": [
+        { "type": "setOptions", "target": "$self.applicableScope", "options": [
+          { "label": "业务场景", "value": "businessScenario" },
+          { "label": "所有人", "value": "all", "disabled": true },
+          { "label": "所有人，除了", "value": "exclude", "disabled": true },
+          { "label": "用户", "value": "users", "disabled": true },
+          { "label": "未知用户", "value": "unknown", "disabled": true }
+        ] }
+      ]
+    }
+  ]
+}
+

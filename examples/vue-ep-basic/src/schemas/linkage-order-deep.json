@@ -1,0 +1,358 @@
+{
+  "version": "1.0.0",
+  "formId": "formx-linkage-order-deep",
+  "ui": {
+    "labelWidth": "160px",
+    "labelSuffix": "："
+  },
+  "model": {
+    "customer": {
+      "region": "CN",
+      "tier": "silver",
+      "taxExempt": false
+    },
+    "pricing": {
+      "enableDiscount": true,
+      "taxRate": 0.06
+    },
+    "lines": [
+      {
+        "sku": "SKU-001",
+        "category": "normal",
+        "qty": 1,
+        "unitPrice": 199,
+        "discountRate": 0.05,
+        "lineTotal": 0,
+        "shipping": {
+          "mode": "standard",
+          "address": ""
+        },
+        "meta": {
+          "note": ""
+        }
+      }
+    ],
+    "summary": {
+      "subtotal": 0,
+      "tax": 0,
+      "grandTotal": 0,
+      "needApproval": false,
+      "approvalReason": "",
+      "approvers": [
+        { "type": "role", "value": "auditor" }
+      ]
+    }
+  },
+  "fields": [
+    {
+      "id": "customer",
+      "type": "form-object",
+      "label": "客户信息",
+      "children": [
+        {
+          "id": "region",
+          "type": "select",
+          "label": "区域",
+          "props": {
+            "options": [
+              { "label": "中国", "value": "CN" },
+              { "label": "美国", "value": "US" },
+              { "label": "欧盟", "value": "EU" }
+            ]
+          }
+        },
+        {
+          "id": "tier",
+          "type": "select",
+          "label": "客户等级",
+          "props": {
+            "options": [
+              { "label": "Bronze", "value": "bronze" },
+              { "label": "Silver", "value": "silver" },
+              { "label": "Gold", "value": "gold" }
+            ]
+          }
+        },
+        {
+          "id": "taxExempt",
+          "type": "switch",
+          "label": "免税",
+          "props": {
+            "activeText": "是",
+            "inactiveText": "否"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pricing",
+      "type": "form-object",
+      "label": "计价规则",
+      "children": [
+        {
+          "id": "enableDiscount",
+          "type": "switch",
+          "label": "启用折扣",
+          "props": {
+            "activeText": "启用",
+            "inactiveText": "关闭"
+          }
+        },
+        {
+          "id": "taxRate",
+          "type": "number",
+          "label": "税率",
+          "props": {
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "precision": 2
+          },
+          "disableWhen": { "field": "$root.customer.taxExempt", "eq": true }
+        }
+      ]
+    },
+    {
+      "id": "lines",
+      "type": "field-group",
+      "label": "订单明细（Tabs）",
+      "min": 1,
+      "max": 6,
+      "operations": {
+        "add": {
+          "text": "+ 新增明细",
+          "defaultItem": {
+            "sku": "",
+            "category": "normal",
+            "qty": 1,
+            "unitPrice": 0,
+            "discountRate": 0,
+            "lineTotal": 0,
+            "shipping": { "mode": "standard", "address": "" },
+            "meta": { "note": "" }
+          }
+        },
+        "remove": { "disabledMessage": "至少保留 1 条" }
+      },
+      "presentation": {
+        "type": "tabs",
+        "tabLabelField": "sku",
+        "tabClosable": true,
+        "addButtonText": "+ 新增"
+      },
+      "template": [
+        {
+          "id": "sku",
+          "type": "input",
+          "label": "SKU",
+          "props": { "placeholder": "例如 SKU-001" },
+          "rules": [{ "required": true, "message": "请输入 SKU", "trigger": "blur" }]
+        },
+        {
+          "id": "category",
+          "type": "select",
+          "label": "类型",
+          "props": {
+            "options": [
+              { "label": "普通商品", "value": "normal" },
+              { "label": "服务（免邮寄）", "value": "service" },
+              { "label": "受控商品（需审批）", "value": "restricted" }
+            ]
+          }
+        },
+        {
+          "id": "qty",
+          "type": "number",
+          "label": "数量",
+          "props": { "min": 1, "step": 1 }
+        },
+        {
+          "id": "unitPrice",
+          "type": "number",
+          "label": "单价",
+          "props": { "min": 0, "step": 1, "precision": 2 }
+        },
+        {
+          "id": "discountRate",
+          "type": "number",
+          "label": "折扣率",
+          "showWhen": { "field": "$root.pricing.enableDiscount", "eq": true },
+          "disableWhen": { "field": "$root.customer.tier", "in": ["bronze", "silver"] },
+          "props": { "min": 0, "max": 0.5, "step": 0.01, "precision": 2 },
+          "requiredWhen": { "field": "$root.customer.tier", "eq": "gold" }
+        },
+        {
+          "id": "lineTotal",
+          "type": "number",
+          "label": "行小计",
+          "readOnlyWhen": "qty",
+          "props": { "precision": 2, "disabled": true },
+          "compute": {
+            "expr": {
+              "*": [
+                { "*": [{ "var": "$self.qty" }, { "var": "$self.unitPrice" }] },
+                {
+                  "iif": [
+                    { "var": "$root.pricing.enableDiscount" },
+                    { "-": [1, { "var": "$self.discountRate" }] },
+                    1
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "shipping",
+          "type": "form-object",
+          "label": "发货信息",
+          "children": [
+            {
+              "id": "mode",
+              "type": "select",
+              "label": "配送方式",
+              "showWhen": { "field": "$self.category", "ne": "service" },
+              "props": {
+                "options": [
+                  { "label": "标准", "value": "standard" },
+                  { "label": "加急", "value": "express" }
+                ]
+              }
+            },
+            {
+              "id": "address",
+              "type": "textarea",
+              "label": "收货地址",
+              "showWhen": { "field": "$self.category", "ne": "service" },
+              "props": { "rows": 2, "placeholder": "服务类可不填" },
+              "requiredWhen": { "field": "$self.category", "ne": "service" }
+            }
+          ]
+        },
+        {
+          "id": "meta",
+          "type": "form-object",
+          "label": "备注",
+          "children": [
+            {
+              "id": "note",
+              "type": "textarea",
+              "label": "内部备注",
+              "props": { "rows": 2, "placeholder": "仅用于演示深层路径联动" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "summary",
+      "type": "form-object",
+      "label": "汇总 / 审批",
+      "children": [
+        {
+          "id": "subtotal",
+          "type": "number",
+          "label": "小计",
+          "props": { "precision": 2, "disabled": true },
+          "compute": { "expr": { "sum": [{ "var": "lines" }, { "var": "$item.lineTotal" }] } }
+        },
+        {
+          "id": "tax",
+          "type": "number",
+          "label": "税额",
+          "props": { "precision": 2, "disabled": true },
+          "compute": {
+            "expr": {
+              "iif": [
+                { "var": "customer.taxExempt" },
+                0,
+                { "*": [{ "var": "summary.subtotal" }, { "var": "pricing.taxRate" }] }
+              ]
+            }
+          }
+        },
+        {
+          "id": "grandTotal",
+          "type": "number",
+          "label": "总计",
+          "props": { "precision": 2, "disabled": true },
+          "compute": { "expr": { "+": [{ "var": "summary.subtotal" }, { "var": "summary.tax" }] } }
+        },
+        {
+          "id": "needApproval",
+          "type": "switch",
+          "label": "是否需要审批",
+          "props": { "activeText": "需要", "inactiveText": "不需要" },
+          "compute": {
+            "expr": {
+              "or": [
+                {
+                  "some": [
+                    { "var": "lines" },
+                    { "==": [{ "var": "$item.category" }, "restricted"] }
+                  ]
+                },
+                { ">=": [{ "var": "summary.grandTotal" }, 5000] }
+              ]
+            }
+          }
+        },
+        {
+          "id": "approvalReason",
+          "type": "textarea",
+          "label": "审批原因",
+          "showWhen": { "field": "summary.needApproval", "eq": true },
+          "requiredWhen": { "field": "summary.needApproval", "eq": true },
+          "props": { "rows": 3, "placeholder": "当包含受控商品或总计 >= 5000 时要求填写" }
+        },
+        {
+          "id": "approvers",
+          "type": "field-group",
+          "label": "审批人（Array + scope）",
+          "min": 1,
+          "max": 5,
+          "showWhen": { "field": "summary.needApproval", "eq": true },
+          "operations": {
+            "add": {
+              "text": "+ 新增审批人",
+              "defaultItem": { "type": "role", "value": "" }
+            },
+            "remove": { "disabledMessage": "至少保留 1 条" }
+          },
+          "presentation": {
+            "type": "table",
+            "table": {
+              "actionsWidth": 150,
+              "columns": [
+                { "field": "type", "label": "类型", "width": 140 },
+                { "field": "value", "label": "值", "span": 2 }
+              ]
+            }
+          },
+          "template": [
+            {
+              "id": "type",
+              "type": "select",
+              "label": "",
+              "labelWidth": 0,
+              "props": {
+                "options": [
+                  { "label": "角色", "value": "role" },
+                  { "label": "用户", "value": "user" }
+                ]
+              }
+            },
+            {
+              "id": "value",
+              "type": "input",
+              "label": "",
+              "labelWidth": 0,
+              "props": { "placeholder": "例如 auditor / user-001" },
+              "requiredWhen": { "field": "$root.summary.needApproval", "eq": true }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -22,7 +22,7 @@ export function renderCheckboxField(view: FieldView) {
           onUpdate:modelValue={(val: any[]) => view.setValue(val)}
         >
           {options.map((o: any) => (
-            <ElCheckbox label={o.value} {...itemProps}>
+            <ElCheckbox value={o.value} {...itemProps}>
               {o.label}
             </ElCheckbox>
           ))}
