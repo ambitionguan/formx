@@ -2,32 +2,36 @@
 import RemoteOptionsDemo from '../.vitepress/theme/components/formx/RemoteOptionsDemo.vue'
 </script>
 
-# Remote Options / 远程选项
+# 远程选项
 
-## 中文
-
-远程选项由 `ResourceManager` 统一注册。schema 只需要引用资源名、参数和拉取策略，不需要把请求函数塞到组件里。
-
-## English
-
-Remote options are registered through `ResourceManager`. The schema references the resource name, params, and fetch strategy without embedding request functions in UI components.
+这个示例展示 `optionsFrom` 和 `ResourceManager`。远程选项通过 `requestKey` 绑定，不把请求函数写进 schema。
 
 <ClientOnly>
   <RemoteOptionsDemo />
 </ClientOnly>
 
+注册资源：
+
 ```ts
-ResourceManager.register('docs:getServices', async (params) => {
-  return fetchServicesByTeam(params.team)
+ResourceManager.register('getCities', async (params) => {
+  return api.getCities(params)
 })
 ```
 
+schema 引用：
+
 ```ts
 {
-  id: 'service',
+  id: 'city',
   type: 'select',
-  optionsFrom: 'docs:getServices',
-  params: { team: { var: 'team' } },
-  fetchOnMount: true
+  label: '城市',
+  optionsFrom: {
+    requestKey: 'getCities',
+    params: {
+      province: '${province}'
+    }
+  }
 }
 ```
+
+当依赖字段变化时，资源层可以重新拉取并更新选项。

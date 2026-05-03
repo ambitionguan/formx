@@ -1,162 +1,197 @@
-# Validation / 校验
+# 校验
 
-## 中文
+FormX 的校验分为三类：
 
-FormX 的校验分为字段规则、命名 pattern、命名 validator 和跨字段规则。UI 皮肤只消费 engine 写入的 `state[path].errors` 和 `state[path].validating`。
+- 字段级规则：写在 `fields[].rules`。
+- 动态校验：由 `requiredWhen`、`rulesV2` 或运行时状态控制。
+- 注册式校验：命名 pattern、命名 validator、异步资源校验。
 
-### 字段级规则
+校验是 Core 能力，不绑定 Element Plus。UI 皮肤只负责展示错误和触发用户交互。
 
-```json
+## 字段级规则
+
+```ts
 {
-  "id": "ownerEmail",
-  "type": "input",
-  "label": "Owner email",
-  "rules": [
-    { "required": true, "message": "Owner email is required." },
-    { "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", "message": "Invalid email." }
+  id: 'email',
+  type: 'input',
+  label: '邮箱',
+  rules: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }
   ]
 }
 ```
 
-常用规则：
+常用配置：
 
-| Rule | 用途 |
+| 字段 | 说明 |
 | --- | --- |
 | `required` | 必填。 |
-| `minLength` / `maxLength` | 字符串或数组长度。 |
-| `min` / `max` | 数字范围。 |
-| `enum` | 枚举值。 |
-| `pattern` | 正则或命名正则。 |
-| `expression` | JSON 表达式。 |
-| `use` | 命名 validator。 |
+| `type` | 内置类型，例如 `email`、`number`。 |
+| `pattern` | 正则字符串或命名 pattern。 |
+| `min`、`max` | 数字范围。 |
+| `minLength`、`maxLength` | 字符串或数组长度。 |
+| `message` | 错误文案。 |
+| `trigger` | 触发方式，例如 `blur`、`change`、`submit`。 |
 
-### 校验触发策略
+## 校验触发策略
 
-`policy.validation.mode` 控制何时写入错误：
-
-| Mode | 行为 |
-| --- | --- |
-| `touched` | 默认模式。用户触达后显示错误，提交时完整校验。 |
-| `immediate` | 值变化后尽快校验。适合实时反馈。 |
-| `submitOnly` | 只在提交或手动调用时显示错误。适合弹窗或向导。 |
-
-```vue
-<FormX
-  ref="formRef"
-  v-model:value="formModel"
-  :schema="schema"
-  :policy="{ validation: { mode: 'submitOnly' } }"
-/>
-```
-
-### 命名 pattern
-
-通用格式规则建议注册为命名 pattern，而不是把长正则复制到每个 schema：
+可以在 engine 或 schema policy 中设置：
 
 ```ts
-import { FormXEngine } from '@formx/vue'
-
-FormXEngine.registerPattern('slug', {
-  source: '^[a-z][a-z0-9-]{2,31}$',
-  message: 'Use 3-32 lowercase letters, numbers, or hyphens.'
-})
-```
-
-schema 中引用：
-
-```json
 {
-  "id": "slug",
-  "type": "input",
-  "label": "Slug",
-  "rules": [{ "pattern": { "name": "slug" } }]
+  policy: {
+    validation: {
+      mode: 'touched',
+      skipHidden: true,
+      skipDisabled: true,
+      skipReadOnly: true
+    }
+  }
 }
 ```
 
-### 命名 validator
+常见模式：
 
-业务规则、异步唯一性、服务端校验适合注册为 validator：
+| 模式 | 行为 |
+| --- | --- |
+| `immediate` | 值变化后尽快写入错误。 |
+| `touched` | 字段被触碰后再展示错误，适合表单编辑体验。 |
+| `submitOnly` | 提交时才写入错误，适合强流程型表单。 |
+
+## 动态必填
+
+简单场景使用 `requiredWhen`：
 
 ```ts
-FormXEngine.registerValidator('availableSlug', {
-  async: true,
-  debounceMs: 180,
-  validate: async ({ value }) => {
-    const reserved = new Set(['admin', 'root', 'system'])
-    return reserved.has(String(value || '')) ? 'This slug is reserved.' : true
-  }
+{
+  id: 'rejectReason',
+  type: 'textarea',
+  label: '驳回原因',
+  requiredWhen: 'action === "reject"'
+}
+```
+
+复杂场景使用规则：
+
+```ts
+{
+  id: 'rule-reject-reason-required',
+  watch: ['action', 'riskLevel'],
+  when: 'action === "reject" || riskLevel === "high"',
+  effects: [{ type: 'required', target: 'rejectReason', value: true }],
+  elseEffects: [{ type: 'required', target: 'rejectReason', value: false }]
+}
+```
+
+## 命名 pattern
+
+命名 pattern 适合复用正则：
+
+```ts
+import { FormXEngine } from '@formx/core'
+
+FormXEngine.registerPattern('mobileCN', /^1[3-9]\d{9}$/)
+```
+
+schema 中引用：
+
+```ts
+{
+  id: 'phone',
+  type: 'input',
+  label: '手机号',
+  rules: [{ pattern: 'mobileCN', message: '手机号格式不正确' }]
+}
+```
+
+## 命名 validator
+
+命名 validator 适合复杂同步或异步校验：
+
+```ts
+FormXEngine.registerValidator('uniqueUsername', async ({ value }) => {
+  if (!value) return true
+  const result = await fetch(`/api/users/check?name=${value}`).then((res) => res.json())
+  return result.available || '用户名已存在'
 })
 ```
 
 schema 中引用：
 
-```json
+```ts
 {
-  "id": "slug",
-  "type": "input",
-  "label": "Slug",
-  "rules": [
-    { "required": true },
-    { "pattern": { "name": "slug" } },
-    { "use": "availableSlug", "async": true }
+  id: 'username',
+  type: 'input',
+  label: '用户名',
+  rules: [
+    { required: true, message: '请输入用户名' },
+    { validator: 'uniqueUsername', trigger: 'blur' }
   ]
 }
 ```
 
-### 跨字段校验
+## 跨字段校验
 
-跨字段校验可以使用 `rulesV2` 和 `validate` effect：
+跨字段校验推荐通过命名 validator 读取上下文：
 
-```json
+```ts
+FormXEngine.registerValidator('endAfterStart', ({ value, values }) => {
+  if (!value || !values.startTime) return true
+  return value > values.startTime || '结束时间必须晚于开始时间'
+})
+```
+
+```ts
 {
-  "id": "approval-reason-required",
-  "watch": ["approvalRequired", "approvalReason"],
-  "when": {
-    "and": [
-      { "==": [{ "var": "approvalRequired" }, true] },
-      { "==": [{ "var": "approvalReason" }, ""] }
-    ]
-  },
-  "effects": [
-    {
-      "type": "validate",
-      "target": "approvalReason",
-      "message": "Explain why approval is required."
-    }
-  ],
-  "elseEffects": [{ "type": "validate", "target": "approvalReason" }]
+  id: 'endTime',
+  type: 'date-picker',
+  label: '结束时间',
+  rules: [{ validator: 'endAfterStart', trigger: 'change' }]
 }
 ```
 
-### 提交时校验
+如果校验本身会影响其他字段状态，可以结合 `rulesV2`。
+
+## 提交时校验
 
 Vue 组件暴露 `validate()`：
 
 ```ts
-const ok = await formRef.value?.validate?.()
-if (!ok) return
+const valid = await formRef.value?.validate()
+if (!valid) {
+  const firstError = formRef.value?.getFirstErrorPath?.()
+  return
+}
 
-const values = formRef.value?.getValues?.()
+const values = formRef.value?.getValues()
 ```
 
-核心引擎也可以直接校验：
+Core 引擎也可以独立校验：
 
 ```ts
-const ok = await engine.validate()
-const errors = engine.getErrors()
-const firstPath = engine.getFirstErrorPath()
+const engine = new FormXEngine({ schema })
+const result = await engine.validate()
 ```
 
-### 校验建议
+## 错误定位
 
-- 字段内能完成的规则写在 `rules`。
-- 通用格式写成命名 pattern。
-- 可复用业务校验写成命名 validator。
-- 跨字段和聚合校验写成 `rulesV2`。
-- 异步校验记得配置 `async: true` 和可选 `debounceMs`。
+大型表单建议提供滚动到第一个错误的体验：
 
-## English
+```ts
+const valid = await formRef.value?.validate()
+if (!valid) {
+  const firstPath = formRef.value?.getFirstErrorPath?.()
+  formRef.value?.scrollToField?.(firstPath)
+}
+```
 
-FormX validation includes field rules, named patterns, named validators, and cross-field rules. Renderers only consume `state[path].errors` and `state[path].validating`.
+具体滚动实现由 UI 皮肤决定。Core 只提供路径和错误详情。
 
-Use field rules for local checks, named patterns for reusable formats, named validators for business or async checks, and `rulesV2` for cross-field or aggregate validation. The Vue component exposes `validate()`, while the headless engine exposes `engine.validate()`, `engine.getErrors()`, and `engine.getFirstErrorPath()`.
+## 校验建议
+
+- 必填和格式校验优先写在字段 `rules`。
+- 动态必填优先用 `requiredWhen`，复杂场景再用 `rulesV2`。
+- 复用正则用命名 pattern，复用业务校验用命名 validator。
+- 异步校验要处理 loading、并发和过期结果。
+- 默认跳过隐藏、禁用、只读字段，避免用户无法修复的错误阻塞提交。

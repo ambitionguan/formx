@@ -1,140 +1,170 @@
-# Vue Runtime / Vue 接入
+# Vue 接入
 
-## 中文
+Vue 接入层的目标是让应用像使用普通表单组件一样使用 FormX，同时保留 Core 的独立能力。
 
-当前开源仓库维护的完整渲染路径是 Vue 3 + Element Plus。大多数 Vue 用户直接使用 `@formx/vue` 即可。
+当前推荐入口是 `@formx/vue`。它面向应用侧聚合了 Vue 运行时和 Element Plus 皮肤。
 
-```ts
-import { FormX, ResourceManager, FormXEngine } from '@formx/vue'
-import '@formx/vue-ep/style.css'
-```
-
-### 基础组件接入
+## 基础组件接入
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
 import { FormX } from '@formx/vue'
 import type { FormSchema } from '@formx/vue'
+import '@formx/vue/style.css'
 
-const formRef = ref<any>()
-const formModel = ref({ name: '', status: 'active' })
+const formRef = ref<InstanceType<typeof FormX>>()
+
+const model = ref({
+  name: '',
+  enabled: true
+})
 
 const schema: FormSchema = {
   version: '1.0.0',
-  model: formModel.value,
+  model: model.value,
   fields: [
-    { id: 'name', type: 'input', label: 'Name', rules: [{ required: true }] },
-    {
-      id: 'status',
-      type: 'select',
-      label: 'Status',
-      props: {
-        options: [
-          { label: 'Active', value: 'active' },
-          { label: 'Paused', value: 'paused' }
-        ]
-      }
-    }
+    { id: 'name', type: 'input', label: '名称', rules: [{ required: true }] },
+    { id: 'enabled', type: 'switch', label: '启用' }
   ]
 }
 
 async function submit() {
-  const ok = await formRef.value?.validate?.()
-  if (!ok) return
-  const values = formRef.value?.getValues?.()
-  console.log(values)
+  const valid = await formRef.value?.validate()
+  if (!valid) return
+
+  console.log(formRef.value?.getValues())
 }
 </script>
 
 <template>
-  <FormX ref="formRef" v-model:value="formModel" :schema="schema" />
-  <el-button type="primary" @click="submit">Submit</el-button>
+  <FormX ref="formRef" v-model:value="model" :schema="schema" />
+  <button type="button" @click="submit">提交</button>
 </template>
 ```
 
-### 组件暴露 API
+## 组件暴露 API
 
-`FormX` 通过 `ref` 暴露常用方法：
+Vue 组件会暴露常用表单方法：
 
-| API | 说明 |
-| --- | --- |
-| `engine` | 底层 `FormXEngine` 实例。高级操作和诊断可直接读取。 |
-| `validate(trigger?)` | 校验整个表单，返回 boolean。 |
-| `validateField(path, trigger?)` | 校验单个字段。 |
-| `getValues()` | 获取当前值树深拷贝。 |
-| `resetFields()` | 重置为当前组件实例创建时的初始值。 |
-| `getValidationDetails(path?)` | 获取校验细节。 |
-| `isValidating(path?)` | 判断是否正在异步校验。 |
-| `getFieldGroupAPI(groupId)` | 获取字段组命令。 |
+```ts
+await formRef.value?.validate()
+await formRef.value?.validateField('name')
+formRef.value?.resetFields()
+formRef.value?.clearValidate()
+formRef.value?.setValues({ name: 'demo' })
+formRef.value?.setFieldValue('name', 'demo')
+formRef.value?.getValues()
+formRef.value?.getSubmitValues()
+formRef.value?.getErrors()
+formRef.value?.getFirstErrorPath()
+formRef.value?.getFieldGroupAPI('rules')
+```
 
-### Dialog 和异步回填
+这些方法背后仍然是 Core 引擎。UI 层只负责把交互映射到 engine。
 
-弹窗、抽屉和编辑页常见问题是：接口数据回来时，FormX 实例可能还没挂载。推荐模式是让外部模型先持有异步数据，FormX 挂载后再通过 `v-model:value` 同步进去。
+## Dialog 和 Drawer
+
+业务系统最常见的问题是：弹窗打开、详情接口返回、表单挂载、初始值重置之间的时序。
+
+推荐模式是“会话化”：
 
 ```ts
 const visible = ref(false)
-const formModel = ref<Record<string, any>>({})
-const formKey = ref(0)
+const loading = ref(false)
+const formModel = ref({})
+let sessionId = 0
 
-async function openEdit(id: string) {
+async function openEdit(row: { id: string }) {
   visible.value = true
-  const detail = await fetchDetail(id)
+  loading.value = true
+  const current = ++sessionId
+
+  const detail = await fetchDetail(row.id)
+  if (current !== sessionId) return
+
   formModel.value = detail
-  formKey.value += 1
+  formRef.value?.setValues(detail, { replace: true })
+  loading.value = false
+}
+
+function close() {
+  sessionId++
+  visible.value = false
+  formRef.value?.resetFields()
 }
 ```
 
-```vue
-<el-dialog v-model="visible">
-  <FormX
-    v-if="visible"
-    :key="formKey"
-    ref="formRef"
-    v-model:value="formModel"
-    :schema="schema"
-  />
-</el-dialog>
-```
+重点：
 
-如果需要保留同一个组件实例，也可以在接口返回后直接更新 `formModel`，当前 `FormX` 实例会同步外部值变化。
+- 不要假设 Dialog 打开后 `formRef` 已经立即存在。
+- 详情返回要防止竞态。
+- 整份详情回填用 replace 语义，局部修正才用 merge。
+- 弹窗关闭后要让旧请求失效。
 
-### 自定义组件
+更多模式见 [异步运行时](/guide/async-runtime)。
 
-`custom` 字段可以通过 `components` 或 `customComponents` 传入渲染组件：
+## 自定义组件
 
-```json
+自定义字段可以通过 `custom` 类型接入。schema 只保存组件标识，不保存组件实例。
+
+```ts
 {
-  "id": "summary",
-  "type": "custom",
-  "label": "Summary",
-  "render": { "component": "ReleaseSummary" }
+  id: 'userPicker',
+  type: 'custom',
+  label: '用户',
+  component: 'UserPicker',
+  props: {
+    multiple: true
+  }
+}
+```
+
+运行时注册组件：
+
+```ts
+const components = {
+  UserPicker
 }
 ```
 
 ```vue
-<FormX
-  v-model:value="formModel"
-  :schema="schema"
-  :components="{ ReleaseSummary }"
-/>
+<FormX :schema="schema" :components="components" />
 ```
 
-自定义组件适合图文摘要、复杂卡片、小型领域编辑器和非标准控件。建议让自定义组件仍通过 FormX 的 view、group 或 engine API 与表单交互，避免重新引入散乱状态。
+自定义组件应该遵守 FormX 的字段协议：
 
-### 皮肤和默认入口
+- 接收当前值。
+- 触发值变更。
+- 支持 disabled、readOnly、loading、error 等状态。
+- 不在组件内部私自维护与 engine 冲突的业务状态。
 
-| Import | 用途 |
-| --- | --- |
-| `@formx/vue` | 推荐 Vue 默认入口，重导出 engine、类型、runtime 和 EP 皮肤。 |
-| `@formx/vue-ep` | 直接使用 Vue + Element Plus 皮肤。 |
-| `@formx/vue-core` | 只使用 Vue runtime bridge，自行做皮肤。 |
-| `@formx/core` | 纯逻辑引擎，不渲染 UI。 |
+## 皮肤和默认入口
 
-## English
+`@formx/vue` 是应用推荐入口：
 
-The currently maintained full renderer is Vue 3 + Element Plus. Most Vue users should import from `@formx/vue`.
+```ts
+import { FormX } from '@formx/vue'
+```
 
-The component exposes a practical API through `ref`: `engine`, `validate()`, `validateField()`, `getValues()`, `resetFields()`, `getValidationDetails()`, `isValidating()`, and `getFieldGroupAPI()`.
+如果你明确要使用 Element Plus 皮肤：
 
-For dialogs and edit-backfill flows, keep the external model as the source of incoming async data. FormX will sync external `v-model:value` changes into the engine after mount. Use a `key` when you intentionally want a fresh engine instance for each opened record.
+```ts
+import { FormXVueEp } from '@formx/vue-ep'
+```
+
+如果你要实现自己的 Vue 皮肤，通常使用：
+
+```ts
+import { useFormXEngine, useFormViewState } from '@formx/vue-core'
+```
+
+再从 `@formx/ui-core` 获取中立视图模型。
+
+## Vue 接入建议
+
+- 页面只关心业务数据和提交，不要把规则写回组件 watch。
+- 远程选项、异步校验、级联请求走资源层。
+- 弹窗编辑要处理挂载时序和竞态。
+- 自定义组件只做交互和展示，不要绕开 engine 修改值。
+- 如果业务需要设计器，schema 必须保持可序列化。

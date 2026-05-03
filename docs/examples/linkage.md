@@ -2,34 +2,37 @@
 import LinkageDemo from '../.vitepress/theme/components/formx/LinkageDemo.vue'
 </script>
 
-# Linkage / 联动规则
+# 联动规则
 
-## 中文
-
-联动可以写在字段短写里，也可以写成 `rulesV2`。字段短写适合局部显隐、动态必填；`rulesV2` 适合跨字段、跨数组、运行时 effect。
-
-## English
-
-Linkage can be expressed as field shortcuts or `rulesV2`. Field shortcuts are good for local visibility and required state; `rulesV2` is better for cross-field, scoped, and effect-driven behavior.
+这个示例展示 FormX 的规则模型：简单联动用字段短写，复杂联动用 `rulesV2`。
 
 <ClientOnly>
   <LinkageDemo />
 </ClientOnly>
 
-```ts
-{
-  id: 'approvalReason',
-  type: 'textarea',
-  showWhen: { field: 'approvalRequired', eq: true },
-  requiredWhen: { field: 'approvalRequired', eq: true }
-}
-```
+常见短写：
 
 ```ts
 {
-  id: 'prod-requires-approval',
-  watch: ['environment'],
-  when: { '==': [{ var: 'environment' }, 'prod'] },
-  effects: [{ type: 'set', target: 'approvalRequired', value: true }]
+  id: 'reason',
+  type: 'textarea',
+  label: '原因',
+  showWhen: 'enabled === false',
+  requiredWhen: 'enabled === false'
 }
 ```
+
+复杂规则：
+
+```ts
+{
+  id: 'set-risk-level',
+  watch: ['enabled', 'role'],
+  when: 'enabled === false && role === "admin"',
+  effects: [
+    { type: 'setValue', target: 'riskLevel', value: 'high' }
+  ]
+}
+```
+
+FormX 的优势在于这些规则都能被编译、执行和诊断，而不是散落在 Vue `watch` 中。

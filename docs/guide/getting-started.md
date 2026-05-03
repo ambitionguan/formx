@@ -1,215 +1,188 @@
-# Getting Started / 快速开始
+# 快速开始
 
-## 中文
+这一页只做一件事：在 Vue 3 + Element Plus 项目里跑起一个可提交、可校验、可观察值变化的 FormX 表单。
 
-这一页只做一件事：在 Vue 3 + Element Plus 项目里跑起一个可提交、可校验、可观察值变化的 FormX 表单。完整概念请先看 [Introduction / 介绍](/guide/introduction)。
+如果你只想看核心引擎如何独立运行，可以直接看 [纯核心引擎示例](/examples/headless-core)。
 
-## 1. 安装
+## 安装
 
-```sh
+```bash
 pnpm add @formx/vue vue element-plus
 ```
 
-`@formx/vue` 是 Vue 默认入口，内部重导出常用类型、核心引擎和 Element Plus 皮肤。
+`@formx/vue` 是 Vue 项目的推荐入口。它聚合了 Vue 运行时和当前默认的 Element Plus 皮肤。
 
-## 2. 注册 Element Plus 和样式
+## 注册样式
 
-在应用入口加载 Element Plus 以及 FormX 皮肤样式：
+在应用入口导入 Element Plus 和 FormX 样式：
 
 ```ts
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import '@formx/vue-ep/style.css'
+import '@formx/vue/style.css'
 import App from './App.vue'
 
 createApp(App).use(ElementPlus).mount('#app')
 ```
 
-如果你直接使用 `@formx/vue-ep`，也需要同样加载 `@formx/vue-ep/style.css`。
+## 定义第一份 schema
 
-## 3. 创建第一份 schema
+FormX 的 schema 是普通 JSON 数据。字段、默认值、校验和联动都可以放进去。
 
-```vue
-<script setup lang="ts">
-import { computed, ref } from 'vue'
-import { FormX } from '@formx/vue'
+```ts
 import type { FormSchema } from '@formx/vue'
 
-const formRef = ref<any>()
-const formModel = ref({
-  name: '',
-  status: 'active',
-  notifyBy: 'email',
-  email: ''
-})
-
-const schema = computed<FormSchema>(() => ({
+export const schema: FormSchema = {
   version: '1.0.0',
-  model: formModel.value,
-  ui: {
-    labelWidth: '120px',
-    labelSuffix: ':'
+  formId: 'account-create',
+  model: {
+    username: '',
+    role: 'user',
+    email: '',
+    needReason: false,
+    reason: ''
   },
   fields: [
     {
-      id: 'name',
+      id: 'username',
       type: 'input',
-      label: 'Name',
-      props: { placeholder: 'Enter a name', clearable: true },
-      rules: [{ required: true, message: 'Name is required.' }]
+      label: '用户名',
+      props: { placeholder: '请输入用户名', clearable: true },
+      rules: [{ required: true, message: '请输入用户名', trigger: 'blur' }]
     },
     {
-      id: 'status',
+      id: 'role',
       type: 'select',
-      label: 'Status',
+      label: '角色',
       props: {
         options: [
-          { label: 'Active', value: 'active' },
-          { label: 'Paused', value: 'paused' }
-        ]
-      }
-    },
-    {
-      id: 'notifyBy',
-      type: 'radio',
-      label: 'Notify by',
-      props: {
-        options: [
-          { label: 'Email', value: 'email' },
-          { label: 'None', value: 'none' }
+          { label: '普通用户', value: 'user' },
+          { label: '管理员', value: 'admin' }
         ]
       }
     },
     {
       id: 'email',
       type: 'input',
-      label: 'Email',
-      showWhen: { field: 'notifyBy', eq: 'email' },
-      requiredWhen: { field: 'notifyBy', eq: 'email' },
-      props: { placeholder: 'name@example.test' },
-      rules: [
-        { pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$', message: 'Invalid email.' }
-      ]
+      label: '邮箱',
+      props: { placeholder: '请输入邮箱' },
+      rules: [{ type: 'email', message: '邮箱格式不正确', trigger: 'blur' }]
+    },
+    {
+      id: 'needReason',
+      type: 'switch',
+      label: '填写申请原因'
+    },
+    {
+      id: 'reason',
+      type: 'textarea',
+      label: '申请原因',
+      showWhen: 'needReason === true',
+      requiredWhen: 'needReason === true',
+      props: { rows: 3, placeholder: '请说明申请原因' }
     }
   ]
-}))
+}
+```
+
+这里已经体现了 FormX 的基本工作方式：
+
+- `model` 是初始值树。
+- `fields` 描述字段。
+- `rules` 描述字段级校验。
+- `showWhen` 和 `requiredWhen` 是联动短写，会编译成规则。
+
+## 在 Vue 中渲染
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { FormX } from '@formx/vue'
+import { schema } from './schema'
+
+const formRef = ref<InstanceType<typeof FormX>>()
+const formModel = ref({ ...schema.model })
 
 async function submit() {
-  const ok = await formRef.value?.validate?.()
-  if (!ok) return
+  const valid = await formRef.value?.validate()
+  if (!valid) return
 
-  const values = formRef.value?.getValues?.()
-  console.log(values)
-}
-
-function reset() {
-  formRef.value?.resetFields?.()
+  console.log(formRef.value?.getValues())
 }
 </script>
 
 <template>
   <FormX ref="formRef" v-model:value="formModel" :schema="schema" />
-
-  <el-space>
-    <el-button @click="reset">Reset</el-button>
-    <el-button type="primary" @click="submit">Submit</el-button>
-  </el-space>
+  <button type="button" @click="submit">提交</button>
 </template>
 ```
 
-这个例子已经包含：
+业务侧持有 `formModel`，FormX 负责渲染、联动和校验。你不需要为每个字段手写 `el-form-item`，也不需要把显隐逻辑散落在模板里。
 
-- 值同步：`v-model:value="formModel"`。
-- 字段校验：`rules`。
-- 条件显示：`showWhen`。
-- 动态必填：`requiredWhen`。
-- 表单提交：`formRef.value.validate()`。
-- 值读取：`formRef.value.getValues()`。
+## 接入远程选项
 
-## 4. 加一个远程选项
-
-注册资源：
+远程数据建议统一注册为请求，而不是在每个组件里写生命周期请求。
 
 ```ts
 import { ResourceManager } from '@formx/vue'
 
-ResourceManager.register('demo:getOwners', async () => [
-  { label: 'Ada Lovelace', value: 'ada' },
-  { label: 'Grace Hopper', value: 'grace' }
-])
+ResourceManager.register('getDepartments', async () => {
+  return [
+    { label: '研发部', value: 'rd' },
+    { label: '产品部', value: 'product' },
+    { label: '运营部', value: 'operation' }
+  ]
+})
 ```
 
-schema 中引用：
+然后在 schema 里引用：
 
-```json
+```ts
 {
-  "id": "owner",
-  "type": "select",
-  "label": "Owner",
-  "optionsFrom": "demo:getOwners",
-  "fetchOnMount": true,
-  "props": { "clearable": true, "filterable": true }
+  id: 'department',
+  type: 'select',
+  label: '部门',
+  optionsFrom: {
+    requestKey: 'getDepartments'
+  }
 }
 ```
 
-资源函数可以是真实 HTTP 请求，也可以是文档、测试或 Storybook 中的 mock。
-
-## 5. 开发和文档
-
-```sh
-pnpm install
-pnpm docs:dev
-pnpm docs:build
-```
-
-完整 workbench 示例：
-
-```sh
-pnpm --filter @formx/example-vue-ep-basic dev
-```
-
-下一步建议按顺序阅读：
-
-1. [Schema Model / Schema 模型](/guide/schema)
-2. [Rules and Shortcuts / 规则与短写](/guide/rules-and-shortcuts)
-3. [Resources / 远程资源](/guide/resources)
-4. [Validation / 校验](/guide/validation)
-5. [Vue Runtime / Vue 接入](/guide/vue-runtime)
-
-## English
-
-This page gets a Vue 3 + Element Plus form running with submit validation and value synchronization. For the full concept, start with [Introduction](/guide/introduction).
-
-Install the default Vue entry:
-
-```sh
-pnpm add @formx/vue vue element-plus
-```
-
-Register Element Plus and load the FormX skin stylesheet:
+带参数的场景也可以声明依赖：
 
 ```ts
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
-import '@formx/vue-ep/style.css'
-
-app.use(ElementPlus)
+{
+  id: 'owner',
+  type: 'select',
+  label: '负责人',
+  optionsFrom: {
+    requestKey: 'searchUsers',
+    params: {
+      department: '${department}',
+      keyword: '${ownerKeyword}'
+    }
+  }
+}
 ```
 
-Render a schema with `FormX`:
+当依赖值变化时，资源层可以重新请求并更新选项。
 
-```vue
-<FormX ref="formRef" v-model:value="formModel" :schema="schema" />
-```
+## 真实项目中的推荐路径
 
-Use the exposed methods for submit flows:
+不要一上来就把所有表单写成巨大 schema。更稳的方式是：
 
-```ts
-const ok = await formRef.value?.validate?.()
-if (!ok) return
+1. 先把字段和值树建好。
+2. 再补字段级校验。
+3. 用短写处理简单联动。
+4. 用 `rulesV2` 收敛复杂业务规则。
+5. 把远程选项、异步校验、级联数据放到 `ResourceManager`。
+6. 最后再处理布局、字段组、自定义组件和诊断。
 
-const values = formRef.value?.getValues?.()
-```
+下一步建议阅读：
 
-Register remote resources through `ResourceManager` and reference them from schema with `optionsFrom`. Read the dedicated guide pages for schema structure, rules, resources, validation, and Vue runtime integration.
+- [Schema 模型](/guide/schema)
+- [规则与短写](/guide/rules-and-shortcuts)
+- [远程资源](/guide/resources)
+- [Vue 接入](/guide/vue-runtime)
+- [构建复杂表单](/guide/building-forms)

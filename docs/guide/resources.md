@@ -1,112 +1,156 @@
-# Resources / 远程资源
+# 远程资源
 
-## 中文
+远程资源是 FormX 的强项之一。它把下拉选项、级联数据、树数据、异步校验和业务查询从 UI 组件里抽出来，交给统一资源层管理。
 
-FormX 把远程数据请求抽象成资源。schema 中只引用资源名和参数，真正的请求函数在应用启动或模块加载时注册。
+这样做的好处是：请求逻辑可复用、参数依赖可声明、缓存和并发可治理，schema 也能保持纯 JSON。
+
+## 注册请求
+
+请求实现放在运行时注册，不放进 schema。
 
 ```ts
 import { ResourceManager } from '@formx/vue'
 
-ResourceManager.register('docs:getServices', async (params) => {
-  const team = String(params?.team || 'platform')
+ResourceManager.register('getRegions', async () => {
   return [
-    { label: `${team} service A`, value: `${team}-a` },
-    { label: `${team} service B`, value: `${team}-b` }
+    { label: '华东', value: 'east' },
+    { label: '华南', value: 'south' }
   ]
 })
 ```
 
-### `optionsFrom`
+带参数：
 
-最常见的资源场景是远程下拉：
+```ts
+ResourceManager.register('getCities', async (params?: Record<string, unknown>) => {
+  const province = params?.province
+  return fetch(`/api/cities?province=${province}`).then((res) => res.json())
+})
+```
 
-```json
+## 在 schema 中引用
+
+```ts
 {
-  "id": "service",
-  "type": "select",
-  "label": "Service",
-  "optionsFrom": "docs:getServices",
-  "params": { "team": { "var": "team" } },
-  "fetchOnMount": true,
-  "props": { "clearable": true, "filterable": true }
+  id: 'province',
+  type: 'select',
+  label: '省份',
+  optionsFrom: {
+    requestKey: 'getRegions'
+  }
 }
 ```
 
-运行时会调用 `ResourceManager.fetch('docs:getServices', params)`，并把返回数组写入 `state.service.options`。皮肤层只消费 `options`，不关心数据来自本地、HTTP、缓存还是 mock。
+参数可以来自当前值树：
 
-### 依赖变化后重新拉取
-
-如果一个远程选项依赖另一个字段，可以用 `rulesV2` 显式刷新：
-
-```json
+```ts
 {
-  "id": "refetch-services-when-team-changes",
-  "watch": ["team"],
-  "effects": [
-    { "type": "set", "target": "service", "value": "" },
+  id: 'city',
+  type: 'select',
+  label: '城市',
+  optionsFrom: {
+    requestKey: 'getCities',
+    params: {
+      province: '${province}'
+    }
+  }
+}
+```
+
+当 `province` 变化时，`city` 的资源可以重新请求。
+
+## 非标准返回结构
+
+如果接口返回不是 `{ label, value }[]`，可以配置映射。
+
+```ts
+{
+  id: 'owner',
+  type: 'select',
+  label: '负责人',
+  optionsFrom: {
+    requestKey: 'searchUsers',
+    params: { keyword: '${ownerKeyword}' },
+    map: {
+      list: 'data.records',
+      label: 'name',
+      value: 'id'
+    }
+  }
+}
+```
+
+## 级联与懒加载
+
+级联场景通常需要上级值作为参数：
+
+```ts
+{
+  id: 'database',
+  type: 'select',
+  label: '数据库',
+  optionsFrom: {
+    requestKey: 'getDatabases',
+    params: {
+      connectionId: '${connection.id}'
+    }
+  }
+}
+```
+
+如果字段隐藏或禁用时不应请求，可以用策略控制：
+
+```ts
+{
+  policy: {
+    resources: {
+      onVisible: true
+    }
+  }
+}
+```
+
+## 并发和缓存
+
+复杂表单里，用户输入可能频繁触发请求。资源层应该承担这些治理能力：
+
+- `debounce`：搜索型选项去抖。
+- `ttl`：静态字典缓存。
+- `strategy: 'latest'`：只保留最新请求结果。
+- `retry` 和 `backoff`：临时失败自动重试。
+- `fallback`：失败时显示兜底选项。
+- `invalidate`：依赖数据变化后主动失效缓存。
+
+具体 API 会在后续版本继续细化，但设计方向是明确的：资源请求属于运行时协议，不属于 UI 组件内部细节。
+
+## 与规则联动
+
+资源也可以和 `rulesV2` 组合使用。例如选择连接类型后，刷新认证方式：
+
+```ts
+{
+  id: 'refresh-auth-methods',
+  watch: ['connection.type'],
+  effects: [
     {
-      "type": "fetch",
-      "target": "service",
-      "requestKey": "docs:getServices",
-      "params": { "team": { "var": "team" } },
-      "mode": "latest"
+      type: 'fetchOptions',
+      target: 'connection.authMethod',
+      requestKey: 'getAuthMethods',
+      params: {
+        type: '${connection.type}'
+      }
     }
   ]
 }
 ```
 
-`mode: "latest"` 适合搜索、级联和快速切换场景：后发请求优先，旧结果不会覆盖新结果。
+这种写法适合“一个字段变化影响多个资源或状态”的场景。
 
-### 参数解析
+## 实战建议
 
-`params` 可以使用模板或 JSON 表达式：
-
-```json
-{
-  "params": {
-    "team": { "var": "team" },
-    "currentRole": { "var": "$self.role" }
-  }
-}
-```
-
-常用来源：
-
-| 写法 | 含义 |
-| --- | --- |
-| `&#123;&#123; form.team &#125;&#125;` | 从根值树读取 `team`。 |
-| `&#123;&#123; $root.team &#125;&#125;` | 显式从根值树读取。 |
-| `&#123;&#123; $self.role &#125;&#125;` | 在当前作用域读取。 |
-| `&#123;&#123; $parent.groupId &#125;&#125;` | 在父作用域读取。 |
-| `{ "var": "team" }` | JSON 表达式读取。 |
-
-### 失败兜底和映射
-
-资源可以在 schema 上声明 `fallbackOptions` 和 `map`：
-
-```json
-{
-  "id": "owner",
-  "type": "select",
-  "optionsFrom": "docs:getOwners",
-  "fetchOnMount": true,
-  "map": { "label": "displayName", "value": "id" },
-  "fallbackOptions": [{ "label": "Default owner", "value": "default" }]
-}
-```
-
-### 资源设计建议
-
-- 资源 key 使用命名空间，例如 `release:getServices`，避免冲突。
-- schema 不直接携带请求函数，保持 JSON 可序列化。
-- HTTP、鉴权、错误提示、埋点放在资源函数中处理。
-- 业务页面可以注册真实请求，文档和测试可以注册 mock 请求。
-- 频繁变化的资源使用 `mode: "latest"`，稳定字典可以配合缓存策略。
-
-## English
-
-FormX models remote data as resources. The schema references resource keys and params; the application registers actual request handlers.
-
-The most common case is `optionsFrom`, which loads options into `state[path].options`. Renderers consume the options but do not care whether they came from HTTP, cache, local mock data, or a test fixture.
-
-Use `rulesV2` with the `fetch` effect when a request depends on another field and must be refreshed after changes. Keep request functions outside schema so the schema remains serializable.
+- 字典类资源注册一次，配置较长 TTL。
+- 搜索类资源使用 debounce 和 latest 策略。
+- 级联类资源要清理下游值，避免提交过期数据。
+- 异步校验和远程选项都走注册表，不要把请求函数写进 schema。
+- 资源失败时要有 UI 兜底，避免表单完全不可用。
+- 在 Dialog 或 Drawer 中使用时，注意打开、回填、请求返回之间的时序，详见 [异步运行时](/guide/async-runtime)。

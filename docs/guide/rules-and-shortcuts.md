@@ -1,172 +1,176 @@
-# Rules and Shortcuts / 规则与短写
+# 规则与短写
 
-## 中文
+FormX 的联动能力分两层：
 
-FormX 有两层联动表达方式：
+- 字段级短写：适合常见的显隐、必填、禁用、只读、计算、远程选项。
+- `rulesV2`：适合跨字段、跨数组、多个 effect、异步资源和复杂业务规则。
 
-1. 字段级短写：适合常见局部联动，schema 更易读。
-2. `rulesV2`：适合跨字段、跨数组、多个 effect、事件触发和高级表达式。
-
-推荐先用短写，短写表达不清楚时再使用 `rulesV2`。
+两者不是两套体系。短写最终会被编译成规则，统一进入引擎执行链。
 
 ## 字段级短写
 
 ### `showWhen`
 
-```json
+根据表达式控制字段可见性。
+
+```ts
 {
-  "id": "approvalReason",
-  "type": "textarea",
-  "label": "Approval reason",
-  "showWhen": { "field": "approvalRequired", "eq": true }
+  id: 'reason',
+  type: 'textarea',
+  label: '停用原因',
+  showWhen: 'status === "disabled"'
 }
 ```
-
-当 `approvalRequired` 为 `true` 时显示该字段，否则隐藏。
 
 ### `requiredWhen`
 
-```json
+根据表达式动态必填。
+
+```ts
 {
-  "id": "webhookUrl",
-  "type": "input",
-  "label": "Webhook URL",
-  "requiredWhen": {
-    "field": "notifyMode",
-    "eq": "webhook",
-    "message": "Webhook URL is required."
-  }
+  id: 'approvalComment',
+  type: 'textarea',
+  label: '审批意见',
+  requiredWhen: 'action === "reject"'
 }
 ```
-
-动态必填最终会写入 `state[path].required`，并参与提交校验。
 
 ### `disableWhen` 和 `readOnlyWhen`
 
-```json
+控制字段是否可编辑。
+
+```ts
 {
-  "id": "releaseWindow",
-  "type": "date-picker",
-  "label": "Release window",
-  "disableWhen": { "field": "deployMode", "eq": "manual" }
+  id: 'quota',
+  type: 'number',
+  label: '额度',
+  disableWhen: 'mode === "readonly"'
 }
 ```
 
-这类短写适合 UI 状态随字段变化的场景。
-
 ### `compute`
 
-```json
+计算字段值。
+
+```ts
 {
-  "id": "monthlyPrice",
-  "type": "number",
-  "label": "Monthly price",
-  "readonly": true,
-  "compute": {
-    "watch": ["plan", "seats"],
-    "expr": {
-      "*": [
-        { "var": "seats" },
-        { "iif": [{ "==": [{ "var": "plan" }, "enterprise"] }, 39, 19] }
-      ]
+  id: 'total',
+  type: 'number',
+  label: '合计',
+  compute: 'price * count'
+}
+```
+
+计算适合派生值，例如总价、显示名称、开关状态、策略摘要。避免在 `compute` 中做有副作用的请求或复杂业务流程。
+
+### `optionsFrom`
+
+声明远程选项来源。
+
+```ts
+{
+  id: 'city',
+  type: 'select',
+  label: '城市',
+  optionsFrom: {
+    requestKey: 'getCities',
+    params: {
+      province: '${province}'
     }
   }
 }
 ```
 
-`compute` 会编译成 `set` effect。它适合金额、评分、摘要、派生字段等场景。
-
-### `optionsFrom`
-
-```json
-{
-  "id": "service",
-  "type": "select",
-  "label": "Service",
-  "optionsFrom": "docs:getServices",
-  "params": { "team": { "var": "team" } },
-  "fetchOnMount": true
-}
-```
-
-`optionsFrom` 会触发远程资源加载，并把结果写入 `state[path].options`。
+`optionsFrom` 会交给资源层处理。它不是简单的回调，而是可被缓存、去抖、重试、诊断和刷新的一部分。
 
 ## `rulesV2`
 
-`rulesV2` 是更底层的规则数组。一个规则通常包含：
+当一个业务规则不能用单个字段短写表达时，使用 `rulesV2`。
 
-| Key | 说明 |
-| --- | --- |
-| `id` | 全局唯一规则 ID，便于诊断。 |
-| `scope` | 可选作用域，常用于 `field-group`。 |
-| `watch` | 监听的值路径或路径模式。 |
-| `trigger` | 自定义事件触发，例如 `event:submitDraft`。 |
-| `when` | JSON 表达式。 |
-| `effects` | 条件成立时执行的 effect。 |
-| `elseEffects` | 条件不成立时执行的 effect。 |
-
-示例：
-
-```json
+```ts
 {
-  "id": "prod-requires-approval",
-  "watch": ["environment"],
-  "when": { "==": [{ "var": "environment" }, "prod"] },
-  "effects": [{ "type": "set", "target": "approvalRequired", "value": true }],
-  "elseEffects": [{ "type": "set", "target": "approvalRequired", "value": false }]
+  id: 'admin-requires-reason',
+  watch: ['role', 'enabled'],
+  when: 'role === "admin" && enabled === false',
+  effects: [
+    { type: 'visible', target: 'reason', value: true },
+    { type: 'required', target: 'reason', value: true },
+    { type: 'setValue', target: 'level', value: 'high' }
+  ],
+  elseEffects: [
+    { type: 'visible', target: 'reason', value: false },
+    { type: 'required', target: 'reason', value: false }
+  ]
 }
 ```
 
-### 常用 effect
+常用字段：
 
-| Effect | 用途 |
+| 字段 | 说明 |
 | --- | --- |
-| `set` | 写入表单值。 |
-| `patch` | 动态修改字段 UI 属性，例如 label、props。 |
-| `setVisible` | 控制可见性。 |
-| `setDisabled` | 控制禁用。 |
-| `setRequired` | 控制必填。 |
-| `setReadOnly` | 控制只读。 |
-| `setOptions` | 动态下发选项。 |
-| `fetch` | 拉取远程资源。 |
-| `validate` | 写入或清理校验结果。 |
-| `addItem` / `removeItem` / `splice` | 操作数组字段。 |
-| `dispatch` | 派发自定义事件。 |
+| `id` | 规则标识，建议可读、稳定。 |
+| `scope` | 规则作用域，数组场景常用。 |
+| `watch` | 监听路径。 |
+| `when` | 条件表达式。 |
+| `effects` | 条件成立时执行的动作。 |
+| `elseEffects` | 条件不成立时执行的动作。 |
 
-### 数组作用域
+## 常用 effect
 
-`field-group` 内部规则建议使用 `scope` 和 `$self`：
+| effect | 说明 |
+| --- | --- |
+| `setValue` | 设置字段值。 |
+| `visible` | 设置可见性。 |
+| `disabled` | 设置禁用状态。 |
+| `readOnly` | 设置只读状态。 |
+| `required` | 设置动态必填。 |
+| `setOptions` | 设置选项。 |
+| `patchProps` | 补丁式更新字段 props。 |
+| `fetchOptions` | 触发资源请求并写入选项。 |
+| `validate` | 触发校验。 |
+| `schemaPatch` | 运行时修改 schema。 |
+| `addItem`、`removeItem`、`splice` | 操作数组字段。 |
 
-```json
+## 数组作用域
+
+数组规则的关键是 `scope`。例如在每一条规则项中，根据 `method` 控制 `threshold`：
+
+```ts
 {
-  "id": "owner-email-required",
-  "scope": "contacts[]",
-  "watch": ["$self.role"],
-  "when": { "==": [{ "var": "$self.role" }, "owner"] },
-  "effects": [{ "type": "setRequired", "target": "$self.email", "value": true }],
-  "elseEffects": [{ "type": "setRequired", "target": "$self.email", "value": false }]
+  id: 'rule-threshold-visible',
+  scope: 'rules[]',
+  watch: ['$self.method'],
+  when: '$self.method === "threshold"',
+  effects: [
+    { type: 'visible', target: '$self.threshold', value: true },
+    { type: 'required', target: '$self.threshold', value: true }
+  ],
+  elseEffects: [
+    { type: 'visible', target: '$self.threshold', value: false },
+    { type: 'required', target: '$self.threshold', value: false }
+  ]
 }
 ```
 
-这条规则会对 `contacts` 数组中的每一项分别运行，`$self.email` 总是指向当前项的邮箱。
+`$self` 会绑定到当前数组项实例，因此不会误伤其他行。
 
-### 规则编写建议
+## 什么时候用短写，什么时候用规则
 
-- 每条规则的 `id` 保持稳定且唯一。
-- 能用字段短写表达的，不必升级到全局规则。
-- 多个 effect 有明显业务含义时，用一条规则聚合，避免到处散落。
-- 跨数组和聚合表达式要显式声明 `scope`。
-- 远程请求优先用 `fetch` effect 或 `optionsFrom`，不要把请求函数放进 schema。
+| 场景 | 推荐 |
+| --- | --- |
+| 单字段显隐、必填、禁用 | 字段短写 |
+| 单字段计算 | `compute` |
+| 远程选项 | `optionsFrom` |
+| 多个字段联动 | `rulesV2` |
+| 数组项内联动 | 带 `scope` 的 `rulesV2` |
+| 需要多个 effect | `rulesV2` |
+| 需要诊断规则链 | `rulesV2` |
 
-## English
+## 规则编写建议
 
-FormX has two levels of linkage:
-
-1. Field shortcuts for common local behavior.
-2. `rulesV2` for cross-field, scoped, event-driven, or multi-effect behavior.
-
-Prefer shortcuts first. Use `rulesV2` when the behavior needs more structure.
-
-Common shortcuts include `showWhen`, `requiredWhen`, `disableWhen`, `readOnlyWhen`, `compute`, and `optionsFrom`. `rulesV2` contains stable rule IDs, watches, optional scopes, JSON expressions, effects, and optional else effects.
-
-In `field-group`, use `scope` and `$self` so the same rule can run for each array item safely.
+- 规则 `id` 要稳定，方便诊断和日志定位。
+- `watch` 尽量精确，减少无意义重算。
+- 数组内规则优先使用 `scope` 和 `$self`。
+- 避免在表达式里写复杂业务算法，复杂逻辑应拆成字段或资源。
+- effect 不要互相打架，例如一条规则隐藏字段，另一条规则又强制显示同一字段。
+- 对大型表单开启诊断，看规则数量、执行器类型和重算范围。

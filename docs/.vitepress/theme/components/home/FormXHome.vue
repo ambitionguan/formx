@@ -1,20 +1,127 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const props = withDefaults(
+  defineProps<{
+    locale?: 'zh' | 'en'
+  }>(),
+  {
+    locale: 'zh'
+  }
+)
+
+const content = {
+  zh: {
+    eyebrow: 'BY FORMX / HEADLESS FORM ENGINE',
+    title: '复杂业务表单的\n声明式运行时',
+    lead:
+      '用 JSON Schema 描述字段、联动、校验和远程资源。核心引擎独立运行，Vue + Element Plus 只是其中一个可替换的渲染皮肤。',
+    start: '开始使用',
+    examples: '查看示例',
+    installLabel: '安装 FormX',
+    stageLabel: 'FormX 运行时分层动画',
+    proofHeadline: 'Built for schema-driven product teams',
+    proof: ['Admin', 'Low-code', 'Designer', 'Runtime', 'Validation', 'Open Source'],
+    introTitle: '重新组织表单开发体验',
+    intro:
+      'FormX 把表单拆成稳定的协议层：核心引擎只管状态和规则，UI 皮肤只管渲染。复杂联动不再散落在组件 watch 和事件回调里。',
+    features: [
+      {
+        title: 'Headless Core',
+        text: '@formx/core 可在浏览器、Node、设计器和测试环境独立运行，不依赖 Vue 或 Element Plus。'
+      },
+      {
+        title: 'JSON DSL',
+        text: '字段、容器、校验、联动、远程选项都能序列化，适合存储、审查、生成和回放。'
+      },
+      {
+        title: 'Rule Graph',
+        text: 'showWhen、requiredWhen、compute 和 rulesV2 统一进入规则执行链，便于诊断。'
+      },
+      {
+        title: 'Renderer Skins',
+        text: '当前提供 Vue + Element Plus 皮肤，包边界为 React、Ant Design Vue 或自研 UI 预留空间。'
+      }
+    ],
+    flowLabel: 'Runtime Flow',
+    flowTitle: '一份 schema，跑完整个表单生命周期',
+    flow: [
+      ['Schema Model', '/guide/schema'],
+      ['Rules', '/guide/rules-and-shortcuts'],
+      ['Resources', '/guide/resources'],
+      ['Validation', '/guide/validation'],
+      ['Vue Runtime', '/guide/vue-runtime']
+    ]
+  },
+  en: {
+    eyebrow: 'BY FORMX / HEADLESS FORM ENGINE',
+    title: 'Declarative runtime\nfor complex business forms',
+    lead:
+      'Describe fields, linkage, validation, and remote resources with JSON Schema. The core engine runs independently; Vue + Element Plus is only one replaceable rendering skin.',
+    start: 'Get started',
+    examples: 'View examples',
+    installLabel: 'Install FormX',
+    stageLabel: 'Animated FormX runtime layers',
+    proofHeadline: 'Built for schema-driven product teams',
+    proof: ['Admin', 'Low-code', 'Designer', 'Runtime', 'Validation', 'Open Source'],
+    introTitle: 'Rebuild the form development model',
+    intro:
+      'FormX separates forms into stable protocol layers: the core engine owns state and rules, while skins render the view model. Complex linkage no longer has to live in scattered watchers and event callbacks.',
+    features: [
+      {
+        title: 'Headless Core',
+        text: '@formx/core runs in browsers, Node.js, designers, and tests without Vue or Element Plus.'
+      },
+      {
+        title: 'JSON DSL',
+        text: 'Fields, containers, validation, linkage, and remote options are serializable for storage, review, generation, and replay.'
+      },
+      {
+        title: 'Rule Graph',
+        text: 'showWhen, requiredWhen, compute, and rulesV2 share one execution pipeline that is easier to diagnose.'
+      },
+      {
+        title: 'Renderer Skins',
+        text: 'The current Vue + Element Plus skin proves the model, while the package boundary leaves room for React, Ant Design Vue, or internal design systems.'
+      }
+    ],
+    flowLabel: 'Runtime Flow',
+    flowTitle: 'One schema drives the full form lifecycle',
+    flow: [
+      ['Schema Model', '/en/guide/schema'],
+      ['Rules', '/en/guide/rules-and-shortcuts'],
+      ['Resources', '/en/guide/resources'],
+      ['Validation', '/en/guide/validation'],
+      ['Vue Runtime', '/en/guide/vue-runtime']
+    ]
+  }
+}
+
+const copy = computed(() => content[props.locale])
+const prefix = computed(() => (props.locale === 'en' ? '/en' : ''))
+const titleLines = computed(() => copy.value.title.split('\n'))
+</script>
+
 <template>
   <main class="fx-home">
     <section class="fx-shell fx-hero">
       <div class="fx-hero__copy">
-        <div class="fx-eyebrow">BY FORMX / HEADLESS FORM ENGINE</div>
-        <h1>复杂业务表单的<br />声明式运行时</h1>
-        <p class="fx-lead">
-          用 JSON Schema 描述字段、联动、校验和远程资源。核心引擎独立运行，Vue + Element
-          Plus 只是其中一个可替换的渲染皮肤。
-        </p>
+        <div class="fx-eyebrow">{{ copy.eyebrow }}</div>
+        <h1>
+          <template v-for="(line, index) in titleLines" :key="line">
+            <br v-if="index > 0" />{{ line }}
+          </template>
+        </h1>
+        <p class="fx-lead">{{ copy.lead }}</p>
 
         <div class="fx-actions" aria-label="FormX quick links">
-          <a class="fx-button fx-button--primary" href="/guide/getting-started">开始使用</a>
-          <a class="fx-button" href="/examples/">查看示例</a>
+          <a class="fx-button fx-button--primary" :href="`${prefix}/guide/getting-started`">
+            {{ copy.start }}
+          </a>
+          <a class="fx-button" :href="`${prefix}/examples/`">{{ copy.examples }}</a>
         </div>
 
-        <div class="fx-install" aria-label="Install FormX">
+        <div class="fx-install" :aria-label="copy.installLabel">
           <div class="fx-install__tabs">
             <span class="is-active">pnpm</span>
             <span>npm</span>
@@ -29,7 +136,7 @@
         </div>
       </div>
 
-      <div class="fx-hero__visual" aria-label="Animated FormX runtime layers">
+      <div class="fx-hero__visual" :aria-label="copy.stageLabel">
         <div class="fx-logo-stage" aria-hidden="true">
           <div class="fx-runtime-plane"></div>
           <div class="fx-data-ring fx-data-ring--outer"></div>
@@ -64,69 +171,32 @@
     </section>
 
     <section class="fx-shell fx-proof" aria-label="FormX capability groups">
-      <div class="fx-proof__headline">Built for schema-driven product teams</div>
+      <div class="fx-proof__headline">{{ copy.proofHeadline }}</div>
       <div class="fx-proof__grid">
-        <span>Admin</span>
-        <span>Low-code</span>
-        <span>Designer</span>
-        <span>Runtime</span>
-        <span>Validation</span>
-        <span>Open Source</span>
+        <span v-for="item in copy.proof" :key="item">{{ item }}</span>
       </div>
     </section>
 
     <section class="fx-shell fx-intro">
-      <h2>重新组织表单开发体验</h2>
-      <p>
-        FormX 把表单拆成稳定的协议层：核心引擎只管状态和规则，UI
-        皮肤只管渲染。复杂联动不再散落在组件 watch 和事件回调里。
-      </p>
+      <h2>{{ copy.introTitle }}</h2>
+      <p>{{ copy.intro }}</p>
     </section>
 
     <section class="fx-shell fx-feature-grid">
-      <article>
-        <span>01</span>
-        <h3>Headless Core</h3>
-        <p>
-          <code>@formx/core</code>
-          可在浏览器、Node、设计器和测试环境独立运行，不依赖 Vue 或 Element Plus。
-        </p>
-      </article>
-      <article>
-        <span>02</span>
-        <h3>JSON DSL</h3>
-        <p>
-          字段、容器、校验、联动、远程选项都能序列化，适合存储、审查、生成和回放。
-        </p>
-      </article>
-      <article>
-        <span>03</span>
-        <h3>Rule Graph</h3>
-        <p>
-          <code>showWhen</code>、<code>requiredWhen</code>、<code>compute</code>
-          和 <code>rulesV2</code> 统一进入规则执行链，便于诊断。
-        </p>
-      </article>
-      <article>
-        <span>04</span>
-        <h3>Renderer Skins</h3>
-        <p>
-          当前提供 Vue + Element Plus 皮肤，包边界为 React、Ant Design Vue 或自研 UI 预留空间。
-        </p>
+      <article v-for="(feature, index) in copy.features" :key="feature.title">
+        <span>{{ String(index + 1).padStart(2, '0') }}</span>
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.text }}</p>
       </article>
     </section>
 
     <section class="fx-shell fx-flow">
       <div>
-        <p class="fx-section-label">Runtime Flow</p>
-        <h2>一份 schema，跑完整个表单生命周期</h2>
+        <p class="fx-section-label">{{ copy.flowLabel }}</p>
+        <h2>{{ copy.flowTitle }}</h2>
       </div>
       <div class="fx-flow__steps">
-        <a href="/guide/schema">Schema Model</a>
-        <a href="/guide/rules-and-shortcuts">Rules</a>
-        <a href="/guide/resources">Resources</a>
-        <a href="/guide/validation">Validation</a>
-        <a href="/guide/vue-runtime">Vue Runtime</a>
+        <a v-for="[label, link] in copy.flow" :key="link" :href="link">{{ label }}</a>
       </div>
     </section>
   </main>

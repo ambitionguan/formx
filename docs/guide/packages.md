@@ -1,41 +1,90 @@
-# Package Boundaries / 包边界
+# 包边界
 
-## 中文
+FormX 采用多包结构。核心原则是：逻辑引擎独立，UI 协议独立，框架适配独立，具体 UI 皮肤独立。
 
-FormX 适合拆包发布。核心原因是“表单逻辑”和“渲染皮肤”生命周期不同：
+## 包列表
 
-| Package | 发布定位 |
-| --- | --- |
-| `@formx/core` | 纯逻辑引擎，可用于 Node、浏览器、设计器、测试、React/Vue/任意框架。 |
-| `@formx/ui-core` | 把 engine 状态转换成框架无关的 `FormView` / `FieldView`。 |
-| `@formx/vue-core` | Vue 响应式桥接层，不绑定具体组件库。 |
-| `@formx/vue-ep` | Vue + Element Plus 皮肤，负责字段渲染和样式。 |
-| `@formx/vue` | Vue 用户的默认入口，重导出常用能力。 |
+| 包 | 职责 | 是否依赖 UI |
+| --- | --- | --- |
+| `@formx/core` | Schema 类型、规则编译、表达式、值树、状态、校验、资源层、诊断。 | 否 |
+| `@formx/ui-core` | 将 Core 的状态转换成 UI 中立的 `FormView`、`FieldView`、容器视图和字段组视图。 | 否 |
+| `@formx/vue-core` | Vue 组合式封装，提供 engine 生命周期、响应式视图、组件暴露方法。 | 依赖 Vue |
+| `@formx/vue-ep` | Vue + Element Plus 皮肤，负责控件渲染、布局、错误展示、字段组 UI。 | 依赖 Vue 和 Element Plus |
+| `@formx/vue` | Vue 默认入口，面向应用侧的聚合包。 | 依赖 Vue 相关包 |
 
-推荐依赖方向保持单向：
+## 为什么要这样拆
 
-```text
-core <- ui-core <- vue-core <- vue-ep <- vue
+如果只发布一个大包，短期上手简单，但长期会带来几个问题：
+
+- Core 被 Vue 或 Element Plus 锁住，无法在设计器、Node、测试环境中独立运行。
+- React、Ant Design Vue、自研 UI 皮肤会被当前渲染实现阻塞。
+- 业务规则、UI 视图模型、具体控件渲染混在一起，扩展和诊断成本很高。
+- 开源用户只想用核心引擎时，也会被迫安装完整 UI 依赖。
+
+多包结构让每层只承担自己的责任：
+
+```txt
+@formx/core      业务逻辑协议
+@formx/ui-core   UI 中立视图协议
+@formx/vue-core  Vue 生命周期与响应式适配
+@formx/vue-ep    Element Plus 皮肤
+@formx/vue       推荐入口
 ```
 
-这样后续要做 React、Ant Design Vue 或自研组件库皮肤时，不需要改核心引擎。
+## 应用侧怎么选包
 
-## English
+大多数 Vue + Element Plus 项目只需要：
 
-FormX should be published as several packages because form logic and renderer skins evolve at different speeds:
-
-| Package | Publishing role |
-| --- | --- |
-| `@formx/core` | Headless engine for Node, browsers, designers, tests, Vue, React, or any other runtime. |
-| `@formx/ui-core` | Converts engine state into framework-neutral `FormView` / `FieldView` models. |
-| `@formx/vue-core` | Vue reactive bridge without binding to a component library. |
-| `@formx/vue-ep` | Vue + Element Plus skin for field rendering and styles. |
-| `@formx/vue` | Default Vue entry that re-exports the common APIs. |
-
-Keep dependencies one-way:
-
-```text
-core <- ui-core <- vue-core <- vue-ep <- vue
+```bash
+pnpm add @formx/vue vue element-plus
 ```
 
-That boundary makes future React, Ant Design Vue, or custom renderer packages possible without changing the engine.
+然后从聚合入口使用：
+
+```ts
+import { FormX, FormXEngine, ResourceManager } from '@formx/vue'
+import '@formx/vue/style.css'
+```
+
+如果你只需要引擎，不渲染 UI：
+
+```bash
+pnpm add @formx/core
+```
+
+```ts
+import { FormXEngine } from '@formx/core'
+```
+
+如果你要做新的 UI 皮肤，通常会依赖：
+
+```bash
+pnpm add @formx/core @formx/ui-core
+```
+
+Vue 皮肤还会用到：
+
+```bash
+pnpm add @formx/vue-core
+```
+
+## 版本策略
+
+建议所有 FormX 官方包保持同一个版本号发布。原因是这些包共享 schema、view model 和运行时协议，统一版本能降低用户排查兼容问题的成本。
+
+可以接受的兼容边界：
+
+- `@formx/core` 的 schema 和 engine API 需要最稳定。
+- `@formx/ui-core` 的视图模型变更要明确标注，因为它影响所有皮肤。
+- `@formx/vue-ep` 可以更快迭代控件和交互，但不能破坏公开暴露方法。
+
+## 开源用户应该理解的边界
+
+FormX 的核心价值不在某个 Element Plus 控件封装，而在这套协议：
+
+- JSON Schema 负责描述业务表单。
+- Core 负责执行规则、值、状态、资源、校验。
+- UI Core 负责把状态变成可渲染视图。
+- Skin 负责把视图落到具体 UI 框架。
+
+理解这条边界后，用户就能判断什么时候写 schema、什么时候注册资源、什么时候扩展自定义组件，什么时候需要实现新的皮肤。
