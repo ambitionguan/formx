@@ -29,9 +29,9 @@
 .formx-section {
   margin-bottom: 16px;
   padding: 16px;
-  border: 1px solid #e4e7ed;
+  border: 1px solid var(--el-border-color-lighter);
   border-radius: 4px;
-  /* background-color: #ffffff; */
+  background-color: var(--el-bg-color);
 }
 
 .formx-container {
@@ -43,7 +43,7 @@
 .formx-section-title {
   font-size: 14px;
   font-weight: 500;
-  color: #303133;
+  color: var(--el-text-color-primary);
   margin-bottom: 12px;
   display: flex;
   align-items: center;
@@ -53,7 +53,7 @@
 .formx-section-title-toggle {
   margin-left: 8px;
   font-size: 12px;
-  color: #909399;
+  color: var(--el-text-color-secondary);
   cursor: pointer;
 }
 
@@ -66,9 +66,10 @@
 }
 
 .formx-group-tabs {
-  border: 1px dashed #dcdfe6;
+  border: 1px dashed var(--el-border-color);
   border-radius: 8px;
   padding: 12px;
+  background-color: var(--el-fill-color-extra-light);
 }
 
 .formx-group-toolbar {
@@ -78,7 +79,7 @@
 }
 
 .formx-group-tabs-inner {
-  background-color: #fff;
+  background-color: var(--el-bg-color);
   border-radius: 6px;
   padding: 4px 8px;
 }
@@ -91,12 +92,12 @@
 
 .formx-tab-close {
   cursor: pointer;
-  color: #f56c6c;
+  color: var(--el-color-danger);
 }
 
 .formx-tab-close-disabled {
   cursor: not-allowed;
-  color: #c0c4cc;
+  color: var(--el-text-color-disabled);
 }
 
 .formx-actions {
@@ -128,7 +129,7 @@
   min-width: 20px;
   text-align: center;
   font-size: 12px;
-  color: #909399;
+  color: var(--el-text-color-secondary);
 }
 
 .formx-group-row-actions {
@@ -164,7 +165,7 @@
 
 .formx-group-table-head {
   font-size: 12px;
-  color: #909399;
+  color: var(--el-text-color-secondary);
 }
 
 .formx-group-table-head-cell {
@@ -192,7 +193,7 @@
 
 .formx-group-table-empty {
   text-align: center;
-  color: #909399;
+  color: var(--el-text-color-secondary);
   padding: 12px 0;
 }
 
@@ -212,10 +213,10 @@
 }
 
 .formx-card {
-  border: 1px solid #ebeef5;
+  border: 1px solid var(--el-border-color-lighter);
   border-radius: 6px;
   padding: 12px;
-  background-color: #fff;
+  background-color: var(--el-bg-color);
 }
 
 .formx-card-header {
