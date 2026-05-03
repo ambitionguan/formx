@@ -22,7 +22,7 @@ export const scenarios: DemoScenario[] = [
   {
     key: 'full-showcase',
     group: 'showcase',
-    title: '全量能力展示',
+    title: '能力全景',
     description: '字段、容器、数组、远程选项、上传、自定义组件与运行时 patch。',
     schema: fullShowcase as any,
     labelWidth: '150px'
@@ -30,31 +30,31 @@ export const scenarios: DemoScenario[] = [
   {
     key: 'connection-config',
     group: 'business',
-    title: '连接配置',
-    description: '接近生产配置弹窗的复杂业务表单，包含多字段组和自定义操作。',
+    title: '配置型弹窗',
+    description: '多区块编辑、异步回填、字段组和自定义操作。',
     schema: connectionConfig as any,
     labelWidth: '230px'
   },
   {
     key: 'controls',
     group: 'showcase',
-    title: '控件矩阵',
-    description: 'switch、slider、cascader、time、upload 和远程 options。',
+    title: '控件覆盖',
+    description: '输入、选择、日期时间、层级选择、上传和远程 options。',
     schema: controlsShowcase as any,
     labelWidth: '140px'
   },
   {
     key: 'data-policy',
     group: 'business',
-    title: '数据保护策略',
-    description: '字段组、保护方法和作用范围联动。',
+    title: '动态数组配置',
+    description: '字段组、数组项作用域和行内联动。',
     schema: dataPolicy as any,
     labelWidth: '150px'
   },
   {
     key: 'data-policy-options',
     group: 'runtime',
-    title: '远程选项策略',
+    title: '远程资源绑定',
     description: 'optionsFrom 与规则联动组合。',
     schema: dataPolicyOptionsFrom as any,
     labelWidth: '150px'
@@ -70,23 +70,23 @@ export const scenarios: DemoScenario[] = [
   {
     key: 'order-deep',
     group: 'linkage',
-    title: '订单深层联动',
-    description: '对象、数组、跨层字段和审批条件。',
+    title: '深层对象联动',
+    description: '对象、数组、跨层字段和派生条件。',
     schema: linkageOrderDeep as any,
     labelWidth: '180px'
   },
   {
     key: 'user-onboarding',
     group: 'linkage',
-    title: '用户入职联动',
-    description: '多区块入职流程和深层对象。',
+    title: '流程分段表单',
+    description: '按步骤、状态或角色组织多区块和深层对象。',
     schema: linkageUserOnboarding as any,
     labelWidth: '180px'
   },
   {
     key: 'permission-matrix',
     group: 'linkage',
-    title: '权限矩阵',
+    title: '矩阵型录入',
     description: '矩阵型字段组、动态必填和提交校验。',
     schema: linkagePermissionMatrix as any,
     labelWidth: '180px'

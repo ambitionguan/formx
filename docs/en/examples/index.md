@@ -10,7 +10,7 @@ FormX examples are live documentation: the forms on these pages are real FormX c
 | [Field Group](/en/examples/field-group) | Array fields, add/copy/remove operations, scoped rules. |
 | [Validation](/en/examples/validation) | Required rules, named patterns, async validators. |
 | [Headless Core](/en/examples/headless-core) | `FormXEngine` without Vue renderer. |
-| [Business Scenarios](/en/examples/business-scenarios) | Full schemas for real application patterns. |
+| [Scenario Patterns](/en/examples/business-scenarios) | General patterns for complex application forms. |
 
 The larger workbench lives in:
 

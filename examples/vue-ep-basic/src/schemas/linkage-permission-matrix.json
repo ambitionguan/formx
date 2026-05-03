@@ -76,7 +76,7 @@
     {
       "id": "modules",
       "type": "field-group",
-      "label": "模块权限矩阵（Table）",
+      "label": "矩阵配置（Table）",
       "min": 1,
       "max": 10,
       "showIndex": true,

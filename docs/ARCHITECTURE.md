@@ -28,7 +28,7 @@ packages/share/components/formx/            # 核心包（Headless）
      │  ├─ LiteExecutor.ts   # 轻规则执行器（<阈值且无通配）
      │  └─ GraphExecutor.ts  # 复杂规则执行器（通配/作用域/聚合）
      └─ demo/
-        └─ data-policy.json  # 数据保护规则示例配置
+        └─ complex-rules.json # 复杂规则示例配置
 
 packages/share/components/formx-ep/         # UI 集成包（Element Plus）
   ├─ README.md
@@ -99,7 +99,7 @@ packages/share/components/formx-ep/         # UI 集成包（Element Plus）
 
 十二、与现有项目集成
 - 保留旧 dynamic-form；新增 formx 与 formx-ep 并行试用
-- 首个用例：数据保护规则（rules[].protectionMethods[] 的任意层级联动与远程 optionsFrom）
+- 首个用例：动态数组规则（rules[].items[] 的任意层级联动与远程 optionsFrom）
 
 十三、后续（预留）
 - 规则设计器、依赖图可视化、片段库

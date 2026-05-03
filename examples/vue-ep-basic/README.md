@@ -11,8 +11,8 @@ pnpm --filter @formx/example-vue-ep-basic dev
 ## 覆盖场景
 
 - 全量能力展示：基础字段、对象容器、数组容器、远程选项、上传、自定义组件、计算字段和运行时 patch。
-- 业务表单：连接配置、数据保护策略等接近生产后台的复杂表单。
-- 联动模型：订单深层联动、用户入职联动、权限矩阵。
+- 场景模式：配置型弹窗、动态数组配置等接近生产后台的复杂表单。
+- 联动模型：深层对象联动、流程分段表单、矩阵型录入。
 - 运行时能力：`optionsFrom`、`setOptions`、远程资源 mock、校验策略切换。
 - 调试面板：实时展示 values、errors、engine state、diagnostics 和当前 schema。
 

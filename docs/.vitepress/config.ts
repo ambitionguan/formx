@@ -55,7 +55,7 @@ const zhThemeConfig = {
           { text: '字段组', link: '/examples/field-group' },
           { text: '校验', link: '/examples/validation' },
           { text: '纯核心引擎', link: '/examples/headless-core' },
-          { text: '业务场景', link: '/examples/business-scenarios' }
+          { text: '场景模式', link: '/examples/business-scenarios' }
         ]
       }
     ],
@@ -137,7 +137,7 @@ const enThemeConfig = {
           { text: 'Field Group', link: '/en/examples/field-group' },
           { text: 'Validation', link: '/en/examples/validation' },
           { text: 'Headless Core', link: '/en/examples/headless-core' },
-          { text: 'Business Scenarios', link: '/en/examples/business-scenarios' }
+          { text: 'Scenario Patterns', link: '/en/examples/business-scenarios' }
         ]
       }
     ],

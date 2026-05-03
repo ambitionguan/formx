@@ -6,7 +6,7 @@
 
 先建值树，不要先想 UI。
 
-例如“数据保护策略”可以拆成：
+例如“策略型配置表单”可以拆成：
 
 ```json
 {
@@ -36,7 +36,7 @@
 ```ts
 {
   fields: [
-    { id: 'name', type: 'input', label: '策略名称' },
+    { id: 'name', type: 'input', label: '配置名称' },
     { id: 'enabled', type: 'switch', label: '启用' },
     {
       id: 'scope',
@@ -50,7 +50,7 @@
     {
       id: 'rules',
       type: 'field-group',
-      label: '保护规则',
+      label: '规则明细',
       template: [
         { id: 'field', type: 'select', label: '字段' },
         { id: 'method', type: 'select', label: '方法' },

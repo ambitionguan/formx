@@ -481,7 +481,7 @@ Core 与 UI Core 不需要知道用的是哪套皮肤。
      - 保留旧实现作为 legacy，不再扩展。
 
 4. **对齐控件行为与布局**
-   - 以若干实际表单场景为基准（策略表单、数据连接配置等）：
+   - 以若干通用复杂表单模式为基准（配置型弹窗、动态数组、矩阵录入等）：
      - 对比旧渲染与新皮肤的差异。
      - 逐步补齐 upload/autocomplete/slider 等特殊行为。
      - 细化 field-group、form-array/TableForm、flatten 容器的布局与操作体验。

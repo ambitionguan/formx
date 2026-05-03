@@ -58,7 +58,7 @@
       "watch": ["$self.methodType"],
       "effects": [
         { "type": "setOptions", "target": "$self.applicableScope", "options": [
-          { "label": "业务场景", "value": "businessScenario" },
+          { "label": "指定场景", "value": "businessScenario" },
           { "label": "所有人", "value": "all" },
           { "label": "所有人，除了", "value": "exclude" },
           { "label": "用户", "value": "users" },
@@ -73,7 +73,7 @@
       "when": { "==": [ { "var": "$self.methodType" }, "mfa" ] },
       "effects": [
         { "type": "setOptions", "target": "$self.applicableScope", "options": [
-          { "label": "业务场景", "value": "businessScenario" },
+          { "label": "指定场景", "value": "businessScenario" },
           { "label": "所有人", "value": "all" },
           { "label": "所有人，除了", "value": "exclude" },
           { "label": "用户", "value": "users" },
@@ -88,7 +88,7 @@
       "when": { "in": [ { "var": "$self.methodType" }, ["desensitization","rowLimit"] ] },
       "effects": [
         { "type": "setOptions", "target": "$self.applicableScope", "options": [
-          { "label": "业务场景", "value": "businessScenario" },
+          { "label": "指定场景", "value": "businessScenario" },
           { "label": "所有人", "value": "all", "disabled": true },
           { "label": "所有人，除了", "value": "exclude", "disabled": true },
           { "label": "用户", "value": "users", "disabled": true },
@@ -98,4 +98,3 @@
     }
   ]
 }
-
