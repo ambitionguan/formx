@@ -4,6 +4,16 @@ import { fileURLToPath, URL } from 'node:url'
 
 const resolveLocal = (path: string) => fileURLToPath(new URL(path, import.meta.url))
 
+const forceHomeDarkScript = `;(() => {
+  const path = location.pathname
+    .replace(/\\/index(?:\\.html)?$/, '/')
+    .replace(/\\.html$/, '')
+  const normalized = path.endsWith('/') ? path : path + '/'
+  if (normalized === '/' || normalized === '/en/') {
+    document.documentElement.classList.add('dark', 'formx-home-route')
+  }
+})()`
+
 const zhThemeConfig = {
   nav: [
     { text: '指南', link: '/guide/introduction' },
@@ -171,6 +181,7 @@ const enThemeConfig = {
 export default defineConfig({
   title: 'FormX',
   description: 'Headless dynamic form engine for complex business applications.',
+  head: [['script', { id: 'formx-home-dark-mode' }, forceHomeDarkScript]],
   cleanUrls: true,
   lastUpdated: true,
   srcExclude: [

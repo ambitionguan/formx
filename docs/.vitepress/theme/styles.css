@@ -14,6 +14,16 @@
   --formx-demo-panel: #111827;
 }
 
+.formx-home-route .VPNavBarAppearance,
+.formx-home-route .VPNavScreenAppearance,
+.formx-home-route .VPNavBarExtra .item.appearance {
+  display: none !important;
+}
+
+.formx-home-route .VPNavBarAppearance + .social-links::before {
+  display: none !important;
+}
+
 .VPDoc .content-container {
   max-width: 1080px;
 }
