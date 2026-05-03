@@ -51,8 +51,14 @@
           <div class="fx-packet fx-packet--c"></div>
           <div class="fx-packet fx-packet--d"></div>
 
-          <div class="fx-runtime-note fx-runtime-note--core"></div>
-          <div class="fx-runtime-note fx-runtime-note--skin"></div>
+          <div class="fx-runtime-note fx-runtime-note--core">
+            <span>0 UI lock-in</span>
+            <strong>headless core</strong>
+          </div>
+          <div class="fx-runtime-note fx-runtime-note--skin">
+            <span>renderer skin</span>
+            <strong>Vue + EP</strong>
+          </div>
         </div>
       </div>
     </section>
@@ -448,9 +454,7 @@
 .fx-runtime-logo::before,
 .fx-runtime-logo::after,
 .fx-data-card::before,
-.fx-data-card::after,
-.fx-runtime-note::before,
-.fx-runtime-note::after {
+.fx-data-card::after {
   position: absolute;
   content: '';
 }
@@ -619,57 +623,57 @@
 
 .fx-runtime-note {
   z-index: 6;
-  min-width: 148px;
-  height: 54px;
-  border: 1px solid rgba(226, 232, 240, 0.12);
-  border-radius: 18px;
-  background: rgba(8, 13, 24, 0.72);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 18px 50px rgba(2, 8, 23, 0.22);
+  display: flex;
+  width: 182px;
+  height: 76px;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid rgba(226, 232, 240, 0.16);
+  border-radius: 22px;
+  padding: 0 18px;
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, 0.86), rgba(15, 23, 42, 0.62)),
+    rgba(8, 13, 24, 0.82);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 18px 50px rgba(2, 8, 23, 0.26);
+  backdrop-filter: blur(16px);
   animation: fxNoteFloat 7.4s ease-in-out infinite;
 }
 
-.fx-runtime-note::before,
-.fx-runtime-note::after {
-  left: 15px;
-  font-size: 11px;
+.fx-runtime-note span,
+.fx-runtime-note strong {
   font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
 }
 
-.fx-runtime-note::before {
-  top: 11px;
+.fx-runtime-note span {
   color: var(--fx-dim);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.fx-runtime-note::after {
-  bottom: 11px;
+.fx-runtime-note strong {
   color: #e0f2fe;
+  font-size: 18px;
+  letter-spacing: 0;
 }
 
 .fx-runtime-note--core {
-  bottom: 116px;
-  left: 46px;
-}
-
-.fx-runtime-note--core::before {
-  content: '0 UI lock-in';
-}
-
-.fx-runtime-note--core::after {
-  content: 'headless core';
+  bottom: 134px;
+  left: 38px;
+  border-color: rgba(125, 211, 252, 0.2);
 }
 
 .fx-runtime-note--skin {
-  top: 294px;
-  right: 10px;
+  top: 316px;
+  right: 34px;
+  border-color: rgba(52, 211, 153, 0.22);
   animation-delay: 1.2s;
-}
-
-.fx-runtime-note--skin::before {
-  content: 'renderer skin';
-}
-
-.fx-runtime-note--skin::after {
-  content: 'Vue + EP';
 }
 
 .fx-proof {
