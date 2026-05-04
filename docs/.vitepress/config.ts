@@ -25,7 +25,7 @@ const zhThemeConfig = {
     { text: '指南', link: '/guide/introduction' },
     { text: '示例', link: '/examples/' },
     { text: 'API', link: '/api/' },
-    { text: 'GitHub', link: 'https://github.com/formxjs/formx' }
+    { text: 'GitHub', link: 'https://github.com/ambitionguan/formx' }
   ],
   sidebar: {
     '/guide/': [
@@ -82,7 +82,7 @@ const zhThemeConfig = {
       }
     ]
   },
-  socialLinks: [{ icon: 'github', link: 'https://github.com/formxjs/formx' }],
+  socialLinks: [{ icon: 'github', link: 'https://github.com/ambitionguan/formx' }],
   search: {
     provider: 'local' as const
   },
@@ -107,7 +107,7 @@ const enThemeConfig = {
     { text: 'Guide', link: '/en/guide/introduction' },
     { text: 'Examples', link: '/en/examples/' },
     { text: 'API', link: '/en/api/' },
-    { text: 'GitHub', link: 'https://github.com/formxjs/formx' }
+    { text: 'GitHub', link: 'https://github.com/ambitionguan/formx' }
   ],
   sidebar: {
     '/en/guide/': [
@@ -164,7 +164,7 @@ const enThemeConfig = {
       }
     ]
   },
-  socialLinks: [{ icon: 'github', link: 'https://github.com/formxjs/formx' }],
+  socialLinks: [{ icon: 'github', link: 'https://github.com/ambitionguan/formx' }],
   search: {
     provider: 'local' as const
   },

@@ -7,7 +7,7 @@ This document covers the first public release workflow for FormX.
 The package metadata currently points to:
 
 ```txt
-https://github.com/formxjs/formx
+https://github.com/ambitionguan/formx
 ```
 
 If the GitHub repository uses a different owner or name, update these fields before publishing:
@@ -24,7 +24,7 @@ The docs site is built with VitePress.
 For the default GitHub Pages URL:
 
 ```txt
-https://formxjs.github.io/formx/
+https://ambitionguan.github.io/formx/
 ```
 
 the workflow sets:

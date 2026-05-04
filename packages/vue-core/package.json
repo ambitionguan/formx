@@ -4,13 +4,13 @@
   "description": "Vue runtime bridge for FormX.",
   "license": "MIT",
   "keywords": ["formx", "dynamic-form", "vue", "runtime", "schema"],
-  "homepage": "https://github.com/formxjs/formx#readme",
+  "homepage": "https://github.com/ambitionguan/formx#readme",
   "bugs": {
-    "url": "https://github.com/formxjs/formx/issues"
+    "url": "https://github.com/ambitionguan/formx/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/formxjs/formx.git",
+    "url": "git+https://github.com/ambitionguan/formx.git",
     "directory": "packages/vue-core"
   },
   "type": "module",

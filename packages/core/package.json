@@ -4,13 +4,13 @@
   "description": "Headless dynamic form engine for FormX.",
   "license": "MIT",
   "keywords": ["formx", "dynamic-form", "headless", "schema", "validation", "low-code"],
-  "homepage": "https://github.com/formxjs/formx#readme",
+  "homepage": "https://github.com/ambitionguan/formx#readme",
   "bugs": {
-    "url": "https://github.com/formxjs/formx/issues"
+    "url": "https://github.com/ambitionguan/formx/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/formxjs/formx.git",
+    "url": "git+https://github.com/ambitionguan/formx.git",
     "directory": "packages/core"
   },
   "type": "module",
