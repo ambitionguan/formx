@@ -23,5 +23,5 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm build
       - run: pnpm docs:build
-      - run: pnpm --filter @formx/example-vue-ep-basic typecheck
-      - run: pnpm --filter @formx/example-vue-ep-basic build
+      - run: pnpm --filter @formxjs/example-vue-ep-basic typecheck
+      - run: pnpm --filter @formxjs/example-vue-ep-basic build

@@ -28,6 +28,7 @@ jobs:
           cache: pnpm
       - uses: actions/configure-pages@v5
       - run: pnpm install --frozen-lockfile
+      - run: pnpm build
       - name: Build VitePress docs
         run: pnpm docs:build
         env:
