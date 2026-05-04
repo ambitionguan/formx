@@ -1,6 +1,6 @@
 {
   "name": "@formxjs/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Headless dynamic form engine for FormX.",
   "license": "MIT",
   "keywords": ["formx", "dynamic-form", "headless", "schema", "validation", "low-code"],

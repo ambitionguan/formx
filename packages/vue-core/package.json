@@ -1,6 +1,6 @@
 {
   "name": "@formxjs/vue-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vue runtime bridge for FormX.",
   "license": "MIT",
   "keywords": ["formx", "dynamic-form", "vue", "runtime", "schema"],
@@ -35,13 +35,13 @@
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "@formxjs/core": "^0.1.0",
-    "@formxjs/ui-core": "^0.1.0",
+    "@formxjs/core": "^0.1.1",
+    "@formxjs/ui-core": "^0.1.1",
     "vue": "^3.5.0"
   },
   "devDependencies": {
-    "@formxjs/core": "^0.1.0",
-    "@formxjs/ui-core": "^0.1.0",
+    "@formxjs/core": "^0.1.1",
+    "@formxjs/ui-core": "^0.1.1",
     "vue": "^3.5.22"
   }
 }

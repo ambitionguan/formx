@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import { withBase } from 'vitepress'
+
+type PackageManager = 'pnpm' | 'npm' | 'yarn'
 
 const props = withDefaults(
   defineProps<{
@@ -28,7 +31,7 @@ const content = {
     features: [
       {
         title: 'Headless Core',
-        text: '@formx/core 可在浏览器、Node、设计器和测试环境独立运行，不依赖 Vue 或 Element Plus。'
+        text: '@formxjs/core 可在浏览器、Node、设计器和测试环境独立运行，不依赖 Vue 或 Element Plus。'
       },
       {
         title: 'JSON DSL',
@@ -70,7 +73,7 @@ const content = {
     features: [
       {
         title: 'Headless Core',
-        text: '@formx/core runs in browsers, Node.js, designers, and tests without Vue or Element Plus.'
+        text: '@formxjs/core runs in browsers, Node.js, designers, and tests without Vue or Element Plus.'
       },
       {
         title: 'JSON DSL',
@@ -99,7 +102,48 @@ const content = {
 
 const copy = computed(() => content[props.locale])
 const prefix = computed(() => (props.locale === 'en' ? '/en' : ''))
+const startLink = computed(() => withBase(`${prefix.value}/guide/getting-started`))
+const examplesLink = computed(() => withBase(`${prefix.value}/examples/`))
 const titleLines = computed(() => copy.value.title.split('\n'))
+const packageManagers: PackageManager[] = ['pnpm', 'npm', 'yarn']
+const activePackageManager = ref<PackageManager>('pnpm')
+const commandPrefix: Record<PackageManager, string> = {
+  pnpm: 'pnpm add',
+  npm: 'npm install',
+  yarn: 'yarn add'
+}
+const installItems = computed(() => {
+  const isEn = props.locale === 'en'
+
+  return [
+    {
+      title: isEn ? 'Recommended Vue entry' : 'Vue 推荐入口',
+      note: isEn ? 'App-facing package with the default EP skin.' : '应用侧优先使用，包含默认 EP 皮肤。',
+      packages: ['@formxjs/vue', 'vue', 'element-plus']
+    },
+    {
+      title: isEn ? 'Headless engine' : '纯核心引擎',
+      note: isEn ? 'Schema, rules, resources, validation.' : '只使用 schema、规则、资源和校验。',
+      packages: ['@formxjs/core']
+    },
+    {
+      title: isEn ? 'UI protocol' : 'UI 中立协议',
+      note: isEn ? 'Build framework-neutral form view models.' : '生成框架无关的表单视图模型。',
+      packages: ['@formxjs/core', '@formxjs/ui-core']
+    },
+    {
+      title: isEn ? 'Vue runtime adapter' : 'Vue 运行时适配',
+      note: isEn ? 'Use Vue reactivity without a fixed skin.' : '接入 Vue 响应式，但不绑定具体皮肤。',
+      packages: ['@formxjs/core', '@formxjs/ui-core', '@formxjs/vue-core', 'vue']
+    },
+    {
+      title: isEn ? 'Vue + EP skin' : 'Vue + EP 皮肤',
+      note: isEn ? 'Render UI Core views with Element Plus.' : '用 Element Plus 渲染 UI Core 视图。',
+      packages: ['@formxjs/core', '@formxjs/ui-core', '@formxjs/vue-core', '@formxjs/vue-ep', 'vue', 'element-plus']
+    }
+  ]
+})
+const installCommand = (packages: string[]) => `${commandPrefix[activePackageManager.value]} ${packages.join(' ')}`
 </script>
 
 <template>
@@ -115,23 +159,32 @@ const titleLines = computed(() => copy.value.title.split('\n'))
         <p class="fx-lead">{{ copy.lead }}</p>
 
         <div class="fx-actions" aria-label="FormX quick links">
-          <a class="fx-button fx-button--primary" :href="`${prefix}/guide/getting-started`">
+          <a class="fx-button fx-button--primary" :href="startLink">
             {{ copy.start }}
           </a>
-          <a class="fx-button" :href="`${prefix}/examples/`">{{ copy.examples }}</a>
+          <a class="fx-button" :href="examplesLink">{{ copy.examples }}</a>
         </div>
 
         <div class="fx-install" :aria-label="copy.installLabel">
           <div class="fx-install__tabs">
-            <span class="is-active">pnpm</span>
-            <span>npm</span>
-            <span>yarn</span>
-            <span>bun</span>
+            <button
+              v-for="manager in packageManagers"
+              :key="manager"
+              type="button"
+              :class="{ 'is-active': activePackageManager === manager }"
+              @click="activePackageManager = manager"
+            >
+              {{ manager }}
+            </button>
           </div>
-          <div class="fx-install__command">
-            <span>$</span>
-            <code>pnpm add @formx/vue vue element-plus</code>
-            <em>bash</em>
+          <div class="fx-install__list">
+            <div v-for="item in installItems" :key="item.title" class="fx-install__row">
+              <div class="fx-install__meta">
+                <strong>{{ item.title }}</strong>
+                <small>{{ item.note }}</small>
+              </div>
+              <code><span>$</span>{{ installCommand(item.packages) }}</code>
+            </div>
           </div>
         </div>
       </div>
@@ -196,7 +249,7 @@ const titleLines = computed(() => copy.value.title.split('\n'))
         <h2>{{ copy.flowTitle }}</h2>
       </div>
       <div class="fx-flow__steps">
-        <a v-for="[label, link] in copy.flow" :key="link" :href="link">{{ label }}</a>
+        <a v-for="[label, link] in copy.flow" :key="link" :href="withBase(link)">{{ label }}</a>
       </div>
     </section>
   </main>
@@ -324,8 +377,8 @@ const titleLines = computed(() => copy.value.title.split('\n'))
 
 .fx-install {
   overflow: hidden;
-  width: min(560px, 100%);
-  margin-top: 72px;
+  width: min(640px, 100%);
+  margin-top: 52px;
   border: 1px solid rgba(15, 23, 42, 0.85);
   border-radius: 10px;
   background: rgba(10, 10, 16, 0.74);
@@ -334,46 +387,88 @@ const titleLines = computed(() => copy.value.title.split('\n'))
 
 .fx-install__tabs {
   display: flex;
-  gap: 28px;
+  gap: 12px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.14);
-  padding: 16px 22px 0;
+  padding: 14px 18px 0;
   color: var(--fx-dim);
   font-weight: 700;
 }
 
-.fx-install__tabs span {
+.fx-install__tabs button {
+  appearance: none;
+  border: 0;
+  background: transparent;
   padding-bottom: 14px;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
 }
 
-.fx-install__tabs .is-active {
+.fx-install__tabs button:hover {
+  color: var(--fx-text);
+}
+
+.fx-install__tabs button.is-active {
   border-bottom: 2px solid var(--fx-blue);
   color: var(--fx-text);
 }
 
-.fx-install__command {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 21px 22px 24px;
-  color: #bde7ff;
-  font-size: 15px;
+.fx-install__list {
+  display: grid;
 }
 
-.fx-install__command span {
-  color: var(--fx-violet);
+.fx-install__row {
+  display: grid;
+  grid-template-columns: minmax(132px, 0.74fr) minmax(0, 1.4fr);
+  gap: 18px;
+  align-items: center;
+  padding: 14px 18px;
+}
+
+.fx-install__row + .fx-install__row {
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.fx-install__meta {
+  min-width: 0;
+}
+
+.fx-install__meta strong,
+.fx-install__meta small {
+  display: block;
+}
+
+.fx-install__meta strong {
+  color: #eef6ff;
+  font-size: 13px;
   font-weight: 800;
 }
 
-.fx-install__command code {
-  color: #dbeafe;
-  font-family: var(--vp-font-family-mono);
+.fx-install__meta small {
+  margin-top: 4px;
+  color: var(--fx-dim);
+  font-size: 11px;
+  line-height: 1.45;
 }
 
-.fx-install__command em {
-  margin-left: auto;
-  color: var(--fx-dim);
-  font-style: normal;
+.fx-install__row code {
+  display: block;
+  overflow-x: auto;
+  padding: 10px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.5);
+  color: #dbeafe;
+  font-family: var(--vp-font-family-mono);
   font-size: 12px;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+
+.fx-install__row code span {
+  margin-right: 9px;
+  color: var(--fx-violet);
+  font-weight: 800;
 }
 
 .fx-hero__visual {
@@ -1044,6 +1139,22 @@ const titleLines = computed(() => copy.value.title.split('\n'))
 
   .fx-feature-grid {
     grid-template-columns: 1fr;
+  }
+
+  .fx-install {
+    margin-top: 36px;
+  }
+
+  .fx-install__tabs {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .fx-install__row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding-right: 14px;
+    padding-left: 14px;
   }
 
   .fx-feature-grid article {

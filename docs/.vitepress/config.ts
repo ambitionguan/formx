@@ -227,24 +227,24 @@ export default defineConfig({
     resolve: {
       alias: [
         {
-          find: /^@formx\/vue-ep\/style\.css$/,
+          find: /^@formxjs\/vue-ep\/style\.css$/,
           replacement: resolveLocal('../../packages/vue-ep/src/style.css')
         },
-        { find: /^@formx\/vue-ep$/, replacement: resolveLocal('../../packages/vue-ep/src') },
-        { find: /^@formx\/vue-core$/, replacement: resolveLocal('../../packages/vue-core/src') },
-        { find: /^@formx\/ui-core$/, replacement: resolveLocal('../../packages/ui-core/src') },
-        { find: /^@formx\/core$/, replacement: resolveLocal('../../packages/core/src') },
-        { find: /^@formx\/vue$/, replacement: resolveLocal('../../packages/vue/src') }
+        { find: /^@formxjs\/vue-ep$/, replacement: resolveLocal('../../packages/vue-ep/src') },
+        { find: /^@formxjs\/vue-core$/, replacement: resolveLocal('../../packages/vue-core/src') },
+        { find: /^@formxjs\/ui-core$/, replacement: resolveLocal('../../packages/ui-core/src') },
+        { find: /^@formxjs\/core$/, replacement: resolveLocal('../../packages/core/src') },
+        { find: /^@formxjs\/vue$/, replacement: resolveLocal('../../packages/vue/src') }
       ]
     },
     ssr: {
       noExternal: [
         'element-plus',
-        '@formx/vue',
-        '@formx/vue-ep',
-        '@formx/vue-core',
-        '@formx/ui-core',
-        '@formx/core'
+        '@formxjs/vue',
+        '@formxjs/vue-ep',
+        '@formxjs/vue-core',
+        '@formxjs/ui-core',
+        '@formxjs/core'
       ]
     },
     optimizeDeps: {

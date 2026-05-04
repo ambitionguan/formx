@@ -1,6 +1,6 @@
 {
   "name": "@formxjs/vue",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Default Vue entry for FormX.",
   "license": "MIT",
   "keywords": ["formx", "dynamic-form", "vue", "element-plus", "schema"],
@@ -35,10 +35,10 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@formxjs/core": "^0.1.0",
-    "@formxjs/ui-core": "^0.1.0",
-    "@formxjs/vue-core": "^0.1.0",
-    "@formxjs/vue-ep": "^0.1.0"
+    "@formxjs/core": "^0.1.1",
+    "@formxjs/ui-core": "^0.1.1",
+    "@formxjs/vue-core": "^0.1.1",
+    "@formxjs/vue-ep": "^0.1.1"
   },
   "peerDependencies": {
     "element-plus": "^2.10.0",

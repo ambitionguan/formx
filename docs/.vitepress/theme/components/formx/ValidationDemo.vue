@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import { FormX } from '@formx/vue'
-import type { FormSchema } from '@formx/vue'
+import { FormX } from '@formxjs/vue'
+import type { FormSchema } from '@formxjs/vue'
 import DemoPanel from './DemoPanel.vue'
 import { useDemoState } from './demoUtils'
 import { registerDocsResources } from './registerDocsResources'

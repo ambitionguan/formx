@@ -61,7 +61,7 @@ The public package names are:
 @formxjs/vue
 ```
 
-The npm account or organization must own the `@formx` scope.
+The npm account or organization must own the `@formxjs` scope.
 
 Do not commit npm tokens. For GitHub Actions publishing, add a repository secret:
 
@@ -69,7 +69,7 @@ Do not commit npm tokens. For GitHub Actions publishing, add a repository secret
 NPM_TOKEN
 ```
 
-The token needs permission to publish packages under the `@formx` scope.
+The token needs permission to publish packages under the `@formxjs` scope.
 
 ## First Release Recommendation
 

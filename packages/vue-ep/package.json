@@ -1,6 +1,6 @@
 {
   "name": "@formxjs/vue-ep",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vue + Element Plus skin for FormX.",
   "license": "MIT",
   "keywords": ["formx", "dynamic-form", "vue", "element-plus", "schema"],
@@ -36,16 +36,16 @@
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "@formxjs/core": "^0.1.0",
-    "@formxjs/ui-core": "^0.1.0",
-    "@formxjs/vue-core": "^0.1.0",
+    "@formxjs/core": "^0.1.1",
+    "@formxjs/ui-core": "^0.1.1",
+    "@formxjs/vue-core": "^0.1.1",
     "element-plus": "^2.10.0",
     "vue": "^3.5.0"
   },
   "devDependencies": {
-    "@formxjs/core": "^0.1.0",
-    "@formxjs/ui-core": "^0.1.0",
-    "@formxjs/vue-core": "^0.1.0",
+    "@formxjs/core": "^0.1.1",
+    "@formxjs/ui-core": "^0.1.1",
+    "@formxjs/vue-core": "^0.1.1",
     "element-plus": "^2.11.4",
     "vue": "^3.5.22"
   }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import { FormXEngine } from '@formx/vue'
-import type { FormSchema } from '@formx/vue'
+import { FormXEngine } from '@formxjs/vue'
+import type { FormSchema } from '@formxjs/vue'
 import { formatJson } from './demoUtils'
 
 const schema: FormSchema = {

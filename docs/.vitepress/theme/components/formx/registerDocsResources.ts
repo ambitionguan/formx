@@ -1,4 +1,4 @@
-import { FormXEngine, ResourceManager } from '@formx/vue'
+import { FormXEngine, ResourceManager } from '@formxjs/vue'
 
 type Option = {
   label: string

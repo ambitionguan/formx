@@ -1,6 +1,6 @@
 {
   "name": "@formxjs/ui-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Framework-neutral FormX view model and UI protocol.",
   "license": "MIT",
   "keywords": ["formx", "dynamic-form", "view-model", "schema", "ui-protocol"],
@@ -35,9 +35,9 @@
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "@formxjs/core": "^0.1.0"
+    "@formxjs/core": "^0.1.1"
   },
   "devDependencies": {
-    "@formxjs/core": "^0.1.0"
+    "@formxjs/core": "^0.1.1"
   }
 }
