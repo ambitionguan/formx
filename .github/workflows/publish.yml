@@ -1,0 +1,63 @@
+name: Publish Packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: npm dist-tag
+        required: true
+        default: alpha
+        type: choice
+        options:
+          - alpha
+          - latest
+      dry_run:
+        description: Run npm pack dry-run instead of publishing
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.8.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm typecheck
+      - run: pnpm build
+      - run: pnpm docs:build
+
+      - name: Pack dry-run
+        if: inputs.dry_run
+        run: |
+          npm pack ./packages/core --dry-run
+          npm pack ./packages/ui-core --dry-run
+          npm pack ./packages/vue-core --dry-run
+          npm pack ./packages/vue-ep --dry-run
+          npm pack ./packages/vue --dry-run
+
+      - name: Publish packages
+        if: ${{ !inputs.dry_run }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TAG: ${{ inputs.tag }}
+        run: |
+          npm publish ./packages/core --access public --tag "$NPM_TAG" --provenance
+          npm publish ./packages/ui-core --access public --tag "$NPM_TAG" --provenance
+          npm publish ./packages/vue-core --access public --tag "$NPM_TAG" --provenance
+          npm publish ./packages/vue-ep --access public --tag "$NPM_TAG" --provenance
+          npm publish ./packages/vue --access public --tag "$NPM_TAG" --provenance

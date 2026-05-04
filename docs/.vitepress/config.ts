@@ -3,9 +3,15 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import { fileURLToPath, URL } from 'node:url'
 
 const resolveLocal = (path: string) => fileURLToPath(new URL(path, import.meta.url))
+const docsBase = process.env.DOCS_BASE || '/'
+const normalizedDocsBase = docsBase.endsWith('/') ? docsBase : `${docsBase}/`
 
 const forceHomeDarkScript = `;(() => {
-  const path = location.pathname
+  const base = ${JSON.stringify(normalizedDocsBase)}
+  const stripBase = (path) => {
+    return base !== '/' && path.startsWith(base) ? '/' + path.slice(base.length) : path
+  }
+  const path = stripBase(location.pathname)
     .replace(/\\/index(?:\\.html)?$/, '/')
     .replace(/\\.html$/, '')
   const normalized = path.endsWith('/') ? path : path + '/'
@@ -181,6 +187,7 @@ const enThemeConfig = {
 export default defineConfig({
   title: 'FormX',
   description: 'Headless dynamic form engine for complex business applications.',
+  base: normalizedDocsBase,
   head: [['script', { id: 'formx-home-dark-mode' }, forceHomeDarkScript]],
   cleanUrls: true,
   lastUpdated: true,

@@ -125,6 +125,8 @@ pnpm docs:build
 
 `docs/` 是 VitePress 文档站，包含中英文介绍和可直接运行的 FormX 示例：基础表单、联动、远程选项、字段组、校验和纯核心引擎。它借鉴了 iSoc 文档中“文档即演示”的方式，但示例代码已改为公开包名并脱敏。
 
+npm 包发布和 GitHub Pages 文档部署见 [PUBLISHING.md](./PUBLISHING.md)。
+
 ## 当前状态
 
 FormX 目前处于开源仓库抽离和 npm 发布准备阶段。核心引擎、UI 协议、Vue runtime、Element Plus 皮肤已经拆包；后续重点会放在测试覆盖、文档完善、更多示例、发布流水线和设计器集成。
@@ -222,5 +224,7 @@ pnpm docs:build
 ```
 
 `docs/` is a VitePress site with bilingual introductions and runnable FormX examples for basic forms, linkage, remote options, field groups, validation, and the headless core engine. The pattern is borrowed from the iSoc docs, but the examples use public package names and sanitized data.
+
+See [PUBLISHING.md](./PUBLISHING.md) for npm publishing and GitHub Pages deployment.
 
 FormX is currently being prepared for open-source release and npm publishing. The package split is in place; the next work areas are tests, documentation, examples, publishing automation, and designer integration.
