@@ -31,3 +31,17 @@ Custom skin authors usually depend on:
 ```bash
 pnpm add @formx/core @formx/ui-core
 ```
+
+## Future Package Naming
+
+Future React or custom UI skins should keep the same layering:
+
+| Scenario | Suggested package | Notes |
+| --- | --- | --- |
+| React framework adapter | `@formx/react-core` | React hooks, subscriptions, ref handle, and view state. |
+| React + Ant Design skin | `@formx/react-antd` | Render `FieldView` with Ant Design components. |
+| Recommended React entry | `@formx/react` | Application-facing entry that aggregates the React adapter and default skin. |
+| Vue + another UI library | `@formx/vue-naive`, `@formx/vue-antd` | Reuse `@formx/vue-core` and replace only the skin. |
+| Internal design system | `@formx/vue-company-ui` or `@formx/react-company-ui` | Reuse Core and UI Core, render with company components. |
+
+These packages should not re-implement rules, resources, or validation. Framework packages adapt lifecycle and reactivity; skin packages consume the `@formx/ui-core` view model.

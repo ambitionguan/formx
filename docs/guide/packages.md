@@ -68,6 +68,20 @@ Vue 皮肤还会用到：
 pnpm add @formx/vue-core
 ```
 
+## 未来扩展包命名
+
+如果后续扩展 React 或其他 UI 皮肤，建议继续沿用同样分层：
+
+| 场景 | 建议包名 | 说明 |
+| --- | --- | --- |
+| React 框架适配 | `@formx/react-core` | React hooks、订阅、ref handle、视图状态。 |
+| React + Ant Design 皮肤 | `@formx/react-antd` | 将 `FieldView` 渲染为 Ant Design 组件。 |
+| React 默认入口 | `@formx/react` | 面向应用侧的推荐入口，聚合 React 适配和默认皮肤。 |
+| Vue + 其他 UI 库 | `@formx/vue-naive`、`@formx/vue-antd` | 复用 `@formx/vue-core`，只替换皮肤。 |
+| 内部设计系统 | `@formx/vue-company-ui` 或 `@formx/react-company-ui` | 复用 Core 和 UI Core，落到企业组件库。 |
+
+这些包不需要重新实现规则、资源和校验。React 或其他框架的重点是实现适配层，皮肤包的重点是消费 `@formx/ui-core` 的视图模型。
+
 ## 版本策略
 
 建议所有 FormX 官方包保持同一个版本号发布。原因是这些包共享 schema、view model 和运行时协议，统一版本能降低用户排查兼容问题的成本。

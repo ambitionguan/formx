@@ -49,7 +49,7 @@ const zhThemeConfig = {
         items: [
           { text: 'Vue 接入', link: '/guide/vue-runtime' },
           { text: '异步运行时', link: '/guide/async-runtime' },
-          { text: '皮肤与插件', link: '/guide/skin-plugins' },
+          { text: '框架与皮肤扩展', link: '/guide/skin-plugins' },
           { text: '性能与诊断', link: '/guide/performance' }
         ]
       }
@@ -131,7 +131,7 @@ const enThemeConfig = {
         items: [
           { text: 'Vue Runtime', link: '/en/guide/vue-runtime' },
           { text: 'Async Runtime', link: '/en/guide/async-runtime' },
-          { text: 'Skins and Plugins', link: '/en/guide/skin-plugins' },
+          { text: 'Frameworks and Skins', link: '/en/guide/skin-plugins' },
           { text: 'Performance', link: '/en/guide/performance' }
         ]
       }
