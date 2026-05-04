@@ -1,11 +1,11 @@
-export { FormX, FormXVueEp } from '@formx/vue-ep'
-export type { FormXVueEpProps } from '@formx/vue-ep'
+export { FormX, FormXVueEp } from '@formxjs/vue-ep'
+export type { FormXVueEpProps } from '@formxjs/vue-ep'
 
 export {
   FormXEngine,
   ResourceManager,
   createFormXEngine
-} from '@formx/core'
+} from '@formxjs/core'
 export type {
   EngineDiagnostics,
   EnginePerformanceOptions,
@@ -16,7 +16,7 @@ export type {
   FormXMessageResolver,
   RuleV2,
   ValidationRule
-} from '@formx/core'
+} from '@formxjs/core'
 
 export type {
   ContainerView,
@@ -25,7 +25,7 @@ export type {
   FormView,
   FormUiConfig,
   LayoutRowView
-} from '@formx/ui-core'
+} from '@formxjs/ui-core'
 
 export {
   createCollapseState,
@@ -34,4 +34,4 @@ export {
   createGroupTabState,
   useFormViewState,
   useFormXEngine
-} from '@formx/vue-core'
+} from '@formxjs/vue-core'

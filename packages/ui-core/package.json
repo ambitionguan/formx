@@ -1,5 +1,5 @@
 {
-  "name": "@formx/ui-core",
+  "name": "@formxjs/ui-core",
   "version": "0.1.0",
   "description": "Framework-neutral FormX view model and UI protocol.",
   "license": "MIT",
@@ -30,14 +30,14 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts --clean --sourcemap --external @formx/core",
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean --sourcemap --external @formxjs/core",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "@formx/core": "^0.1.0"
+    "@formxjs/core": "^0.1.0"
   },
   "devDependencies": {
-    "@formx/core": "^0.1.0"
+    "@formxjs/core": "^0.1.0"
   }
 }

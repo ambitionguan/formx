@@ -5,8 +5,8 @@ import type {
   FormSchema,
   FormXMessageOptions,
   FormXMessageResolver
-} from '@formx/core'
-import { FormXEngine, normalizeFormXMessageResolver } from '@formx/core'
+} from '@formxjs/core'
+import { FormXEngine, normalizeFormXMessageResolver } from '@formxjs/core'
 
 type AnyRecord = Record<string, any>
 

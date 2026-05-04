@@ -1,4 +1,4 @@
-import type { FieldGroupView } from '@formx/ui-core'
+import type { FieldGroupView } from '@formxjs/ui-core'
 
 export type FieldRenderContext = {
   groupCommands?: Map<string, FieldGroupView['commands']>

@@ -1,5 +1,5 @@
-import type { FormSchema } from '@formx/core'
-import { getAt } from '@formx/core'
+import type { FormSchema } from '@formxjs/core'
+import { getAt } from '@formxjs/core'
 import type { UiNode, UiFieldNode, UiContainerNode, UiLayout } from './types'
 
 // 规范化 type，避免 date/datePicker/date-picker/subForm 等命名差异在 UI 层泛滥

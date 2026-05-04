@@ -1,4 +1,4 @@
-import type { FormSchema } from '@formx/core'
+import type { FormSchema } from '@formxjs/core'
 import { buildUiTree } from './buildUiTree'
 import type { UiNode, UiFieldNode, UiContainerNode, UiLayout, UiI18nKeyConfig } from './types'
 

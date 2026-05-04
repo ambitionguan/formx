@@ -7,11 +7,11 @@ export default defineConfig({
   plugins: [vue(), vueJsx()],
   resolve: {
     alias: {
-      '@formx/core': resolve(__dirname, '../../packages/core/src'),
-      '@formx/ui-core': resolve(__dirname, '../../packages/ui-core/src'),
-      '@formx/vue-core': resolve(__dirname, '../../packages/vue-core/src'),
-      '@formx/vue-ep': resolve(__dirname, '../../packages/vue-ep/src'),
-      '@formx/vue': resolve(__dirname, '../../packages/vue/src')
+      '@formxjs/core': resolve(__dirname, '../../packages/core/src'),
+      '@formxjs/ui-core': resolve(__dirname, '../../packages/ui-core/src'),
+      '@formxjs/vue-core': resolve(__dirname, '../../packages/vue-core/src'),
+      '@formxjs/vue-ep': resolve(__dirname, '../../packages/vue-ep/src'),
+      '@formxjs/vue': resolve(__dirname, '../../packages/vue/src')
     }
   }
 })

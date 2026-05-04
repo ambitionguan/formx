@@ -1,6 +1,6 @@
 import { watch } from 'vue'
 import type { ComputedRef } from 'vue'
-import type { FormView, FieldGroupView } from '@formx/ui-core'
+import type { FormView, FieldGroupView } from '@formxjs/ui-core'
 import { buildGroupCommandMap } from '../utils/formViewMaps'
 
 export function createFieldGroupApiSync(

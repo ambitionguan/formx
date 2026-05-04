@@ -5,10 +5,10 @@ FormX does not hard-code the UI layer. The current open-source packages ship a V
 The stable boundary is:
 
 ```txt
-@formx/core
+@formxjs/core
   -> rules, state, values, resources, validation, diagnostics
 
-@formx/ui-core
+@formxjs/ui-core
   -> framework-neutral FormView / FieldView protocol
 
 framework adapter
@@ -26,13 +26,13 @@ The current repository ships the Vue stack:
 
 | Package | Layer | Responsibility |
 | --- | --- | --- |
-| `@formx/core` | Core engine | Runs schema, rules, resources, validation, values, and diagnostics. |
-| `@formx/ui-core` | UI protocol | Builds `FormView`, `FieldView`, containers, and field-group views from the engine. |
-| `@formx/vue-core` | Vue adapter | Provides `useFormXEngine`, `useFormViewState`, exposed form methods, and Vue state helpers. |
-| `@formx/vue-ep` | Vue skin | Renders view models with Element Plus forms, fields, groups, and layouts. |
-| `@formx/vue` | App entry | Aggregates the Vue runtime and the default Element Plus skin. |
+| `@formxjs/core` | Core engine | Runs schema, rules, resources, validation, values, and diagnostics. |
+| `@formxjs/ui-core` | UI protocol | Builds `FormView`, `FieldView`, containers, and field-group views from the engine. |
+| `@formxjs/vue-core` | Vue adapter | Provides `useFormXEngine`, `useFormViewState`, exposed form methods, and Vue state helpers. |
+| `@formxjs/vue-ep` | Vue skin | Renders view models with Element Plus forms, fields, groups, and layouts. |
+| `@formxjs/vue` | App entry | Aggregates the Vue runtime and the default Element Plus skin. |
 
-There is no official React package yet. A React implementation should follow the same boundary instead of adding React behavior to `@formx/core`.
+There is no official React package yet. A React implementation should follow the same boundary instead of adding React behavior to `@formxjs/core`.
 
 ## Two Extension Types
 
@@ -47,7 +47,7 @@ It should:
 - Create or receive a `FormXEngine`.
 - Sync external `value/defaultValue/schema/policy/messages` into the engine.
 - Subscribe to engine changes and trigger framework renders.
-- Use `@formx/ui-core` to build `FormView`.
+- Use `@formxjs/ui-core` to build `FormView`.
 - Expose form methods such as `validate()`, `resetFields()`, and `getValues()`.
 - Dispose subscriptions and runtime state on unmount.
 
@@ -57,7 +57,7 @@ It should not:
 - Hard-code Element Plus, Ant Design, or another UI library.
 - Recompile rules or maintain another value tree.
 
-`@formx/vue-core` is the Vue adapter. A future React stack can provide `@formx/react-core` with `useFormXEngine()`, `useFormViewState()`, and `createFormXHandle()`.
+`@formxjs/vue-core` is the Vue adapter. A future React stack can provide `@formxjs/react-core` with `useFormXEngine()`, `useFormViewState()`, and `createFormXHandle()`.
 
 ### Skins
 
@@ -79,35 +79,35 @@ It should not:
 - Mutate field state by bypassing Core.
 - Keep business values inside controls in a way that conflicts with the engine.
 
-`@formx/vue-ep` is the Vue + Element Plus skin. A React + Ant Design skin could be `@formx/react-antd`; a Vue skin for an internal design system could be `@formx/vue-company-ui`.
+`@formxjs/vue-ep` is the Vue + Element Plus skin. A React + Ant Design skin could be `@formxjs/react-antd`; a Vue skin for an internal design system could be `@formxjs/vue-company-ui`.
 
 ## React Extension Path
 
 A React stack should be split into three packages:
 
 ```txt
-@formx/react-core
+@formxjs/react-core
   -> React hooks, subscriptions, ref handle, view state
 
-@formx/react-antd
+@formxjs/react-antd
   -> React + Ant Design skin
 
-@formx/react
+@formxjs/react
   -> recommended React entry that aggregates react-core and the default skin
 ```
 
 These names are recommendations; they are not published by the current repository. The important boundary is:
 
-- `@formx/react-core` depends only on React, `@formx/core`, and `@formx/ui-core`.
-- `@formx/react-antd` depends on React, Ant Design, and `@formx/react-core`.
-- `@formx/react` exports the recommended application-facing component and types.
+- `@formxjs/react-core` depends only on React, `@formxjs/core`, and `@formxjs/ui-core`.
+- `@formxjs/react-antd` depends on React, Ant Design, and `@formxjs/react-core`.
+- `@formxjs/react` exports the recommended application-facing component and types.
 
 A minimal React adapter can follow this shape:
 
 ```tsx
 import { useEffect, useMemo, useState } from 'react'
-import { FormXEngine } from '@formx/core'
-import { createFormViewRuntime } from '@formx/ui-core'
+import { FormXEngine } from '@formxjs/core'
+import { createFormViewRuntime } from '@formxjs/ui-core'
 
 export function useFormXEngine(props) {
   const engine = useMemo(() => {
@@ -142,7 +142,7 @@ The React skin then consumes the adapter:
 ```tsx
 import { forwardRef, useImperativeHandle } from 'react'
 import { Form } from 'antd'
-import { useFormXEngine, useFormViewState, createFormXHandle } from '@formx/react-core'
+import { useFormXEngine, useFormViewState, createFormXHandle } from '@formxjs/react-core'
 
 export const FormXReactAntd = forwardRef(function FormXReactAntd(props, ref) {
   const engine = useFormXEngine(props)
@@ -231,9 +231,9 @@ Custom components should:
 ## New Skin Checklist
 
 1. Decide whether you are replacing only the UI library or the framework too.
-2. If you only replace the Vue UI library, reuse `@formx/vue-core`.
-3. If you move to React, build a framework adapter similar to `@formx/react-core` first.
-4. Use `@formx/ui-core` to build `FormView`.
+2. If you only replace the Vue UI library, reuse `@formxjs/vue-core`.
+3. If you move to React, build a framework adapter similar to `@formxjs/react-core` first.
+4. Use `@formxjs/ui-core` to build `FormView`.
 5. Map every supported field type.
 6. Implement common field wrappers: label, required, error, help, loading.
 7. Implement containers, layout, and `field-group`.

@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import type { ContainerView, FieldGroupView } from '@formx/ui-core'
+import type { ContainerView, FieldGroupView } from '@formxjs/ui-core'
 
 type TabView = ContainerView | FieldGroupView
 

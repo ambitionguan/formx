@@ -2,16 +2,16 @@
 
 Vue 接入层的目标是让应用像使用普通表单组件一样使用 FormX，同时保留 Core 的独立能力。
 
-当前推荐入口是 `@formx/vue`。它面向应用侧聚合了 Vue 运行时和 Element Plus 皮肤。
+当前推荐入口是 `@formxjs/vue`。它面向应用侧聚合了 Vue 运行时和 Element Plus 皮肤。
 
 ## 基础组件接入
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { FormX } from '@formx/vue'
-import type { FormSchema } from '@formx/vue'
-import '@formx/vue/style.css'
+import { FormX } from '@formxjs/vue'
+import type { FormSchema } from '@formxjs/vue'
+import '@formxjs/vue/style.css'
 
 const formRef = ref<InstanceType<typeof FormX>>()
 
@@ -141,25 +141,25 @@ const components = {
 
 ## 皮肤和默认入口
 
-`@formx/vue` 是应用推荐入口：
+`@formxjs/vue` 是应用推荐入口：
 
 ```ts
-import { FormX } from '@formx/vue'
+import { FormX } from '@formxjs/vue'
 ```
 
 如果你明确要使用 Element Plus 皮肤：
 
 ```ts
-import { FormXVueEp } from '@formx/vue-ep'
+import { FormXVueEp } from '@formxjs/vue-ep'
 ```
 
 如果你要实现自己的 Vue 皮肤，通常使用：
 
 ```ts
-import { useFormXEngine, useFormViewState } from '@formx/vue-core'
+import { useFormXEngine, useFormViewState } from '@formxjs/vue-core'
 ```
 
-再从 `@formx/ui-core` 获取中立视图模型。
+再从 `@formxjs/ui-core` 获取中立视图模型。
 
 ## Vue 接入建议
 

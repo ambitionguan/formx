@@ -5,7 +5,7 @@
 ## 运行
 
 ```sh
-pnpm --filter @formx/example-vue-ep-basic dev
+pnpm --filter @formxjs/example-vue-ep-basic dev
 ```
 
 ## 覆盖场景
@@ -23,7 +23,7 @@ This example is a FormX workbench for realistic admin-style workflows. It is not
 ### Run
 
 ```sh
-pnpm --filter @formx/example-vue-ep-basic dev
+pnpm --filter @formxjs/example-vue-ep-basic dev
 ```
 
 ### Coverage

@@ -1,4 +1,4 @@
-import type { FieldView, FormUiConfig, LayoutRowView } from '@formx/ui-core'
+import type { FieldView, FormUiConfig, LayoutRowView } from '@formxjs/ui-core'
 import { ElRow, ElCol } from 'element-plus'
 import type { FieldRenderContext } from '../group/types'
 

@@ -6,7 +6,7 @@ generation and validation.
 
 ## Files
 - JSON Schema: `packages/share/components/formx/aidl/formx-aidsl.schema.json`
-- Runtime validator: `validateAIDSL()` in `@formx/core`
+- Runtime validator: `validateAIDSL()` in `@formxjs/core`
 
 ## Core Shape
 

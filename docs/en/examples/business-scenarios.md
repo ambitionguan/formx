@@ -3,7 +3,7 @@
 The full workbench is available at:
 
 ```bash
-pnpm --filter @formx/example-vue-ep-basic dev
+pnpm --filter @formxjs/example-vue-ep-basic dev
 ```
 
 It should be read as a set of general form patterns, not as fixed business templates:

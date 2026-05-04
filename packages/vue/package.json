@@ -1,5 +1,5 @@
 {
-  "name": "@formx/vue",
+  "name": "@formxjs/vue",
   "version": "0.1.0",
   "description": "Default Vue entry for FormX.",
   "license": "MIT",
@@ -30,15 +30,15 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts --clean --sourcemap --external vue --external element-plus --external @formx/core --external @formx/ui-core --external @formx/vue-core --external @formx/vue-ep",
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean --sourcemap --external vue --external element-plus --external @formxjs/core --external @formxjs/ui-core --external @formxjs/vue-core --external @formxjs/vue-ep",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@formx/core": "^0.1.0",
-    "@formx/ui-core": "^0.1.0",
-    "@formx/vue-core": "^0.1.0",
-    "@formx/vue-ep": "^0.1.0"
+    "@formxjs/core": "^0.1.0",
+    "@formxjs/ui-core": "^0.1.0",
+    "@formxjs/vue-core": "^0.1.0",
+    "@formxjs/vue-ep": "^0.1.0"
   },
   "peerDependencies": {
     "element-plus": "^2.10.0",

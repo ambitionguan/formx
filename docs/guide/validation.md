@@ -89,7 +89,7 @@ FormX 的校验分为三类：
 命名 pattern 适合复用正则：
 
 ```ts
-import { FormXEngine } from '@formx/core'
+import { FormXEngine } from '@formxjs/core'
 
 FormXEngine.registerPattern('mobileCN', /^1[3-9]\d{9}$/)
 ```

@@ -1,4 +1,4 @@
-import type { FieldView } from '@formx/ui-core'
+import type { FieldView } from '@formxjs/ui-core'
 import { processI18nObject } from '../../i18n'
 
 export function useFormItemProps(view: FieldView) {

@@ -3,9 +3,9 @@
   "compilerOptions": {
     "rootDir": "src",
     "paths": {
-      "@formx/core": ["../core/dist/index.d.ts"],
-      "@formx/ui-core": ["../ui-core/dist/index.d.ts"],
-      "@formx/vue-core": ["../vue-core/dist/index.d.ts"]
+      "@formxjs/core": ["../core/dist/index.d.ts"],
+      "@formxjs/ui-core": ["../ui-core/dist/index.d.ts"],
+      "@formxjs/vue-core": ["../vue-core/dist/index.d.ts"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],

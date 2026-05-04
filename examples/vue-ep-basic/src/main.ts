@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import '@formx/vue-ep/style.css'
+import '@formxjs/vue-ep/style.css'
 import App from './App.vue'
 import './style.css'
 

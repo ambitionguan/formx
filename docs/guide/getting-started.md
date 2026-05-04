@@ -7,10 +7,10 @@
 ## 安装
 
 ```bash
-pnpm add @formx/vue vue element-plus
+pnpm add @formxjs/vue vue element-plus
 ```
 
-`@formx/vue` 是 Vue 项目的推荐入口。它聚合了 Vue 运行时和当前默认的 Element Plus 皮肤。
+`@formxjs/vue` 是 Vue 项目的推荐入口。它聚合了 Vue 运行时和当前默认的 Element Plus 皮肤。
 
 ## 注册样式
 
@@ -20,7 +20,7 @@ pnpm add @formx/vue vue element-plus
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import '@formx/vue/style.css'
+import '@formxjs/vue/style.css'
 import App from './App.vue'
 
 createApp(App).use(ElementPlus).mount('#app')
@@ -31,7 +31,7 @@ createApp(App).use(ElementPlus).mount('#app')
 FormX 的 schema 是普通 JSON 数据。字段、默认值、校验和联动都可以放进去。
 
 ```ts
-import type { FormSchema } from '@formx/vue'
+import type { FormSchema } from '@formxjs/vue'
 
 export const schema: FormSchema = {
   version: '1.0.0',
@@ -98,7 +98,7 @@ export const schema: FormSchema = {
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { FormX } from '@formx/vue'
+import { FormX } from '@formxjs/vue'
 import { schema } from './schema'
 
 const formRef = ref<InstanceType<typeof FormX>>()
@@ -125,7 +125,7 @@ async function submit() {
 远程数据建议统一注册为请求，而不是在每个组件里写生命周期请求。
 
 ```ts
-import { ResourceManager } from '@formx/vue'
+import { ResourceManager } from '@formxjs/vue'
 
 ResourceManager.register('getDepartments', async () => {
   return [

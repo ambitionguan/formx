@@ -6,29 +6,29 @@ FormX 的设计目标是把复杂表单从“组件实现”提升为“运行�
 
 ```txt
 Application
-  -> @formx/vue
+  -> @formxjs/vue
      推荐应用入口
 
 Skin
-  -> @formx/vue-ep
+  -> @formxjs/vue-ep
      Vue + Element Plus 渲染皮肤
 
 Framework Runtime
-  -> @formx/vue-core
+  -> @formxjs/vue-core
      Vue 响应式和组件生命周期适配
 
 View Protocol
-  -> @formx/ui-core
+  -> @formxjs/ui-core
      FormView / FieldView / FieldGroupView
 
 Headless Runtime
-  -> @formx/core
+  -> @formxjs/core
      Schema, rules, values, state, validation, resources, diagnostics
 ```
 
 ## Core 负责什么
 
-`@formx/core` 是 FormX 的核心。它不关心组件库，也不直接渲染 DOM。
+`@formxjs/core` 是 FormX 的核心。它不关心组件库，也不直接渲染 DOM。
 
 它负责：
 
@@ -44,7 +44,7 @@ Headless Runtime
 Core 可以独立运行：
 
 ```ts
-import { FormXEngine } from '@formx/core'
+import { FormXEngine } from '@formxjs/core'
 
 const engine = new FormXEngine({ schema })
 engine.dispatch('init')
@@ -56,7 +56,7 @@ console.log(engine.getState())
 
 ## UI Core 负责什么
 
-`@formx/ui-core` 把 Core 的底层状态转换成 UI 中立视图模型。
+`@formxjs/ui-core` 把 Core 的底层状态转换成 UI 中立视图模型。
 
 例如一个字段会被转换成：
 
@@ -81,7 +81,7 @@ UI Core 的存在让 FormX 可以支持多个皮肤。不同 UI 框架不需要�
 
 ## Skin 负责什么
 
-Skin 是具体 UI 实现。当前 `@formx/vue-ep` 负责把 `FieldView` 渲染成 Element Plus 控件。
+Skin 是具体 UI 实现。当前 `@formxjs/vue-ep` 负责把 `FieldView` 渲染成 Element Plus 控件。
 
 Skin 负责：
 
@@ -115,8 +115,8 @@ showWhen / requiredWhen / compute / optionsFrom
 
 拆成 Core、UI Core、Framework Runtime、Skin 后：
 
-- 只需要逻辑引擎的用户可以安装 `@formx/core`。
-- Vue + Element Plus 用户可以直接用 `@formx/vue`。
+- 只需要逻辑引擎的用户可以安装 `@formxjs/core`。
+- Vue + Element Plus 用户可以直接用 `@formxjs/vue`。
 - 想做 React 皮肤的人可以复用 Core 和 UI Core。
 - 想做设计器的人可以在 Node 或浏览器中独立运行 Core。
 - 企业内部可以实现自己的 skin，而不必 fork 规则引擎。

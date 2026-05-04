@@ -47,7 +47,7 @@ importers:
 
   examples/vue-ep-basic:
     dependencies:
-      '@formx/vue':
+      '@formxjs/vue':
         specifier: ^0.1.0
         version: link:../../packages/vue
       element-plus:
@@ -77,22 +77,22 @@ importers:
 
   packages/ui-core:
     devDependencies:
-      '@formx/core':
+      '@formxjs/core':
         specifier: ^0.1.0
         version: link:../core
 
   packages/vue:
     dependencies:
-      '@formx/core':
+      '@formxjs/core':
         specifier: ^0.1.0
         version: link:../core
-      '@formx/ui-core':
+      '@formxjs/ui-core':
         specifier: ^0.1.0
         version: link:../ui-core
-      '@formx/vue-core':
+      '@formxjs/vue-core':
         specifier: ^0.1.0
         version: link:../vue-core
-      '@formx/vue-ep':
+      '@formxjs/vue-ep':
         specifier: ^0.1.0
         version: link:../vue-ep
       element-plus:
@@ -104,10 +104,10 @@ importers:
 
   packages/vue-core:
     devDependencies:
-      '@formx/core':
+      '@formxjs/core':
         specifier: ^0.1.0
         version: link:../core
-      '@formx/ui-core':
+      '@formxjs/ui-core':
         specifier: ^0.1.0
         version: link:../ui-core
       vue:
@@ -116,13 +116,13 @@ importers:
 
   packages/vue-ep:
     devDependencies:
-      '@formx/core':
+      '@formxjs/core':
         specifier: ^0.1.0
         version: link:../core
-      '@formx/ui-core':
+      '@formxjs/ui-core':
         specifier: ^0.1.0
         version: link:../ui-core
-      '@formx/vue-core':
+      '@formxjs/vue-core':
         specifier: ^0.1.0
         version: link:../vue-core
       element-plus:

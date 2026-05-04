@@ -18,11 +18,11 @@
     "jsxFragmentFactory": "Fragment",
     "baseUrl": ".",
     "paths": {
-      "@formx/core": ["packages/core/src"],
-      "@formx/ui-core": ["packages/ui-core/src"],
-      "@formx/vue-core": ["packages/vue-core/src"],
-      "@formx/vue-ep": ["packages/vue-ep/src"],
-      "@formx/vue": ["packages/vue/src"]
+      "@formxjs/core": ["packages/core/src"],
+      "@formxjs/ui-core": ["packages/ui-core/src"],
+      "@formxjs/vue-core": ["packages/vue-core/src"],
+      "@formxjs/vue-ep": ["packages/vue-ep/src"],
+      "@formxjs/vue": ["packages/vue/src"]
     }
   },
   "include": ["packages/**/*.ts", "packages/**/*.tsx", "examples/**/*.ts", "examples/**/*.tsx", "examples/**/*.vue"],

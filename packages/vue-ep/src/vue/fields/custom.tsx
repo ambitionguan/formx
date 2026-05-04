@@ -1,4 +1,4 @@
-import type { FieldView, FieldGroupView } from '@formx/ui-core'
+import type { FieldView, FieldGroupView } from '@formxjs/ui-core'
 import { useFormItemProps } from './shared'
 import { ElFormItem, ElButton } from 'element-plus'
 

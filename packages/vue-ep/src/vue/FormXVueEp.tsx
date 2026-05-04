@@ -7,8 +7,8 @@ import type {
   FormSchema,
   FormXMessageOptions,
   FormXMessageResolver
-} from '@formx/core'
-import type { ContainerView, FieldGroupView, FieldView, FormView } from '@formx/ui-core'
+} from '@formxjs/core'
+import type { ContainerView, FieldGroupView, FieldView, FormView } from '@formxjs/ui-core'
 import { renderInputField } from './fields/input'
 import { renderNumberField } from './fields/number'
 import { renderSelectField } from './fields/select'
@@ -40,7 +40,7 @@ import {
   createGroupTabState,
   useFormViewState,
   useFormXEngine
-} from '@formx/vue-core'
+} from '@formxjs/vue-core'
 import type { FieldRenderContext } from './group/types'
 import { addBaseMessages, tf } from '../i18n'
 

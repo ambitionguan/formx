@@ -22,7 +22,7 @@
     "build": "pnpm -r --filter './packages/*' build",
     "typecheck": "pnpm -r --filter './packages/*' typecheck",
     "test": "vitest run",
-    "dev": "pnpm --filter @formx/example-vue-ep-basic dev",
+    "dev": "pnpm --filter @formxjs/example-vue-ep-basic dev",
     "docs:dev": "vitepress dev docs --host 0.0.0.0",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs --host 0.0.0.0",

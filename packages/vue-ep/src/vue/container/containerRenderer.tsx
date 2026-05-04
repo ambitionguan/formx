@@ -1,4 +1,4 @@
-import type { ContainerView, FieldGroupView, FieldView } from '@formx/ui-core'
+import type { ContainerView, FieldGroupView, FieldView } from '@formxjs/ui-core'
 import { ElRow, ElCol } from 'element-plus'
 import type { FieldRenderContext } from '../group/types'
 import { processI18nObject } from '../../i18n'

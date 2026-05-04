@@ -1,8 +1,8 @@
 import { computed, onBeforeUnmount, ref, watch, isRef, toRef } from 'vue'
 import type { Ref } from 'vue'
-import type { FormSchema, FormXEngine as Engine } from '@formx/core'
-import type { ContainerView, FormView, FieldGroupView, FieldView } from '@formx/ui-core'
-import { createFormViewRuntime } from '@formx/ui-core'
+import type { FormSchema, FormXEngine as Engine } from '@formxjs/core'
+import type { ContainerView, FormView, FieldGroupView, FieldView } from '@formxjs/ui-core'
+import { createFormViewRuntime } from '@formxjs/ui-core'
 import { buildFieldIndex, buildGroupCommandMap } from '../utils/formViewMaps'
 
 export type FormViewContext = {

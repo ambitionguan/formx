@@ -18,7 +18,7 @@ It is not just a renderer for a few input fields. FormX is designed for forms wi
 ## Strengths
 
 **Headless Core**  
-`@formx/core` runs without Vue, React, or Element Plus. It can be used in browsers, Node.js, designers, tests, and preview tools.
+`@formxjs/core` runs without Vue, React, or Element Plus. It can be used in browsers, Node.js, designers, tests, and preview tools.
 
 **Unified Rules**  
 Shortcuts such as `showWhen`, `requiredWhen`, `compute`, and `optionsFrom` compile into the same rule pipeline as `rulesV2`.
@@ -36,11 +36,11 @@ The current Vue + Element Plus skin proves the model, while Core and UI Core sta
 
 ```txt
 schema.json
-  -> @formx/core
+  -> @formxjs/core
      compile shortcuts, execute rules, own values/state/resources/validation
-  -> @formx/ui-core
+  -> @formxjs/ui-core
      build FormView / FieldView / FieldGroupView
-  -> @formx/vue-ep or another skin
+  -> @formxjs/vue-ep or another skin
      render into Vue, Element Plus, or a future UI stack
 ```
 

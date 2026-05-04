@@ -1,5 +1,5 @@
 {
-  "name": "@formx/core",
+  "name": "@formxjs/core",
   "version": "0.1.0",
   "description": "Headless dynamic form engine for FormX.",
   "license": "MIT",

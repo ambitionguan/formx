@@ -6,11 +6,11 @@ FormX 采用多包结构。核心原则是：逻辑引擎独立，UI 协议独�
 
 | 包 | 职责 | 是否依赖 UI |
 | --- | --- | --- |
-| `@formx/core` | Schema 类型、规则编译、表达式、值树、状态、校验、资源层、诊断。 | 否 |
-| `@formx/ui-core` | 将 Core 的状态转换成 UI 中立的 `FormView`、`FieldView`、容器视图和字段组视图。 | 否 |
-| `@formx/vue-core` | Vue 组合式封装，提供 engine 生命周期、响应式视图、组件暴露方法。 | 依赖 Vue |
-| `@formx/vue-ep` | Vue + Element Plus 皮肤，负责控件渲染、布局、错误展示、字段组 UI。 | 依赖 Vue 和 Element Plus |
-| `@formx/vue` | Vue 默认入口，面向应用侧的聚合包。 | 依赖 Vue 相关包 |
+| `@formxjs/core` | Schema 类型、规则编译、表达式、值树、状态、校验、资源层、诊断。 | 否 |
+| `@formxjs/ui-core` | 将 Core 的状态转换成 UI 中立的 `FormView`、`FieldView`、容器视图和字段组视图。 | 否 |
+| `@formxjs/vue-core` | Vue 组合式封装，提供 engine 生命周期、响应式视图、组件暴露方法。 | 依赖 Vue |
+| `@formxjs/vue-ep` | Vue + Element Plus 皮肤，负责控件渲染、布局、错误展示、字段组 UI。 | 依赖 Vue 和 Element Plus |
+| `@formxjs/vue` | Vue 默认入口，面向应用侧的聚合包。 | 依赖 Vue 相关包 |
 
 ## 为什么要这样拆
 
@@ -24,11 +24,11 @@ FormX 采用多包结构。核心原则是：逻辑引擎独立，UI 协议独�
 多包结构让每层只承担自己的责任：
 
 ```txt
-@formx/core      业务逻辑协议
-@formx/ui-core   UI 中立视图协议
-@formx/vue-core  Vue 生命周期与响应式适配
-@formx/vue-ep    Element Plus 皮肤
-@formx/vue       推荐入口
+@formxjs/core      业务逻辑协议
+@formxjs/ui-core   UI 中立视图协议
+@formxjs/vue-core  Vue 生命周期与响应式适配
+@formxjs/vue-ep    Element Plus 皮肤
+@formxjs/vue       推荐入口
 ```
 
 ## 应用侧怎么选包
@@ -36,36 +36,36 @@ FormX 采用多包结构。核心原则是：逻辑引擎独立，UI 协议独�
 大多数 Vue + Element Plus 项目只需要：
 
 ```bash
-pnpm add @formx/vue vue element-plus
+pnpm add @formxjs/vue vue element-plus
 ```
 
 然后从聚合入口使用：
 
 ```ts
-import { FormX, FormXEngine, ResourceManager } from '@formx/vue'
-import '@formx/vue/style.css'
+import { FormX, FormXEngine, ResourceManager } from '@formxjs/vue'
+import '@formxjs/vue/style.css'
 ```
 
 如果你只需要引擎，不渲染 UI：
 
 ```bash
-pnpm add @formx/core
+pnpm add @formxjs/core
 ```
 
 ```ts
-import { FormXEngine } from '@formx/core'
+import { FormXEngine } from '@formxjs/core'
 ```
 
 如果你要做新的 UI 皮肤，通常会依赖：
 
 ```bash
-pnpm add @formx/core @formx/ui-core
+pnpm add @formxjs/core @formxjs/ui-core
 ```
 
 Vue 皮肤还会用到：
 
 ```bash
-pnpm add @formx/vue-core
+pnpm add @formxjs/vue-core
 ```
 
 ## 未来扩展包命名
@@ -74,13 +74,13 @@ pnpm add @formx/vue-core
 
 | 场景 | 建议包名 | 说明 |
 | --- | --- | --- |
-| React 框架适配 | `@formx/react-core` | React hooks、订阅、ref handle、视图状态。 |
-| React + Ant Design 皮肤 | `@formx/react-antd` | 将 `FieldView` 渲染为 Ant Design 组件。 |
-| React 默认入口 | `@formx/react` | 面向应用侧的推荐入口，聚合 React 适配和默认皮肤。 |
-| Vue + 其他 UI 库 | `@formx/vue-naive`、`@formx/vue-antd` | 复用 `@formx/vue-core`，只替换皮肤。 |
-| 内部设计系统 | `@formx/vue-company-ui` 或 `@formx/react-company-ui` | 复用 Core 和 UI Core，落到企业组件库。 |
+| React 框架适配 | `@formxjs/react-core` | React hooks、订阅、ref handle、视图状态。 |
+| React + Ant Design 皮肤 | `@formxjs/react-antd` | 将 `FieldView` 渲染为 Ant Design 组件。 |
+| React 默认入口 | `@formxjs/react` | 面向应用侧的推荐入口，聚合 React 适配和默认皮肤。 |
+| Vue + 其他 UI 库 | `@formxjs/vue-naive`、`@formxjs/vue-antd` | 复用 `@formxjs/vue-core`，只替换皮肤。 |
+| 内部设计系统 | `@formxjs/vue-company-ui` 或 `@formxjs/react-company-ui` | 复用 Core 和 UI Core，落到企业组件库。 |
 
-这些包不需要重新实现规则、资源和校验。React 或其他框架的重点是实现适配层，皮肤包的重点是消费 `@formx/ui-core` 的视图模型。
+这些包不需要重新实现规则、资源和校验。React 或其他框架的重点是实现适配层，皮肤包的重点是消费 `@formxjs/ui-core` 的视图模型。
 
 ## 版本策略
 
@@ -88,9 +88,9 @@ pnpm add @formx/vue-core
 
 可以接受的兼容边界：
 
-- `@formx/core` 的 schema 和 engine API 需要最稳定。
-- `@formx/ui-core` 的视图模型变更要明确标注，因为它影响所有皮肤。
-- `@formx/vue-ep` 可以更快迭代控件和交互，但不能破坏公开暴露方法。
+- `@formxjs/core` 的 schema 和 engine API 需要最稳定。
+- `@formxjs/ui-core` 的视图模型变更要明确标注，因为它影响所有皮肤。
+- `@formxjs/vue-ep` 可以更快迭代控件和交互，但不能破坏公开暴露方法。
 
 ## 开源用户应该理解的边界
 

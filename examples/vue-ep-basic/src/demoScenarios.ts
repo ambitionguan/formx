@@ -1,4 +1,4 @@
-import type { FormSchema } from '@formx/vue'
+import type { FormSchema } from '@formxjs/vue'
 import connectionConfig from './schemas/connection-config.json'
 import controlsShowcase from './schemas/controls-showcase.json'
 import dataPolicy from './schemas/data-policy.json'

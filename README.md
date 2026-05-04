@@ -21,30 +21,30 @@ FormX 是一个面向复杂业务系统的 Headless 动态表单引擎。它把�
 ## 包结构
 
 ```text
-@formx/core
-  -> @formx/ui-core
-    -> @formx/vue-core
-      -> @formx/vue-ep
-        -> @formx/vue
+@formxjs/core
+  -> @formxjs/ui-core
+    -> @formxjs/vue-core
+      -> @formxjs/vue-ep
+        -> @formxjs/vue
 ```
 
 | 包 | 定位 |
 | --- | --- |
-| `@formx/core` | 纯逻辑引擎：schema、规则编译执行、校验、资源、路径、表达式、诊断。 |
-| `@formx/ui-core` | 框架无关 UI 协议：`FormView`、`FieldView`、容器视图、字段组命令。 |
-| `@formx/vue-core` | Vue 运行时桥接：响应式 engine/view 状态、composables、暴露 API。 |
-| `@formx/vue-ep` | Vue + Element Plus 皮肤：字段渲染、容器渲染、样式。 |
-| `@formx/vue` | Vue 默认入口：重导出常用 engine、类型、Vue runtime 和 EP 皮肤。 |
+| `@formxjs/core` | 纯逻辑引擎：schema、规则编译执行、校验、资源、路径、表达式、诊断。 |
+| `@formxjs/ui-core` | 框架无关 UI 协议：`FormView`、`FieldView`、容器视图、字段组命令。 |
+| `@formxjs/vue-core` | Vue 运行时桥接：响应式 engine/view 状态、composables、暴露 API。 |
+| `@formxjs/vue-ep` | Vue + Element Plus 皮肤：字段渲染、容器渲染、样式。 |
+| `@formxjs/vue` | Vue 默认入口：重导出常用 engine、类型、Vue runtime 和 EP 皮肤。 |
 
 ## 快速开始
 
 ```sh
-pnpm add @formx/vue vue element-plus
+pnpm add @formxjs/vue vue element-plus
 ```
 
 ```ts
-import { FormX, FormXEngine } from '@formx/vue'
-import '@formx/vue-ep/style.css'
+import { FormX, FormXEngine } from '@formxjs/vue'
+import '@formxjs/vue-ep/style.css'
 
 const schema = {
   version: '1.0.0',
@@ -83,7 +83,7 @@ const engine = new FormXEngine({ schema })
 ## 单独使用核心引擎
 
 ```ts
-import { FormXEngine } from '@formx/core'
+import { FormXEngine } from '@formxjs/core'
 
 const engine = new FormXEngine({ schema })
 engine.dispatch('init')
@@ -94,7 +94,7 @@ const values = engine.getValues()
 const errors = engine.getErrors()
 ```
 
-`@formx/core` 可以在 Node、浏览器、设计器、测试环境或任意前端框架中使用。
+`@formxjs/core` 可以在 Node、浏览器、设计器、测试环境或任意前端框架中使用。
 
 ## 开发
 
@@ -111,10 +111,10 @@ pnpm docs:build
 示例项目：
 
 ```sh
-pnpm --filter @formx/example-vue-ep-basic dev
+pnpm --filter @formxjs/example-vue-ep-basic dev
 ```
 
-`@formx/example-vue-ep-basic` 目前是一个 Vue + Element Plus Workbench，不再只是三五个字段的入门页。它包含多份接近真实后台业务的复杂 schema，并补充了远程资源 mock、校验策略切换、实时模型/错误/状态/诊断面板，覆盖全量控件、连接配置、数据保护策略、深层联动、权限矩阵、`optionsFrom` 和运行时 `setOptions` 等场景。
+`@formxjs/example-vue-ep-basic` 目前是一个 Vue + Element Plus Workbench，不再只是三五个字段的入门页。它包含多份接近真实后台业务的复杂 schema，并补充了远程资源 mock、校验策略切换、实时模型/错误/状态/诊断面板，覆盖全量控件、连接配置、数据保护策略、深层联动、权限矩阵、`optionsFrom` 和运行时 `setOptions` 等场景。
 
 文档站：
 
@@ -154,30 +154,30 @@ Core principles:
 ## Packages
 
 ```text
-@formx/core
-  -> @formx/ui-core
-    -> @formx/vue-core
-      -> @formx/vue-ep
-        -> @formx/vue
+@formxjs/core
+  -> @formxjs/ui-core
+    -> @formxjs/vue-core
+      -> @formxjs/vue-ep
+        -> @formxjs/vue
 ```
 
 | Package | Role |
 | --- | --- |
-| `@formx/core` | Headless engine: schema, rules, validation, resources, paths, expressions, diagnostics. |
-| `@formx/ui-core` | Framework-neutral UI protocol: `FormView`, `FieldView`, containers, field-group commands. |
-| `@formx/vue-core` | Vue runtime bridge: reactive engine/view state, composables, exposed APIs. |
-| `@formx/vue-ep` | Vue + Element Plus skin: field rendering, container rendering, styles. |
-| `@formx/vue` | Default Vue entry that re-exports the common engine, types, runtime, and EP skin. |
+| `@formxjs/core` | Headless engine: schema, rules, validation, resources, paths, expressions, diagnostics. |
+| `@formxjs/ui-core` | Framework-neutral UI protocol: `FormView`, `FieldView`, containers, field-group commands. |
+| `@formxjs/vue-core` | Vue runtime bridge: reactive engine/view state, composables, exposed APIs. |
+| `@formxjs/vue-ep` | Vue + Element Plus skin: field rendering, container rendering, styles. |
+| `@formxjs/vue` | Default Vue entry that re-exports the common engine, types, runtime, and EP skin. |
 
 ## Quick Start
 
 ```sh
-pnpm add @formx/vue vue element-plus
+pnpm add @formxjs/vue vue element-plus
 ```
 
 ```ts
-import { FormX, FormXEngine } from '@formx/vue'
-import '@formx/vue-ep/style.css'
+import { FormX, FormXEngine } from '@formxjs/vue'
+import '@formxjs/vue-ep/style.css'
 
 const schema = {
   version: '1.0.0',
@@ -211,10 +211,10 @@ pnpm docs:build
 Example project:
 
 ```sh
-pnpm --filter @formx/example-vue-ep-basic dev
+pnpm --filter @formxjs/example-vue-ep-basic dev
 ```
 
-`@formx/example-vue-ep-basic` is now a Vue + Element Plus workbench instead of a minimal starter form. It includes multiple complex schemas modeled after realistic admin workflows and adds mocked remote resources, validation policy controls, and live values/errors/state/diagnostics inspectors. It covers the full component showcase, connection configuration, data protection policy, deep linkage, permission matrix, `optionsFrom`, and runtime `setOptions` scenarios.
+`@formxjs/example-vue-ep-basic` is now a Vue + Element Plus workbench instead of a minimal starter form. It includes multiple complex schemas modeled after realistic admin workflows and adds mocked remote resources, validation policy controls, and live values/errors/state/diagnostics inspectors. It covers the full component showcase, connection configuration, data protection policy, deep linkage, permission matrix, `optionsFrom`, and runtime `setOptions` scenarios.
 
 Documentation site:
 

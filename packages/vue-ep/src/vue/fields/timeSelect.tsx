@@ -1,4 +1,4 @@
-import type { FieldView } from '@formx/ui-core'
+import type { FieldView } from '@formxjs/ui-core'
 import { useFormItemProps } from './shared'
 import { ElFormItem, ElTimeSelect } from 'element-plus'
 

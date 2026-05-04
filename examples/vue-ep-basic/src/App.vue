@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, defineComponent, h, nextTick, ref, watch } from 'vue'
 import { ElButton, ElTag } from 'element-plus'
-import { FormX } from '@formx/vue'
-import type { FormSchema } from '@formx/vue'
+import { FormX } from '@formxjs/vue'
+import type { FormSchema } from '@formxjs/vue'
 import { groupLabels, scenarios } from './demoScenarios'
 import type { DemoScenario } from './demoScenarios'
 import { registerDemoResources } from './demoResources'

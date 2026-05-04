@@ -1,7 +1,7 @@
-import type { FieldView } from '@formx/ui-core'
+import type { FieldView } from '@formxjs/ui-core'
 import { useFormItemProps } from './shared'
 import { ElFormItem, ElUpload } from 'element-plus'
-import { ResourceManager } from '@formx/core'
+import { ResourceManager } from '@formxjs/core'
 
 export function renderUploadField(view: FieldView) {
   const { ui, componentProps, v, disabled, hasErr, fi, shouldRender } = useFormItemProps(view)

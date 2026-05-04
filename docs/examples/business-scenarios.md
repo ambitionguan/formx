@@ -3,7 +3,7 @@
 除了文档页里的基础 demo，FormX 仓库还提供一个完整示例工程：
 
 ```bash
-pnpm --filter @formx/example-vue-ep-basic dev
+pnpm --filter @formxjs/example-vue-ep-basic dev
 ```
 
 示例位置：

@@ -5,10 +5,10 @@ FormX 的 UI 层不是写死的。当前开源包提供 Vue + Element Plus 实�
 FormX 真正稳定的边界是：
 
 ```txt
-@formx/core
+@formxjs/core
   -> 规则、状态、值树、资源、校验和诊断
 
-@formx/ui-core
+@formxjs/ui-core
   -> FormView / FieldView 等 UI 中立视图协议
 
 框架适配层
@@ -26,13 +26,13 @@ FormX 真正稳定的边界是：
 
 | 包 | 层级 | 职责 |
 | --- | --- | --- |
-| `@formx/core` | 核心引擎 | 执行 schema、规则、资源、校验、诊断。 |
-| `@formx/ui-core` | UI 协议 | 从 engine 生成 `FormView`、`FieldView`、容器视图和字段组视图。 |
-| `@formx/vue-core` | Vue 适配 | 提供 `useFormXEngine`、`useFormViewState`、表单暴露方法和 Vue 状态工具。 |
-| `@formx/vue-ep` | Vue 皮肤 | 将视图模型渲染成 Element Plus 表单、控件、字段组和布局。 |
-| `@formx/vue` | 应用入口 | 聚合 Vue 运行时和默认 Element Plus 皮肤。 |
+| `@formxjs/core` | 核心引擎 | 执行 schema、规则、资源、校验、诊断。 |
+| `@formxjs/ui-core` | UI 协议 | 从 engine 生成 `FormView`、`FieldView`、容器视图和字段组视图。 |
+| `@formxjs/vue-core` | Vue 适配 | 提供 `useFormXEngine`、`useFormViewState`、表单暴露方法和 Vue 状态工具。 |
+| `@formxjs/vue-ep` | Vue 皮肤 | 将视图模型渲染成 Element Plus 表单、控件、字段组和布局。 |
+| `@formxjs/vue` | 应用入口 | 聚合 Vue 运行时和默认 Element Plus 皮肤。 |
 
-目前还没有发布官方 React 包。React 扩展应该按同样边界实现，而不是把 React 逻辑塞进 `@formx/core`。
+目前还没有发布官方 React 包。React 扩展应该按同样边界实现，而不是把 React 逻辑塞进 `@formxjs/core`。
 
 ## 两类扩展
 
@@ -47,7 +47,7 @@ FormX 的 UI 扩展分两类，先区分清楚会少走很多弯路。
 - 创建或接收 `FormXEngine`。
 - 把外部 `value/defaultValue/schema/policy/messages` 同步进 engine。
 - 订阅 engine 变化，并触发框架视图刷新。
-- 使用 `@formx/ui-core` 生成 `FormView`。
+- 使用 `@formxjs/ui-core` 生成 `FormView`。
 - 暴露 `validate()`、`resetFields()`、`getValues()` 等表单方法。
 - 在组件卸载时清理订阅、请求或运行时状态。
 
@@ -57,7 +57,7 @@ FormX 的 UI 扩展分两类，先区分清楚会少走很多弯路。
 - 写死 Element Plus、Ant Design 或其他组件库。
 - 重新编译规则或维护另一棵值树。
 
-Vue 里的 `@formx/vue-core` 就是框架适配层。未来 React 可以有类似的 `@formx/react-core`，提供 `useFormXEngine()`、`useFormViewState()`、`createFormXHandle()` 等能力。
+Vue 里的 `@formxjs/vue-core` 就是框架适配层。未来 React 可以有类似的 `@formxjs/react-core`，提供 `useFormXEngine()`、`useFormViewState()`、`createFormXHandle()` 等能力。
 
 ### 皮肤实现
 
@@ -79,35 +79,35 @@ Vue 里的 `@formx/vue-core` 就是框架适配层。未来 React 可以有类�
 - 绕过 Core 直接改字段状态。
 - 在控件内部维护一份和 engine 冲突的业务值。
 
-Vue + Element Plus 的 `@formx/vue-ep` 就是皮肤层。React + Ant Design 可以做成 `@formx/react-antd`，Vue + 内部组件库可以做成 `@formx/vue-company-ui`。
+Vue + Element Plus 的 `@formxjs/vue-ep` 就是皮肤层。React + Ant Design 可以做成 `@formxjs/react-antd`，Vue + 内部组件库可以做成 `@formxjs/vue-company-ui`。
 
 ## React 扩展路线
 
 React 扩展建议拆成三层：
 
 ```txt
-@formx/react-core
+@formxjs/react-core
   -> React hooks、订阅、ref handle、view state
 
-@formx/react-antd
+@formxjs/react-antd
   -> React + Ant Design 皮肤
 
-@formx/react
+@formxjs/react
   -> React 默认入口，聚合 react-core 和默认皮肤
 ```
 
 这三个包是建议命名，当前仓库尚未发布。真正重要的是边界：
 
-- `@formx/react-core` 只依赖 React、`@formx/core`、`@formx/ui-core`。
-- `@formx/react-antd` 依赖 React、Ant Design 和 `@formx/react-core`。
-- `@formx/react` 面向应用侧导出推荐组件和类型。
+- `@formxjs/react-core` 只依赖 React、`@formxjs/core`、`@formxjs/ui-core`。
+- `@formxjs/react-antd` 依赖 React、Ant Design 和 `@formxjs/react-core`。
+- `@formxjs/react` 面向应用侧导出推荐组件和类型。
 
 一个 React 适配层的最小形态可以是：
 
 ```tsx
 import { useEffect, useMemo, useState } from 'react'
-import { FormXEngine } from '@formx/core'
-import { createFormViewRuntime } from '@formx/ui-core'
+import { FormXEngine } from '@formxjs/core'
+import { createFormViewRuntime } from '@formxjs/ui-core'
 
 export function useFormXEngine(props) {
   const engine = useMemo(() => {
@@ -142,7 +142,7 @@ React 皮肤组件再消费这个适配层：
 ```tsx
 import { forwardRef, useImperativeHandle } from 'react'
 import { Form } from 'antd'
-import { useFormXEngine, useFormViewState, createFormXHandle } from '@formx/react-core'
+import { useFormXEngine, useFormViewState, createFormXHandle } from '@formxjs/react-core'
 
 export const FormXReactAntd = forwardRef(function FormXReactAntd(props, ref) {
   const engine = useFormXEngine(props)
@@ -231,9 +231,9 @@ React 皮肤可以采用类似方式：
 ## 实现新皮肤的步骤
 
 1. 确认目标：只是换 UI 库，还是换框架。
-2. 如果只换 Vue UI 库，优先复用 `@formx/vue-core`。
-3. 如果换到 React，先实现类似 `@formx/react-core` 的框架适配层。
-4. 用 `@formx/ui-core` 生成 `FormView`。
+2. 如果只换 Vue UI 库，优先复用 `@formxjs/vue-core`。
+3. 如果换到 React，先实现类似 `@formxjs/react-core` 的框架适配层。
+4. 用 `@formxjs/ui-core` 生成 `FormView`。
 5. 为每个字段类型建立渲染映射。
 6. 实现通用字段包装，包括 label、required、error、help、loading。
 7. 实现容器、布局和 `field-group`。

@@ -1,4 +1,4 @@
-import type { ContainerView, FieldGroupView } from '@formx/ui-core'
+import type { ContainerView, FieldGroupView } from '@formxjs/ui-core'
 import { processI18nObject, tf } from '../../i18n'
 
 type AnyRecord = Record<string, any>

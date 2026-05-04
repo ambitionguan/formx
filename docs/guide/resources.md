@@ -9,7 +9,7 @@
 请求实现放在运行时注册，不放进 schema。
 
 ```ts
-import { ResourceManager } from '@formx/vue'
+import { ResourceManager } from '@formxjs/vue'
 
 ResourceManager.register('getRegions', async () => {
   return [

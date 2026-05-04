@@ -9,8 +9,8 @@ pnpm install
 pnpm test
 pnpm typecheck
 pnpm build
-pnpm --filter @formx/example-vue-ep-basic typecheck
-pnpm --filter @formx/example-vue-ep-basic build
+pnpm --filter @formxjs/example-vue-ep-basic typecheck
+pnpm --filter @formxjs/example-vue-ep-basic build
 ```
 
 ## Pull Requests
@@ -22,8 +22,8 @@ pnpm --filter @formx/example-vue-ep-basic build
 
 ## Package Boundaries
 
-- `@formx/core`: headless schema, rules, validation, resources, paths, and diagnostics.
-- `@formx/ui-core`: framework-neutral view model and field-group commands.
-- `@formx/vue-core`: Vue runtime bridge and composables.
-- `@formx/vue-ep`: Vue + Element Plus skin.
-- `@formx/vue`: default Vue entry point.
+- `@formxjs/core`: headless schema, rules, validation, resources, paths, and diagnostics.
+- `@formxjs/ui-core`: framework-neutral view model and field-group commands.
+- `@formxjs/vue-core`: Vue runtime bridge and composables.
+- `@formxjs/vue-ep`: Vue + Element Plus skin.
+- `@formxjs/vue`: default Vue entry point.

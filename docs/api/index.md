@@ -6,18 +6,18 @@
 
 | 入口 | 主要导出 |
 | --- | --- |
-| `@formx/core` | `FormXEngine`、`ResourceManager`、schema 类型、规则类型、校验类型。 |
-| `@formx/ui-core` | `FormView`、`FieldView`、`ContainerView`、`FieldGroupView`、视图构建运行时。 |
-| `@formx/vue-core` | `useFormXEngine`、`useFormViewState`、表单暴露方法。 |
-| `@formx/vue-ep` | `FormXVueEp`、Element Plus 皮肤和样式。 |
-| `@formx/vue` | 推荐 Vue 入口，导出 `FormX` 和常用能力。 |
+| `@formxjs/core` | `FormXEngine`、`ResourceManager`、schema 类型、规则类型、校验类型。 |
+| `@formxjs/ui-core` | `FormView`、`FieldView`、`ContainerView`、`FieldGroupView`、视图构建运行时。 |
+| `@formxjs/vue-core` | `useFormXEngine`、`useFormViewState`、表单暴露方法。 |
+| `@formxjs/vue-ep` | `FormXVueEp`、Element Plus 皮肤和样式。 |
+| `@formxjs/vue` | 推荐 Vue 入口，导出 `FormX` 和常用能力。 |
 
 ## `FormXEngine`
 
 创建引擎：
 
 ```ts
-import { FormXEngine } from '@formx/core'
+import { FormXEngine } from '@formxjs/core'
 
 const engine = new FormXEngine({
   schema,
@@ -142,7 +142,7 @@ const diagnostics = engine.getDiagnostics()
 注册请求：
 
 ```ts
-import { ResourceManager } from '@formx/core'
+import { ResourceManager } from '@formxjs/core'
 
 ResourceManager.register('getUsers', async (params) => {
   return api.users(params)
@@ -179,7 +179,7 @@ schema 绑定：
 
 ## Vue 组件 API
 
-`@formx/vue` 的 `FormX` 组件暴露：
+`@formxjs/vue` 的 `FormX` 组件暴露：
 
 ```ts
 await formRef.value?.validate()
@@ -208,16 +208,16 @@ api?.move(0, 1)
 
 ## 类型导入建议
 
-应用侧通常从 `@formx/vue` 导入：
+应用侧通常从 `@formxjs/vue` 导入：
 
 ```ts
-import { FormX, ResourceManager } from '@formx/vue'
-import type { FormSchema } from '@formx/vue'
+import { FormX, ResourceManager } from '@formxjs/vue'
+import type { FormSchema } from '@formxjs/vue'
 ```
 
-只使用核心引擎时从 `@formx/core` 导入：
+只使用核心引擎时从 `@formxjs/core` 导入：
 
 ```ts
-import { FormXEngine } from '@formx/core'
-import type { FormSchema, RuleV2 } from '@formx/core'
+import { FormXEngine } from '@formxjs/core'
+import type { FormSchema, RuleV2 } from '@formxjs/core'
 ```

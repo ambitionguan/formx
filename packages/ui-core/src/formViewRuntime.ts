@@ -1,4 +1,4 @@
-import type { FormSchema } from '@formx/core'
+import type { FormSchema } from '@formxjs/core'
 import type { EngineLike, FormView } from './formView'
 import { buildFormView } from './formView'
 

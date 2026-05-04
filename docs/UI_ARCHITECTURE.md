@@ -10,15 +10,15 @@
   - 表单规则、联动、远程数据、校验等全部在 formx 核心里完成。
   - UI 只是不同的“皮肤”（Element Plus / Web Components / React 等），复用同一套逻辑。
 - **路径**：三层架构 + 明确协议：
-  1. Core 层（`@formx/core`）：只管 schema / values/state / 规则执行。
-  2. UI Core 层（`@formx/ui-core`）：把 Core 的输出转成视图模型树 + 命令。
-  3. Skin 层（例如 `@formx/vue-ep`）：把视图模型渲染为具体 UI 组件，对外暴露框架组件。
+  1. Core 层（`@formxjs/core`）：只管 schema / values/state / 规则执行。
+  2. UI Core 层（`@formxjs/ui-core`）：把 Core 的输出转成视图模型树 + 命令。
+  3. Skin 层（例如 `@formxjs/vue-ep`）：把视图模型渲染为具体 UI 组件，对外暴露框架组件。
 
 ---
 
 ## 2. 分层架构与职责
 
-### 2.1 Core：`@formx/core`
+### 2.1 Core：`@formxjs/core`
 
 - 职责：
   - 定义 DSL：`FormSchema` / `RuleV2` / `FormXEngine`。
@@ -40,7 +40,7 @@
 
 - 不做：不产生任何 UI 相关类型（节点、布局），不依赖 Vue/React/ElementPlus。
 
-### 2.2 UI Core：`@formx/ui-core`
+### 2.2 UI Core：`@formxjs/ui-core`
 
 UI Core 分两层视图模型。
 
@@ -184,7 +184,7 @@ function createFormViewRuntime(engine: EngineLike, schema: FormSchema): FormView
 ```ts
 // React
 import { useEffect, useMemo, useSyncExternalStore } from 'react'
-import { createFormViewRuntime } from '@formx/ui-core'
+import { createFormViewRuntime } from '@formxjs/ui-core'
 
 export function useFormViewRuntime(engine: FormXEngine, schema: FormSchema) {
   const runtime = useMemo(() => createFormViewRuntime(engine, schema), [engine])
@@ -197,7 +197,7 @@ export function useFormViewRuntime(engine: FormXEngine, schema: FormSchema) {
 ```ts
 // Svelte
 import { readable } from 'svelte/store'
-import { createFormViewRuntime } from '@formx/ui-core'
+import { createFormViewRuntime } from '@formxjs/ui-core'
 
 export function createFormViewStore(engine: FormXEngine, schema: FormSchema) {
   const runtime = createFormViewRuntime(engine, schema)
@@ -315,12 +315,12 @@ export interface FieldGroupView extends ContainerView {
 
 > 重点：**所有这些 UI 配置都停留在 UI Core 层，皮肤只是消费这些语义并映射到具体组件。** 这样未来换成 Web Components 皮肤时，只需要重写一个渲染器，而不需要复制 field-group 的行为逻辑。
 
-### 2.3 Skin：`@formx/vue-ep` 等具体皮肤包
+### 2.3 Skin：`@formxjs/vue-ep` 等具体皮肤包
 
 每个 UI 库对应一个皮肤包，例如：
 
-- `@formx/vue-ep`（Vue + Element Plus）
-- 未来可以有：`@formx/lit`（Web Components）、`@formx/react-antd`（React + AntD）等。
+- `@formxjs/vue-ep`（Vue + Element Plus）
+- 未来可以有：`@formxjs/lit`（Web Components）、`@formxjs/react-antd`（React + AntD）等。
 
 皮肤包内部由两部分组成：
 
@@ -353,7 +353,7 @@ export interface FieldGroupView extends ContainerView {
    以 Vue + Element Plus 为例：
 
    ```ts
-   // @formx/vue-ep
+   // @formxjs/vue-ep
    export const FormXVueEp = defineComponent({
      props: { schema, value, defaultValue, engine, skinProps, components, ... },
      setup(props, { emit }) {
@@ -427,20 +427,20 @@ export interface FieldGroupView extends ContainerView {
 
 新建包：
 
-- `@formx/vue-ep`（Vue + Element Plus）
-- `@formx/lit` 等。
+- `@formxjs/vue-ep`（Vue + Element Plus）
+- `@formxjs/lit` 等。
 
 统一流程：
 
-1. 依赖 `@formx/core` + `@formx/ui-core`。
+1. 依赖 `@formxjs/core` + `@formxjs/ui-core`。
 2. 在 UI Adapter 层用 `createFormViewRuntime(engine, schema)`（或 `useFormViewState`）维护视图快照。
 3. 实现一套 FieldRenderer/ContainerRenderer 映射 + 一个框架组件出口。
 
 业务层选择皮肤的方式可以是：
 
 ```ts
-import { FormXVueEp } from '@formx/vue-ep'
-// 或 import { FormXLit } from '@formx/lit'
+import { FormXVueEp } from '@formxjs/vue-ep'
+// 或 import { FormXLit } from '@formxjs/lit'
 ```
 
 Core 与 UI Core 不需要知道用的是哪套皮肤。
@@ -460,14 +460,14 @@ Core 与 UI Core 不需要知道用的是哪套皮肤。
 结合现有代码，近期计划分阶段推进：
 
 1. **完善 UI Core 的 FormView 层**
-   - 在 `@formx/ui-core` 增加：
+   - 在 `@formxjs/ui-core` 增加：
      - `FieldView/ContainerView/FieldGroupView` 类型定义。
      - `buildFormView(engine, schema)` 实现：
        - 基于现有 `buildUiTree`。
        - 集中处理 label/required/errors/options/uiProps。
        - 封装 field-group 的 add/remove 命令。
 
-2. **新建 EP 皮肤包 `@formx/vue-ep`**
+2. **新建 EP 皮肤包 `@formxjs/vue-ep`**
    - 只依赖 Core + UI Core。
    - 结构：
      - `core/context.ts`：注入 Engine + FormView。
@@ -477,7 +477,7 @@ Core 与 UI Core 不需要知道用的是哪套皮肤。
 
 3. **设计器运行预览切换到新皮肤**
    - 在 designer app 中：
-     - 用 `@formx/vue-ep` 替换旧的临时渲染路径。
+     - 用 `@formxjs/vue-ep` 替换旧的临时渲染路径。
      - 保留旧实现作为 legacy，不再扩展。
 
 4. **对齐控件行为与布局**

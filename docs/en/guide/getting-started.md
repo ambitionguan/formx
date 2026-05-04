@@ -5,7 +5,7 @@ This page gets a Vue 3 + Element Plus FormX form running with rendering, validat
 ## Install
 
 ```bash
-pnpm add @formx/vue vue element-plus
+pnpm add @formxjs/vue vue element-plus
 ```
 
 ## Register styles
@@ -14,7 +14,7 @@ pnpm add @formx/vue vue element-plus
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import '@formx/vue/style.css'
+import '@formxjs/vue/style.css'
 import App from './App.vue'
 
 createApp(App).use(ElementPlus).mount('#app')
@@ -23,7 +23,7 @@ createApp(App).use(ElementPlus).mount('#app')
 ## Create a schema
 
 ```ts
-import type { FormSchema } from '@formx/vue'
+import type { FormSchema } from '@formxjs/vue'
 
 export const schema: FormSchema = {
   version: '1.0.0',
@@ -74,7 +74,7 @@ export const schema: FormSchema = {
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { FormX } from '@formx/vue'
+import { FormX } from '@formxjs/vue'
 import { schema } from './schema'
 
 const formRef = ref<InstanceType<typeof FormX>>()

@@ -1,4 +1,4 @@
-import type { ContainerView, FieldGroupView, FieldView } from '@formx/ui-core'
+import type { ContainerView, FieldGroupView, FieldView } from '@formxjs/ui-core'
 
 export function buildFieldIndex(containers: ContainerView[]): Record<string, FieldView[]> {
   const index: Record<string, FieldView[]> = {}

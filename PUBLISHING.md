@@ -54,11 +54,11 @@ If you use a custom domain, change the docs workflow `DOCS_BASE` to `/` and conf
 The public package names are:
 
 ```txt
-@formx/core
-@formx/ui-core
-@formx/vue-core
-@formx/vue-ep
-@formx/vue
+@formxjs/core
+@formxjs/ui-core
+@formxjs/vue-core
+@formxjs/vue-ep
+@formxjs/vue
 ```
 
 The npm account or organization must own the `@formx` scope.
@@ -86,11 +86,11 @@ npm publish ./packages/vue --access public --tag alpha
 When the API is ready to be installed by default:
 
 ```bash
-npm dist-tag add @formx/core@0.1.0 latest
-npm dist-tag add @formx/ui-core@0.1.0 latest
-npm dist-tag add @formx/vue-core@0.1.0 latest
-npm dist-tag add @formx/vue-ep@0.1.0 latest
-npm dist-tag add @formx/vue@0.1.0 latest
+npm dist-tag add @formxjs/core@0.1.0 latest
+npm dist-tag add @formxjs/ui-core@0.1.0 latest
+npm dist-tag add @formxjs/vue-core@0.1.0 latest
+npm dist-tag add @formxjs/vue-ep@0.1.0 latest
+npm dist-tag add @formxjs/vue@0.1.0 latest
 ```
 
 ## GitHub Actions Publish
@@ -111,11 +111,11 @@ Recommended sequence:
 The workflow publishes packages in dependency order:
 
 ```txt
-@formx/core
-@formx/ui-core
-@formx/vue-core
-@formx/vue-ep
-@formx/vue
+@formxjs/core
+@formxjs/ui-core
+@formxjs/vue-core
+@formxjs/vue-ep
+@formxjs/vue
 ```
 
 ## Local Verification
@@ -127,8 +127,8 @@ pnpm test
 pnpm typecheck
 pnpm build
 pnpm docs:build
-pnpm --filter @formx/example-vue-ep-basic typecheck
-pnpm --filter @formx/example-vue-ep-basic build
+pnpm --filter @formxjs/example-vue-ep-basic typecheck
+pnpm --filter @formxjs/example-vue-ep-basic build
 ```
 
 Verify package contents:

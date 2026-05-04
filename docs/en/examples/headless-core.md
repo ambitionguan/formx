@@ -11,7 +11,7 @@ FormX Core can run without Vue or Element Plus.
 </ClientOnly>
 
 ```ts
-import { FormXEngine } from '@formx/core'
+import { FormXEngine } from '@formxjs/core'
 
 const engine = new FormXEngine({ schema })
 engine.dispatch('init')

@@ -5,7 +5,7 @@ import type {
   FieldGroupToolbarButton,
   FieldGroupView,
   FieldView
-} from '@formx/ui-core'
+} from '@formxjs/ui-core'
 import { ElButton, ElCol, ElRow, ElTabPane, ElTabs, ElTooltip } from 'element-plus'
 import { processI18nObject, tf } from '../../i18n'
 import type { FieldRenderContext } from './types'

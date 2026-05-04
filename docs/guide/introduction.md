@@ -20,7 +20,7 @@ FormX 是一套面向复杂业务表单的 Headless 动态表单引擎。它把�
 ## 核心亮点
 
 **Headless Core**
-`@formx/core` 不依赖 Vue、React 或 Element Plus。它维护值树、字段状态、规则执行、资源请求和校验结果，适合在浏览器、Node.js、表单设计器、测试环境中独立运行。
+`@formxjs/core` 不依赖 Vue、React 或 Element Plus。它维护值树、字段状态、规则执行、资源请求和校验结果，适合在浏览器、Node.js、表单设计器、测试环境中独立运行。
 
 **统一规则模型**
 字段短写和 `rulesV2` 最终都会进入同一套规则执行链。简单场景用 `showWhen`、`requiredWhen`、`compute`；复杂场景用 `rulesV2` 组合 `when`、`effects`、`elseEffects`。
@@ -41,11 +41,11 @@ FormX 原生支持 `form-object`、`field-group`、嵌套数组、数组项作�
 
 ```txt
 schema.json
-  -> @formx/core
+  -> @formxjs/core
      编译字段短写、执行 rulesV2、维护 values/state、处理资源和校验
-  -> @formx/ui-core
+  -> @formxjs/ui-core
      转换成 FormView / FieldView / FieldGroupView
-  -> @formx/vue-ep 或其他 skin
+  -> @formxjs/vue-ep 或其他 skin
      渲染到 Vue、Element Plus 或未来的其他 UI 框架
 ```
 

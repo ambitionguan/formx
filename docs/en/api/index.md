@@ -4,11 +4,11 @@
 
 | Entry | Main exports |
 | --- | --- |
-| `@formx/core` | `FormXEngine`, `ResourceManager`, schema types, rule types, validation types. |
-| `@formx/ui-core` | `FormView`, `FieldView`, `ContainerView`, `FieldGroupView`. |
-| `@formx/vue-core` | `useFormXEngine`, `useFormViewState`, exposed form helpers. |
-| `@formx/vue-ep` | `FormXVueEp`, Element Plus skin styles. |
-| `@formx/vue` | Recommended Vue entry for applications. |
+| `@formxjs/core` | `FormXEngine`, `ResourceManager`, schema types, rule types, validation types. |
+| `@formxjs/ui-core` | `FormView`, `FieldView`, `ContainerView`, `FieldGroupView`. |
+| `@formxjs/vue-core` | `useFormXEngine`, `useFormViewState`, exposed form helpers. |
+| `@formxjs/vue-ep` | `FormXVueEp`, Element Plus skin styles. |
+| `@formxjs/vue` | Recommended Vue entry for applications. |
 
 ## Engine
 

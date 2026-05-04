@@ -1,14 +1,14 @@
 # Vue Runtime
 
-The recommended Vue entry is `@formx/vue`. It lets application code use FormX like a normal form component while the core engine stays independent.
+The recommended Vue entry is `@formxjs/vue`. It lets application code use FormX like a normal form component while the core engine stays independent.
 
 ## Basic usage
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { FormX } from '@formx/vue'
-import '@formx/vue/style.css'
+import { FormX } from '@formxjs/vue'
+import '@formxjs/vue/style.css'
 
 const formRef = ref<InstanceType<typeof FormX>>()
 const model = ref({ name: '', enabled: true })

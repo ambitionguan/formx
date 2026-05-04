@@ -1,4 +1,4 @@
-import type { FormXMessageParams, FormXMessageResolver } from '@formx/core'
+import type { FormXMessageParams, FormXMessageResolver } from '@formxjs/core'
 
 type Locale = 'zh-CN' | 'en-US'
 

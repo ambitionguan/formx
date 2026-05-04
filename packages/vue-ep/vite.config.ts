@@ -13,7 +13,7 @@ export default defineConfig({
       fileName: (format) => (format === 'es' ? 'index.js' : 'index.cjs')
     },
     rollupOptions: {
-      external: ['vue', 'element-plus', '@formx/core', '@formx/ui-core', '@formx/vue-core'],
+      external: ['vue', 'element-plus', '@formxjs/core', '@formxjs/ui-core', '@formxjs/vue-core'],
       output: {
         globals: {
           vue: 'Vue',
@@ -28,9 +28,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@formx/core': resolve(__dirname, '../core/src'),
-      '@formx/ui-core': resolve(__dirname, '../ui-core/src'),
-      '@formx/vue-core': resolve(__dirname, '../vue-core/src')
+      '@formxjs/core': resolve(__dirname, '../core/src'),
+      '@formxjs/ui-core': resolve(__dirname, '../ui-core/src'),
+      '@formxjs/vue-core': resolve(__dirname, '../vue-core/src')
     }
   }
 })

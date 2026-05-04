@@ -1,5 +1,5 @@
 {
-  "name": "@formx/vue-core",
+  "name": "@formxjs/vue-core",
   "version": "0.1.0",
   "description": "Vue runtime bridge for FormX.",
   "license": "MIT",
@@ -30,18 +30,18 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts --clean --sourcemap --external vue --external @formx/core --external @formx/ui-core",
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean --sourcemap --external vue --external @formxjs/core --external @formxjs/ui-core",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "@formx/core": "^0.1.0",
-    "@formx/ui-core": "^0.1.0",
+    "@formxjs/core": "^0.1.0",
+    "@formxjs/ui-core": "^0.1.0",
     "vue": "^3.5.0"
   },
   "devDependencies": {
-    "@formx/core": "^0.1.0",
-    "@formx/ui-core": "^0.1.0",
+    "@formxjs/core": "^0.1.0",
+    "@formxjs/ui-core": "^0.1.0",
     "vue": "^3.5.22"
   }
 }

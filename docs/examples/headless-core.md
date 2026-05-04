@@ -13,7 +13,7 @@ FormX Core 可以不依赖 Vue 和 Element Plus 独立运行。这个能力适�
 核心用法：
 
 ```ts
-import { FormXEngine } from '@formx/core'
+import { FormXEngine } from '@formxjs/core'
 
 const engine = new FormXEngine({ schema })
 engine.dispatch('init')

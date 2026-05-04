@@ -5,7 +5,7 @@ Resources centralize remote options, cascades, async validation, and business qu
 ## Register a request
 
 ```ts
-import { ResourceManager } from '@formx/vue'
+import { ResourceManager } from '@formxjs/vue'
 
 ResourceManager.register('getCities', async (params) => {
   return api.getCities(params)

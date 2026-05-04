@@ -1,5 +1,5 @@
 import type { Ref } from 'vue'
-import type { FormXEngine as Engine } from '@formx/core'
+import type { FormXEngine as Engine } from '@formxjs/core'
 
 type AnyRecord = Record<string, any>
 
