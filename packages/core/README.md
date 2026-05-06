@@ -1,5 +1,7 @@
 # @formxjs/core
 
+[Documentation](https://ambitionguan.github.io/formx/) | [GitHub](https://github.com/ambitionguan/formx) | [npm](https://www.npmjs.com/package/@formxjs/core)
+
 ## 中文
 
 `@formxjs/core` 是 FormX 的纯逻辑引擎包，不依赖任何 UI 框架或组件库。它负责 schema 类型、规则编译执行、表达式求值、字段校验、远程资源、路径解析、状态管理和诊断能力。

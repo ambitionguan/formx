@@ -1,5 +1,7 @@
 # @formxjs/vue
 
+[Documentation](https://ambitionguan.github.io/formx/) | [GitHub](https://github.com/ambitionguan/formx) | [npm](https://www.npmjs.com/package/@formxjs/vue)
+
 ## 中文
 
 `@formxjs/vue` 是 Vue 用户的默认入口包。它聚合并重导出 FormX 常用能力：核心引擎、UI 协议类型、Vue runtime helpers，以及默认的 Element Plus 皮肤。

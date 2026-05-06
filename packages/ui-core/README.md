@@ -1,5 +1,7 @@
 # @formxjs/ui-core
 
+[Documentation](https://ambitionguan.github.io/formx/) | [GitHub](https://github.com/ambitionguan/formx) | [npm](https://www.npmjs.com/package/@formxjs/ui-core)
+
 ## 中文
 
 `@formxjs/ui-core` 是 FormX 的框架无关 UI 协议层。它把 `@formxjs/core` 的 engine state 和 schema 转换为稳定的视图模型，例如 `FormView`、`FieldView`、容器视图、布局元数据和字段组命令。

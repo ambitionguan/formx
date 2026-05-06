@@ -1,10 +1,10 @@
 {
   "name": "@formxjs/core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Headless dynamic form engine for FormX.",
   "license": "MIT",
   "keywords": ["formx", "dynamic-form", "headless", "schema", "validation", "low-code"],
-  "homepage": "https://github.com/ambitionguan/formx#readme",
+  "homepage": "https://ambitionguan.github.io/formx/",
   "bugs": {
     "url": "https://github.com/ambitionguan/formx/issues"
   },

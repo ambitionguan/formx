@@ -1,5 +1,7 @@
 # @formxjs/vue-ep
 
+[Documentation](https://ambitionguan.github.io/formx/) | [GitHub](https://github.com/ambitionguan/formx) | [npm](https://www.npmjs.com/package/@formxjs/vue-ep)
+
 ## 中文
 
 `@formxjs/vue-ep` 是 FormX 的 Vue + Element Plus 皮肤包。它把 `@formxjs/ui-core` 产出的 `FieldView`、`ContainerView` 和字段组命令渲染成 Element Plus 表单组件。

@@ -1,6 +1,6 @@
 {
   "name": "formx",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Headless dynamic form engine for complex business applications.",
   "private": true,
   "license": "MIT",
@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/ambitionguan/formx/issues"
   },
-  "homepage": "https://github.com/ambitionguan/formx#readme",
+  "homepage": "https://ambitionguan.github.io/formx/",
   "packageManager": "pnpm@10.8.1",
   "engines": {
     "node": "^20.19.0 || >=22.12.0",

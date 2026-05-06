@@ -2,6 +2,8 @@
 
 中文 | [English](#english)
 
+[文档站](https://ambitionguan.github.io/formx/) | [GitHub](https://github.com/ambitionguan/formx) | [npm packages](https://www.npmjs.com/org/formxjs)
+
 FormX 是一个面向复杂业务系统的 Headless 动态表单引擎。它把“表单逻辑”和“界面渲染”拆开：核心包只负责 schema、联动规则、校验、远程资源、路径解析和状态计算；UI 包再把这些状态转换成框架无关的视图模型；最后由 Vue、React 或具体组件库皮肤负责渲染。
 
 它适合那些普通表单库很难维护的场景：多层对象、对象数组、字段组、复杂联动、动态显隐、动态必填、远程选项、运行时 schema patch、异步校验、设计器生成 JSON 配置等。
@@ -134,6 +136,8 @@ FormX 目前处于开源仓库抽离和 npm 发布准备阶段。核心引擎、
 ---
 
 ## English
+
+[Documentation](https://ambitionguan.github.io/formx/) | [GitHub](https://github.com/ambitionguan/formx) | [npm packages](https://www.npmjs.com/org/formxjs)
 
 FormX is a headless dynamic form engine for complex business applications. It separates form logic from UI rendering: the core package owns schema parsing, rule execution, validation, remote resources, path resolution, and state calculation; UI packages convert that state into framework-neutral view models; renderer packages then bind those view models to Vue, React, or specific component libraries.
 

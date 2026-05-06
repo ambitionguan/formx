@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Point npm package homepage metadata to the public documentation site.
+- Add documentation links to the GitHub README and package READMEs.
+
 ## 0.1.1
 
 - Fixed public docs install commands to use the published `@formxjs/*` scope.
